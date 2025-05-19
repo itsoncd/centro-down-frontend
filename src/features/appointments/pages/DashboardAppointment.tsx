@@ -1,21 +1,32 @@
-import AppointmentForm from "../components/AppointmentForm"
-import { AppointmentList } from "../components/AppointmentList"
+import AppointmentForm from "../components/AppointmentForm";
+import { AppointmentList } from "../components/AppointmentList";
+import { useCreateAppointment } from "../hooks/useCreateAppointment";
 
 export const DashboardAppointment = () => {
+  const { appointmentMutation } = useCreateAppointment();
+
+  const handleCreate = (data: any) => {
+    const finalData = {
+      ...data,
+      user_id: 2, // fijo por ahora
+    };
+    appointmentMutation.mutate(finalData);
+  };
+
   return (
-    <>
     <section className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 max-w-7xl mx-auto">
-        {/* Formulario */}
-        <div className="bg-white rounded-2xl shadow p-6">
+      <div className="bg-white rounded-2xl shadow p-6">
         <h2 className="text-xl font-bold mb-4 text-blue-800">Agendar Cita</h2>
-        <AppointmentForm />
+        <AppointmentForm
+          onSubmit={handleCreate}
+          submitLabel="Agendar"
+        />
       </div>
 
       <div className="bg-white rounded-2xl shadow p-6">
-        <h2 className="text-xl font-bold mb-4 text-blue-800">Agendar Cita</h2>
+        <h2 className="text-xl font-bold mb-4 text-blue-800">Citas agendadas</h2>
         <AppointmentList />
       </div>
     </section>
-    </>
-  )
-}
+  );
+};

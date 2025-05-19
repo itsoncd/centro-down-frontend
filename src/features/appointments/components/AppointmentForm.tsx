@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import Button from "@/components/Button";
 import { ErrorMessage } from "@/components/ErrorMessage";
-import { useCreateAppointment } from "../hooks/useCreateAppointment";
 
 type AppointmentFormData = {
   correo: string;
@@ -10,27 +9,34 @@ type AppointmentFormData = {
   nombre_tutor: string;
 };
 
-export default function AppointmentForm() {
+type Props = {
+  defaultValues?: AppointmentFormData;
+  onSubmit: (data: AppointmentFormData) => void;
+  submitLabel?: string;
+};
+
+export default function AppointmentForm({
+  defaultValues,
+  onSubmit,
+  submitLabel = "Agendar",
+}: Props) {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<AppointmentFormData>();
-
-  const { appointmentMutation } = useCreateAppointment();
-
-  const onSubmit = (data: AppointmentFormData) => {
-    const finalData = {
-      ...data,
-      user_id: 2, // valor estático por ahora
-    };
-    appointmentMutation.mutate(finalData);
-    reset();
-  };
+  } = useForm<AppointmentFormData>({
+    defaultValues,
+  });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form
+      onSubmit={handleSubmit((data) => {
+        onSubmit(data);
+        reset();
+      })}
+      className="space-y-4"
+    >
       <input
         {...register("correo", { required: "El correo es obligatorio" })}
         placeholder="Correo del tutor"
@@ -71,7 +77,7 @@ export default function AppointmentForm() {
       )}
 
       <Button type="submit" variant="primary">
-        Agendar
+        {submitLabel}
       </Button>
     </form>
   );
