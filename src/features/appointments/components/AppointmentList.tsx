@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { useGetAppointments } from "../hooks/useGetAppointments";
 import { AppointmentCard } from "./AppointmentCard";
 
@@ -8,7 +9,10 @@ export const AppointmentList = () => {
     console.log(appointmentQuery.data);
 
     if (appointmentQuery.isLoading) return <p>Cargando...</p>
-    if (!appointmentQuery.data) return <p>No Data.</p>
+    if (!appointmentQuery.data) {
+      toast.error('Error al cargar la lista.');
+      return <p>No Data.</p>
+    }
   return (
     <>
       <div className="grid gap-4">

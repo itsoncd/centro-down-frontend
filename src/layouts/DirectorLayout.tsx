@@ -1,8 +1,10 @@
 import { Outlet } from "react-router-dom";
 import { SidebarNavDirector } from "@/components/SidebarNavDirector";
+import FooterDev from "@/components/FooterDev";
 
 export default function DirectorLayout() {
   return (
+    <>
     <div className="flex min-h-screen bg-gray-50">
       {/* Barra lateral */}
       <SidebarNavDirector />
@@ -14,5 +16,7 @@ export default function DirectorLayout() {
         </div>
       </main>
     </div>
+    <FooterDev />
+    </>
   );
 }

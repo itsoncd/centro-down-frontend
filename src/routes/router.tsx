@@ -5,6 +5,7 @@ import DirectorLayout from "@/layouts/DirectorLayout";
 import { DashboardAppointment } from "@/features/appointments/pages/DashboardAppointment";
 import { InDevelopment } from "@/pages/InDevelopment";
 import { HomePageDirector } from "@/features/appointments/pages/HomePageDirector";
+import { NotFoundPage } from "@/pages/NotFoundPage";
 
 
 export const router = createBrowserRouter([
@@ -42,5 +43,9 @@ export const router = createBrowserRouter([
         element: <InDevelopment />
       }
     ],
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />
   },
 ]);
