@@ -4,6 +4,8 @@ import HomePageDev from "@/pages/HomePageDev";
 import DirectorLayout from "@/layouts/DirectorLayout";
 import { DashboardAppointment } from "@/features/appointments/pages/DashboardAppointment";
 import { InDevelopment } from "@/pages/InDevelopment";
+import { HomePageDirector } from "@/features/appointments/pages/HomePageDirector";
+
 
 export const router = createBrowserRouter([
   {
@@ -22,14 +24,21 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <InDevelopment />
+        element: <HomePageDirector/>
       },
       {
         path: "citas",
-        element: <DashboardAppointment />,
+        element: <DashboardAppointment/>,
       },
       {
         path: "agenda",
+        element: <InDevelopment />
+      },
+      { 
+        path: "profesores",
+        element: <InDevelopment />
+      },
+      { path: "alumnos",
         element: <InDevelopment />
       }
     ],
