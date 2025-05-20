@@ -7,6 +7,7 @@ export default function HeaderDev() {
           <a href="#" className="hover:underline">Inicio</a>
           <a href="#" className="hover:underline">Nosotros</a>
           <a href="#" className="hover:underline">Contacto</a>
+          <a href="/login" className="hover:underline">Iniciar Sesion</a>
         </nav>
       </div>
     </header>

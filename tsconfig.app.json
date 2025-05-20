@@ -23,6 +23,7 @@
       "@/routes/*": ["routes/*"],
       "@/store/*": ["store/*"],
       "@/config/*": ["config/*"],
+      "@/assets/*": ["assets/*"],
     },
 
     /* Bundler mode */
