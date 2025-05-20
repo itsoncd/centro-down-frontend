@@ -1,14 +1,14 @@
 import { Outlet } from "react-router-dom";
-import { SidebarNavDirector } from "@/components/SidebarNavDirector";
+import { SidebarNav} from "@/components/SidebarNav";
 import FooterDev from "@/components/FooterDev";
 import { useState } from "react";
 
 export default function DirectorLayout() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
   return (
     <>
     <div className="flex h-screen bg-gray-50">
-      <SidebarNavDirector isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+      <SidebarNav isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
       
       {/* Contenido dinámico */}
       <main className="flex-1 flex flex-col p-6 overflow-auto">

@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import HomeLayoutDev from "@/layouts/HomeLayoutDev";
 import HomePageDev from "@/pages/HomePageDev";
-import DirectorLayout from "@/layouts/DirectorLayout";
+import AppLayout from "@/layouts/AppLayout";
 import { DashboardAppointment } from "@/features/appointments/pages/DashboardAppointment";
 import { InDevelopment } from "@/pages/InDevelopment";
 import { HomePageDirector } from "@/features/appointments/pages/HomePageDirector";
@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/director",
-    element: <DirectorLayout />,
+    element: <AppLayout />,
     children: [
       {
         index: true,

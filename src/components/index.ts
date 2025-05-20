@@ -5,4 +5,4 @@ export * from './ErrorMessage';
 export * from './FooterDev';
 export * from './HeaderDev';
 export * from './LogoBlack';
-export * from './SidebarNavDirector';
+export * from './SidebarNav';

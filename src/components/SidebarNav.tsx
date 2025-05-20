@@ -1,46 +1,32 @@
 import {
-  Home,
-  Calendar,
-  Users,
-  BookOpenCheck,
   LogOut,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { LogoBlack } from "./LogoBlack";
-
-const links = [
-  { to: "/director", label: "Inicio", icon: <Home size={18} /> },
-  { to: "/director/citas", label: "Citas", icon: <Calendar size={18} /> },
-  {
-    to: "/director/agenda",
-    label: "Agenda",
-    icon: <BookOpenCheck size={18} />,
-  },
-  {
-    to: "/director/profesores",
-    label: "Profesores",
-    icon: <Users size={18} />,
-  },
-  { to: "/director/alumnos", label: "Alumnos", icon: <Users size={18} /> },
-];
+import { subMenusByRole, type SidebarLink } from "@/utils/subMenus.utils";
 
 interface Props {
   isOpen: boolean;
   toggleSidebar: () => void;
 }
 
-export const SidebarNavDirector = ({ isOpen, toggleSidebar }: Props) => {
+export const SidebarNav = ({ isOpen, toggleSidebar }: Props) => {
   const { pathname } = useLocation();
+
+  // Leer el rol del localStorage
+  const role = localStorage.getItem("rol") as keyof typeof subMenusByRole;
+
+  // Fallback por si no hay rol
+  const links: SidebarLink[] = subMenusByRole[role] || [];
 
   return (
     <aside
-      className={`relative bg-white shadow h-full p-6 flex flex-col transition-all duration-300 ${
+      className={`relative bg-white shadow h-full p-6 flex flex-col transition-[width] duration-300 ease-in-out ${
         isOpen ? "w-60" : "w-16"
       }`}
     >
-      {/* Botón para colapsar */}
       <button
         onClick={toggleSidebar}
         className="absolute top-1/2 right-[-12px] bg-white border rounded-full shadow p-1 hover:bg-gray-100 transition"
@@ -80,7 +66,7 @@ export const SidebarNavDirector = ({ isOpen, toggleSidebar }: Props) => {
         })}
       </nav>
 
-      {/* Botón Cerrar sesión */}
+      {/* Logout */}
       <button
         className={`flex items-center gap-2 text-red-600 hover:underline mt-auto ${
           !isOpen ? "justify-center" : ""
