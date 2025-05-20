@@ -6,6 +6,7 @@ import { DashboardAppointment } from "@/features/appointments/pages/DashboardApp
 import { InDevelopment } from "@/pages/InDevelopment";
 import { HomePageDirector } from "@/features/appointments/pages/HomePageDirector";
 import { NotFoundPage } from "@/pages/NotFoundPage";
+import { LoginPage } from "@/features/auth/pages/LoginPage";
 
 
 export const router = createBrowserRouter([
@@ -43,6 +44,10 @@ export const router = createBrowserRouter([
         element: <InDevelopment />
       }
     ],
+  },
+  {
+    path: "/login",
+    element: <LoginPage/>
   },
   {
     path: "*",

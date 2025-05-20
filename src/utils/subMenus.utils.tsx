@@ -14,7 +14,7 @@ export interface SidebarLink {
   icon: JSX.Element;
 }
 
-type Role = "admin" | "director" | "profesor";
+export type Role = "admin" | "director" | "profesor";
 
 export const subMenusByRole: Record<Role, SidebarLink[]> = {
   admin: [
