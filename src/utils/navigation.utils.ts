@@ -1,20 +1,16 @@
-// src/utils/navigation.utils.ts
-import type { Role } from "@/utils/subMenus.utils";
-
-const validRoles: Role[] = ["admin", "director", "profesor"];
+import type { Role } from "@/types";
 
 const initialRouteByRole: Record<Role, string> = {
   admin: "/admin",
   director: "/director",
   profesor: "/profesor",
+  tutor: "/tutor",
 };
 
-export function getInitialRouteByRoles(roles: string[]): string {
-  const validUserRoles = roles.filter((role): role is Role =>
-    validRoles.includes(role as Role)
-  );
+export function getInitialRouteByRole(role: Role | string): string {
+  const validRoles: Role[] = ["admin", "director", "profesor", "tutor"];
 
-  if (validUserRoles.length === 0) return "/";
+  if (!validRoles.includes(role as Role)) return "/";
 
-  return initialRouteByRole[validUserRoles[0]];
+  return initialRouteByRole[role as Role];
 }

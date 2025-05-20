@@ -1,7 +1,9 @@
 import { useForm } from "react-hook-form";
 import type { LoginFormType } from "../types";
 import { ErrorMessage } from "@/components";
-import { useLogin } from "../hooks/useLogin";
+import { RoleSelectionModal } from "./RoleModalSelection";
+import { useLogin, useRoleSelection } from "../hooks";
+import { toast } from "react-toastify";
 
 export const LoginForm = () => {
   const initialValues: LoginFormType = {
@@ -16,11 +18,25 @@ export const LoginForm = () => {
     formState: { errors },
   } = useForm<LoginFormType>({ defaultValues: initialValues });
 
-  const { loginMutation, } = useLogin();
+  const { mutate: loginMutation } = useLogin();
+  const {
+    handleRoleSelection,
+    showRoleModal,
+    availableRoles,
+    selectRole,
+    closeModal,
+  } = useRoleSelection();
 
   //?? Functions for login
-  const handleLogin = (formData: LoginFormType) => loginMutation.mutate(formData);
-  
+  const handleLogin = (formData: LoginFormType) =>
+    loginMutation(formData, {
+      onSuccess: (response) => {
+        toast.success("Inicio de Sesion exitoso.");
+        handleRoleSelection(response);
+      },
+      onError: (error) => toast.error(error.response?.data.error),
+    });
+
   return (
     <>
       <form onSubmit={handleSubmit(handleLogin)} className="space-y-4">
@@ -40,9 +56,7 @@ export const LoginForm = () => {
               required: "El correo electrónico es obligatorio.",
             })}
           />
-          {errors.password && (
-            <ErrorMessage>{errors.password.message}</ErrorMessage>
-          )}
+          {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
         </div>
 
         <div>
@@ -73,6 +87,14 @@ export const LoginForm = () => {
           Iniciar sesión
         </button>
       </form>
+
+      {showRoleModal && (
+        <RoleSelectionModal
+          roles={availableRoles}
+          onSelectRole={selectRole}
+          onClose={closeModal}
+        />
+      )}
       <div className="text-center mt-6">
         <p className="text-sm text-gray-500">
           ¿Olvidaste tu contraseña?{" "}

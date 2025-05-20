@@ -7,14 +7,13 @@ import {
   Settings,
 } from "lucide-react";
 import type { JSX } from "react";
+import type { Role } from "@/types";
 
 export interface SidebarLink {
   to: string;
   label: string;
   icon: JSX.Element;
 }
-
-export type Role = "admin" | "director" | "profesor";
 
 export const subMenusByRole: Record<Role, SidebarLink[]> = {
   admin: [
@@ -33,5 +32,9 @@ export const subMenusByRole: Record<Role, SidebarLink[]> = {
     { to: "/profesor", label: "Inicio", icon: <Home size={18} /> },
     { to: "/profesor/citas", label: "Mis Citas", icon: <Calendar size={18} /> },
     { to: "/profesor/alumnos", label: "Alumnos", icon: <Users size={18} /> },
+  ],
+  tutor: [
+    { to: "/tutor", label: "Inicio", icon: <Home size={18} /> },
+    { to: "/tutor/citas", label: "Generar Cita", icon: <Calendar size={18} /> },
   ],
 };

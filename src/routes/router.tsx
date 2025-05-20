@@ -46,6 +46,24 @@ export const router = createBrowserRouter([
     ],
   },
   {
+    path: "/tutor",
+    element: <AppLayout />,
+    children: [
+      {
+        index: true,
+        element: <HomePageDirector/>
+      },
+      {
+        path: "citas",
+        element: <DashboardAppointment/>,
+      },
+      {
+        path: "agenda",
+        element: <InDevelopment />
+      },
+    ],
+  },
+  {
     path: "/login",
     element: <LoginPage/>
   },

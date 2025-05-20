@@ -6,6 +6,7 @@ import {
 import { Link, useLocation } from "react-router-dom";
 import { LogoBlack } from "./LogoBlack";
 import { subMenusByRole, type SidebarLink } from "@/utils/subMenus.utils";
+import { useLogout } from "@/hooks/useLogout";
 
 interface Props {
   isOpen: boolean;
@@ -14,6 +15,8 @@ interface Props {
 
 export const SidebarNav = ({ isOpen, toggleSidebar }: Props) => {
   const { pathname } = useLocation();
+
+  const { logout } = useLogout();
 
   // Leer el rol del localStorage
   const role = localStorage.getItem("rol") as keyof typeof subMenusByRole;
@@ -68,6 +71,7 @@ export const SidebarNav = ({ isOpen, toggleSidebar }: Props) => {
 
       {/* Logout */}
       <button
+        onClick={logout}
         className={`flex items-center gap-2 text-red-600 hover:underline mt-auto ${
           !isOpen ? "justify-center" : ""
         }`}
