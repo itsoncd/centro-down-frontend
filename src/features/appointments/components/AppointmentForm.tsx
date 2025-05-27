@@ -1,12 +1,14 @@
 import { useForm } from "react-hook-form";
 import Button from "@/components/Button";
-import { ErrorMessage } from "@/components/ErrorMessage";
+import { InputField } from "@/components/InputField";
 
 type AppointmentFormData = {
   correo: string;
   fecha_cita: string;
   nombre_alumno: string;
   nombre_tutor: string;
+  hora_inicio: string;
+  hora_fin: string;
 };
 
 type Props = {
@@ -25,9 +27,7 @@ export default function AppointmentForm({
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<AppointmentFormData>({
-    defaultValues,
-  });
+  } = useForm<AppointmentFormData>({ defaultValues });
 
   return (
     <form
@@ -37,44 +37,60 @@ export default function AppointmentForm({
       })}
       className="space-y-4"
     >
-      <input
-        {...register("correo", { required: "El correo es obligatorio" })}
-        placeholder="Correo del tutor"
-        className="w-full p-2 border rounded"
+      <InputField
+        id="correo"
+        label="Correo del tutor"
         type="email"
+        registration={register("correo", { required: "El correo es obligatorio" })}
+        error={errors.correo}
       />
-      {errors.correo && <ErrorMessage>{errors.correo.message}</ErrorMessage>}
 
-      <input
-        {...register("fecha_cita", { required: "La fecha es obligatoria" })}
+      <InputField
+        id="fecha_cita"
+        label="Fecha de la cita"
         type="date"
-        className="w-full p-2 border rounded"
+        readOnly
+        registration={register("fecha_cita", { required: "La fecha es obligatoria" })}
+        error={errors.fecha_cita}
       />
-      {errors.fecha_cita && (
-        <ErrorMessage>{errors.fecha_cita.message}</ErrorMessage>
-      )}
 
-      <input
-        {...register("nombre_alumno", {
+      <InputField
+      id="hora_inicio"
+      label="Hora de inicio"
+      type="time"
+      registration={register("hora_inicio", {
+        required: "La hora de inicio es obligatoria",
+      })}
+      error={errors.hora_inicio}
+    />
+
+    <InputField
+      id="hora_fin"
+      label="Hora de fin"
+      type="time"
+      registration={register("hora_fin", {
+        required: "La hora de fin es obligatoria",
+      })}
+      error={errors.hora_fin}
+    />
+
+      <InputField
+        id="nombre_alumno"
+        label="Nombre del alumno"
+        registration={register("nombre_alumno", {
           required: "El nombre del alumno es obligatorio",
         })}
-        placeholder="Nombre del alumno"
-        className="w-full p-2 border rounded"
+        error={errors.nombre_alumno}
       />
-      {errors.nombre_alumno && (
-        <ErrorMessage>{errors.nombre_alumno.message}</ErrorMessage>
-      )}
 
-      <input
-        {...register("nombre_tutor", {
+      <InputField
+        id="nombre_tutor"
+        label="Nombre del tutor"
+        registration={register("nombre_tutor", {
           required: "El nombre del tutor es obligatorio",
         })}
-        placeholder="Nombre del tutor"
-        className="w-full p-2 border rounded"
+        error={errors.nombre_tutor}
       />
-      {errors.nombre_tutor && (
-        <ErrorMessage>{errors.nombre_tutor.message}</ErrorMessage>
-      )}
 
       <Button type="submit" variant="primary">
         {submitLabel}
