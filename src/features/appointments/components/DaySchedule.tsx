@@ -1,6 +1,7 @@
 // src/components/DaySchedule.tsx
 import { useAppointmentStore } from "@/store";
 import { useMemo } from "react";
+import { NoDateSelected } from "./NoDateSelected";
 
 const generateHourSlots = (start: string, end: string) => {
   const slots = [];
@@ -26,6 +27,8 @@ export const DaySchedule = () => {
   } = useAppointmentStore();
 
   const hourSlots = useMemo(() => generateHourSlots("00:00", "23:00"), []);
+
+  if (!selectedDate) return <NoDateSelected />
 
   return (
     <div>

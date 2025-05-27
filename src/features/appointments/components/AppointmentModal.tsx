@@ -15,7 +15,7 @@ export const AppointmentModal = () => {
         user_id: 6, // fijo por ahora
       };
       console.log(finalData);
-      // appointmentMutation.mutate(finalData);
+      appointmentMutation.mutate(finalData);
     };
 
   if (!isModalOpen) return null;

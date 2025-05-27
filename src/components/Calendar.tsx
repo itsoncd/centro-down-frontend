@@ -12,7 +12,7 @@ export const Calendar = () => {
     : undefined;
 
   return (
-    <div>
+    <div className="w-full">
       <DayPicker
         mode="single"
         selected={selectedDateObj}
