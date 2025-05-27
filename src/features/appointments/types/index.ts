@@ -8,6 +8,15 @@ export interface AppointmentLike {
     nombre_tutor: string;
 }
 
+export type AppointmentFormData = {
+  correo: string;
+  fecha_cita: string;
+  nombre_alumno: string;
+  nombre_tutor: string;
+  hora_inicio: string;
+  hora_fin: string;
+};
+
 //?? HTTP Responses
 
 export interface AppointmentCreated {

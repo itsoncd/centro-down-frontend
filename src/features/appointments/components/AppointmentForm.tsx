@@ -1,15 +1,7 @@
 import { useForm } from "react-hook-form";
 import Button from "@/components/Button";
 import { InputField } from "@/components/InputField";
-
-type AppointmentFormData = {
-  correo: string;
-  fecha_cita: string;
-  nombre_alumno: string;
-  nombre_tutor: string;
-  hora_inicio: string;
-  hora_fin: string;
-};
+import type { AppointmentFormData } from "../types";
 
 type Props = {
   defaultValues?: AppointmentFormData;

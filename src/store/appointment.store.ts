@@ -6,6 +6,10 @@ type AppointmentStore = {
   isModalOpen: boolean;
   openModal: () => void;
   closeModal: () => void;
+  selectedHour: string | null;
+  setSelectedHour: (hour: string) => void;
+  openHour: string;
+  closeHour: string;
 };
 
 export const useAppointmentStore = create<AppointmentStore>((set) => ({
@@ -14,4 +18,8 @@ export const useAppointmentStore = create<AppointmentStore>((set) => ({
   isModalOpen: false,
   openModal: () => set({ isModalOpen: true }),
   closeModal: () => set({ isModalOpen: false }),
+  selectedHour: null,
+  setSelectedHour: (hour) => set({ selectedHour: hour }),
+  openHour: "08:00",
+  closeHour: "18:00",
 }));
