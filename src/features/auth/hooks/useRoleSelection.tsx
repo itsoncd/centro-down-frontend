@@ -25,6 +25,7 @@ export const useRoleSelection = () => {
       const mainRole = roles[0];
       localStorage.setItem("rol", mainRole);
       setUser({
+        id: response.user.id,
         name: response.user.name,
         email: response.user.email,
         roles: [mainRole],
@@ -38,6 +39,7 @@ export const useRoleSelection = () => {
     if (!pendingUserData) return;
     localStorage.setItem("rol", role);
     setUser({
+      id: pendingUserData.user.id,
       name: pendingUserData.user.name,
       email: pendingUserData.user.email,
       roles: [role],

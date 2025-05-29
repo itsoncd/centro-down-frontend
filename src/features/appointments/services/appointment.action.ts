@@ -1,5 +1,6 @@
 import { api } from "@/lib/axios"
 import type { AppointmentCreated, AppointmentLike, GetAppointments } from "../types"
+import { sleep } from "@/utils/awaitFetch.utils";
 
 export const createAppointment = async (body: AppointmentLike): Promise<AppointmentCreated> => {
     const { data } = await api.post<AppointmentCreated>('/citas', body);
@@ -8,6 +9,7 @@ export const createAppointment = async (body: AppointmentLike): Promise<Appointm
 }
 
 export const getAllAppointments = async (): Promise<GetAppointments> => {
+    await sleep(3);
     const { data } = await api.get<GetAppointments>('/citas');
     console.log('🚀data: ', data);
     return data;

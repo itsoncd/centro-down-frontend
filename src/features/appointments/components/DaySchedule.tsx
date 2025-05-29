@@ -1,75 +1,29 @@
-// src/components/DaySchedule.tsx
 import { useAppointmentStore } from "@/store";
 import { useMemo } from "react";
 import { NoDateSelected } from "./NoDateSelected";
 import type { AppointmentData } from "../types";
 import { toast } from "react-toastify";
+import { generateHourSlots } from "../helpers";
+import { Info } from "lucide-react";
 
-export const dummyAppointments: AppointmentData[] = [
-  {
-    id: 1,
-    user_id: 101,
-    fecha_cita: new Date("2025-08-22"),
-    hora_inicio: "08:30",
-    hora_fin: "09:30",
-    correo: "alumno1@example.com",
-    nombre_alumno: "Luis Hernández",
-    nombre_tutor: "María García",
-    created_at: new Date("2025-08-20T10:00:00Z"),
-    updated_at: new Date("2025-08-20T10:00:00Z"),
-  },
-  {
-    id: 2,
-    user_id: 102,
-    fecha_cita: new Date("2025-08-22"),
-    hora_inicio: "10:00",
-    hora_fin: "11:00",
-    correo: "alumno2@example.com",
-    nombre_alumno: "Ana López",
-    nombre_tutor: "Carlos Pérez",
-    created_at: new Date("2025-08-21T11:00:00Z"),
-    updated_at: new Date("2025-08-21T11:00:00Z"),
-  },
-  {
-    id: 3,
-    user_id: 103,
-    fecha_cita: new Date("2025-08-22"),
-    hora_inicio: "15:00",
-    hora_fin: "16:30",
-    correo: "alumno3@example.com",
-    nombre_alumno: "Jorge Martínez",
-    nombre_tutor: "Lucía Rivas",
-    created_at: new Date("2025-08-21T12:00:00Z"),
-    updated_at: new Date("2025-08-21T12:00:00Z"),
-  },
-];
-
-const generateHourSlots = (start: string, end: string) => {
-  const slots = [];
-  let [startHour, startMinute] = start.split(":").map(Number);
-  const [endHour, endMinute] = end.split(":").map(Number);
-
-  while (
-    startHour < endHour ||
-    (startHour === endHour && startMinute < endMinute)
-  ) {
-    const hourStr = `${String(startHour).padStart(2, "0")}:${String(
-      startMinute
-    ).padStart(2, "0")}`;
-    slots.push(hourStr);
-    startHour++;
-  }
-
-  return slots;
+interface Props {
+  appointmentsData: AppointmentData[];
 };
 
-export const DaySchedule = () => {
-  const { selectedDate, openModal, setSelectedHour, openHour, closeHour } =
+export const DaySchedule = ({ appointmentsData }: Props) => {
+  const { selectedDate, openModal, setSelectedHour, openHour, closeHour, setSelectedAppointment } =
     useAppointmentStore();
 
   const hourSlots = useMemo(() => generateHourSlots("00:00", "23:00"), []);
 
   if (!selectedDate) return <NoDateSelected />;
+
+  const appointments: AppointmentData[] = appointmentsData.map((item) => ({
+    ...item,
+    fecha_cita: new Date(item.fecha_cita),
+    created_at: new Date(item.created_at),
+    updated_at: new Date(item.updated_at),
+  }));
 
   return (
     <div>
@@ -80,9 +34,9 @@ export const DaySchedule = () => {
         {hourSlots.map((hour) => {
           const isBlocked = hour < openHour || hour >= closeHour;
 
-          const isPresent = dummyAppointments.find(
+          const isPresent = appointments.find(
             (appointment) =>
-              appointment.hora_inicio === hour &&
+              appointment.hora_inicio.startsWith(hour) &&
               appointment.fecha_cita.toDateString() ===
                 new Date(selectedDate).toDateString()
           );
@@ -90,7 +44,7 @@ export const DaySchedule = () => {
           return (
             <div
               key={hour}
-              className={`p-2 rounded cursor-pointer text-sm border
+              className={`p-2 rounded cursor-pointer text-sm border flex items-center justify-between
         ${
           isBlocked
             ? "bg-red-100 text-red-600 border-red-300 cursor-not-allowed"
@@ -111,7 +65,19 @@ export const DaySchedule = () => {
               }}
             >
               {hour} - {parseInt(hour.split(":")[0]) + 1}:00
-              {isPresent && <button className="px-6" onClick={ () => console.log(isPresent)}>Ver info.</button>}
+              {isPresent && (
+                <button
+                  className="ml-4 flex items-center gap-1 text-blue-700 hover:text-blue-900 text-xs underline transition-all duration-200"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    console.log(isPresent);
+                    setSelectedAppointment(isPresent);
+                  }}
+                >
+                  <Info className="w-4 h-4" />
+                  <span>Ver info</span>
+                </button>
+              )}
             </div>
           );
         })}

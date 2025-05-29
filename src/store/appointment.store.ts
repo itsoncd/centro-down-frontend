@@ -1,6 +1,9 @@
-import { create } from 'zustand';
+import type { AppointmentData } from "@/features/appointments/types";
+import { create } from "zustand";
 
 type AppointmentStore = {
+  selectedAppointment: AppointmentData | null;
+  setSelectedAppointment: (appointment: AppointmentData) => void;
   selectedDate: string | null;
   setSelectedDate: (date: string) => void;
   isModalOpen: boolean;
@@ -13,6 +16,9 @@ type AppointmentStore = {
 };
 
 export const useAppointmentStore = create<AppointmentStore>((set) => ({
+  selectedAppointment: null,
+  setSelectedAppointment: (appointment) =>
+    set({ selectedAppointment: appointment }),
   selectedDate: null,
   setSelectedDate: (date) => set({ selectedDate: date }),
   isModalOpen: false,

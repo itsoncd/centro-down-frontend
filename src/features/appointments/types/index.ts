@@ -1,7 +1,7 @@
 
 
 export interface AppointmentLike {
-    user_id: number;
+    user_id: string;
     fecha_cita: string;
     correo: string;
     nombre_alumno: string;
