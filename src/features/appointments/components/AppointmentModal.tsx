@@ -2,7 +2,6 @@
 import { Dialog } from "@headlessui/react";
 import { useAppointmentStore } from "@/store";
 import AppointmentForm from "./AppointmentForm";
-import { useCreateAppointment } from "../hooks/useCreateAppointment";
 
 export const AppointmentModal = () => {
   const { isModalOpen, closeModal } = useAppointmentStore();

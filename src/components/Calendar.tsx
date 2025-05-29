@@ -47,7 +47,7 @@ export const Calendar = ({ appointments }: Props) => {
         disabled={!selectedDate}
         className="mt-4 bg-blue-600 text-white py-2 px-4 rounded"
       >
-        Agendar citaaa
+        Agendar cita
       </button>
     </div>
   );
