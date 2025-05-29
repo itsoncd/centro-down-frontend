@@ -7,7 +7,7 @@ export const ToastProvider = ({ children }: React.PropsWithChildren) => {
       {children}
       <ToastContainer
         position="top-right"
-        autoClose={4000}
+        autoClose={2000}
         hideProgressBar={false}
         newestOnTop={true}
         closeOnClick
@@ -15,7 +15,7 @@ export const ToastProvider = ({ children }: React.PropsWithChildren) => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light" // Puedes usar "dark" o "colored" también
+        theme="dark" // Puedes usar "dark" o "colored" también
       />
     </>
   )

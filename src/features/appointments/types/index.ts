@@ -34,6 +34,8 @@ export interface GetAppointments {
 export interface AppointmentData {
     user_id:       number;
     fecha_cita:    Date;
+    hora_inicio:   string;
+    hora_fin:      string;
     correo:        string;
     nombre_alumno: string;
     nombre_tutor:  string;
