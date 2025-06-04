@@ -1,15 +1,27 @@
 import Button from "@/components/Button";
 import type { AppointmentData } from "../types";
+import { useDeleteAppointment } from "../hooks/useDeleteAppointment";
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  onDelete: () => void;
   appointment: AppointmentData;
+  onDeleteSuccess: () => void; 
 };
 
-export default function AppointmentDeleteModal({ isOpen, onClose, onDelete, appointment }: Props) {
+export default function AppointmentDeleteModal({ isOpen, onClose, appointment, onDeleteSuccess }: Props) {
+  const { deleteMutation } = useDeleteAppointment();
+
   if (!isOpen) return null;
+
+  const handleDelete = () => {
+    deleteMutation.mutate(appointment.id, {
+      onSuccess: () => {
+        onDeleteSuccess();  
+        onClose();
+      },
+    });
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -31,12 +43,8 @@ export default function AppointmentDeleteModal({ isOpen, onClose, onDelete, appo
         <p className="mb-4 text-sm text-red-500">¿Estás seguro de eliminar la cita?</p>
 
         <div className="flex justify-end gap-2">
-          <Button variant="secondary" onClick={onClose}>
-            Cancelar
-          </Button>
-          <Button variant="cancel" onClick={onDelete}>
-            Eliminar
-          </Button>
+          <Button variant="secondary" onClick={onClose}>Cancelar</Button>
+          <Button variant="cancel" onClick={handleDelete}>Eliminar</Button>
         </div>
       </div>
     </div>

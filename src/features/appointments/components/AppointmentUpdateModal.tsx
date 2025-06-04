@@ -6,12 +6,14 @@ type AppointmentModalProps = {
   isOpen: boolean;
   onClose: () => void;
   appointment: AppointmentData;
+  onUpdate: (updated: AppointmentData) => void;
 };
 
 export default function AppointmentUpdateModal({
   isOpen,
   onClose,
   appointment,
+  onUpdate,
 }: AppointmentModalProps) {
   const { updateMutation } = useUpdateAppointment();
 
@@ -20,14 +22,15 @@ export default function AppointmentUpdateModal({
   const onSubmit = (formData: any) => {
     const finalData = {
       ...formData,
-      user_id: 2, // Si aún es estático
+      user_id: String(appointment.user_id), 
     };
 
     updateMutation.mutate(
       { id: appointment.id, body: finalData },
       {
         onSuccess: () => {
-          onClose(); // cerrar modal
+          onUpdate({ ...appointment, ...finalData }); 
+          onClose(); 
         },
       }
     );
@@ -48,6 +51,8 @@ export default function AppointmentUpdateModal({
           defaultValues={{
             correo: appointment.correo,
             fecha_cita: new Date(appointment.fecha_cita).toISOString().slice(0, 10),
+            hora_inicio: appointment.hora_inicio,
+            hora_fin: appointment.hora_fin,
             nombre_alumno: appointment.nombre_alumno,
             nombre_tutor: appointment.nombre_tutor,
           }}

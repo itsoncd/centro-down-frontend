@@ -6,32 +6,50 @@ import { useAppointmentStore, useUserStore } from "@/store";
 import { useCreateAppointment } from "../hooks/useCreateAppointment";
 import { getDefaultValues } from "../helpers";
 
-export default function AppointmentForm() {
-  //?? Store & Hooks
+type Props = {
+  defaultValues?: Partial<AppointmentFormData>;
+  onSubmit?: (data: AppointmentFormData) => void;
+  submitLabel?: string;
+};
+
+export default function AppointmentForm({
+  defaultValues,
+  onSubmit,
+  submitLabel = "Agendar",
+}: Props) {
   const { selectedDate, selectedHour } = useAppointmentStore();
   const { user } = useUserStore();
   const { appointmentMutation } = useCreateAppointment({
     onSucces: () => reset(),
   });
-  const defaultValues = getDefaultValues(selectedDate, selectedHour);
-  //?? react hook form
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<AppointmentFormData>({ defaultValues });
-  //?? Function
-  const onSubmit = (data: AppointmentFormData) => {
+  } = useForm<AppointmentFormData>({
+    defaultValues: {
+      ...getDefaultValues(selectedDate, selectedHour),
+      ...defaultValues, // sobrescribe si viene del update
+    },
+  });
+
+  const handleFormSubmit = (data: AppointmentFormData) => {
     const finalData = {
       ...data,
       user_id: user!.id,
     };
-    appointmentMutation.mutate(finalData);
+
+    if (onSubmit) {
+      onSubmit(finalData); // para editar
+    } else {
+      appointmentMutation.mutate(finalData); // para crear
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
       <InputField
         id="correo"
         label="Correo del tutor"
@@ -92,7 +110,7 @@ export default function AppointmentForm() {
       />
 
       <Button type="submit" variant="primary">
-        Agendar
+        {submitLabel}
       </Button>
     </form>
   );

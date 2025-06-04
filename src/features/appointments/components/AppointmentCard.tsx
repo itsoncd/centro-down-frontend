@@ -49,15 +49,15 @@ export const AppointmentCard = ({ appointment }: Props) => {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         appointment={appointment}
+        onUpdate={() => {}} 
       />
 
       <AppointmentDeleteModal
         isOpen={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
-        onDelete={handleDelete}
         appointment={appointment}
+        onDeleteSuccess={handleDelete} 
       />
-
     </div>
   );
 };

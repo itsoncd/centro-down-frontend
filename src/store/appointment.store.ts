@@ -3,7 +3,7 @@ import { create } from "zustand";
 
 type AppointmentStore = {
   selectedAppointment: AppointmentData | null;
-  setSelectedAppointment: (appointment: AppointmentData) => void;
+  setSelectedAppointment: (appointment: AppointmentData | null) => void;
   selectedDate: string | null;
   setSelectedDate: (date: string) => void;
   isModalOpen: boolean;

@@ -5,6 +5,7 @@ import type { AppointmentData } from "../types";
 import { toast } from "react-toastify";
 import { generateHourSlots } from "../helpers";
 import { Info } from "lucide-react";
+import dayjs from "dayjs";
 
 interface Props {
   appointmentsData: AppointmentData[];
@@ -37,21 +38,19 @@ export const DaySchedule = ({ appointmentsData }: Props) => {
           const isPresent = appointments.find(
             (appointment) =>
               appointment.hora_inicio.startsWith(hour) &&
-              appointment.fecha_cita.toDateString() ===
-                new Date(selectedDate).toDateString()
+              dayjs(appointment.fecha_cita).isSame(dayjs(selectedDate), "day")
           );
 
           return (
             <div
               key={hour}
               className={`p-2 rounded cursor-pointer text-sm border flex items-center justify-between
-        ${
-          isBlocked
-            ? "bg-red-100 text-red-600 border-red-300 cursor-not-allowed"
-            : isPresent
-            ? "bg-blue-100 text-blue-800 border-blue-300 cursor-not-allowed"
-            : "bg-green-100 hover:bg-green-200 text-green-800"
-        }
+        ${isBlocked
+                  ? "bg-red-100 text-red-600 border-red-300 cursor-not-allowed"
+                  : isPresent
+                    ? "bg-blue-100 text-blue-800 border-blue-300 cursor-not-allowed"
+                    : "bg-green-100 hover:bg-green-200 text-green-800"
+                }
       `}
               onClick={() => {
                 if (!isBlocked && !isPresent) {
