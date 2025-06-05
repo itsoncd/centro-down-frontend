@@ -15,7 +15,7 @@ export const ToastProvider = ({ children }: React.PropsWithChildren) => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="dark" // Puedes usar "dark" o "colored" también
+        theme="dark"
       />
     </>
   )

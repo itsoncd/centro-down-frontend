@@ -7,7 +7,7 @@ export const modifiersClassNames = {
     appointmentDays: "bg-green-300 text-white",
   };
 
-const nonWorkingDays = [parseISO("2025-05-20"), parseISO("2025-05-25")]
+const nonWorkingDays = [parseISO("2025-05-20"), parseISO("2025-05-25"),]
 
 export const getModifiers = ( appointments: AppointmentData[] ) => {
   const appointmentDays = Array.from(

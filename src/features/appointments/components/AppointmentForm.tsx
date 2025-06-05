@@ -5,6 +5,7 @@ import type { AppointmentFormData } from "../types";
 import { useAppointmentStore, useUserStore } from "@/store";
 import { useCreateAppointment } from "../hooks/useCreateAppointment";
 import { getDefaultValues } from "../helpers";
+import { formatHour } from '../../../utils/format-hours.utils';
 
 type Props = {
   defaultValues?: Partial<AppointmentFormData>;
@@ -64,7 +65,6 @@ export default function AppointmentForm({
         id="fecha_cita"
         label="Fecha de la cita"
         type="date"
-        readOnly
         registration={register("fecha_cita", {
           required: "La fecha es obligatoria",
         })}
@@ -75,6 +75,7 @@ export default function AppointmentForm({
         id="hora_inicio"
         label="Hora de inicio"
         type="time"
+        name="time"
         registration={register("hora_inicio", {
           required: "La hora de inicio es obligatoria",
         })}

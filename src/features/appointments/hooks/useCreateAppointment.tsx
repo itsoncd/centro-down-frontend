@@ -21,7 +21,7 @@ export const useCreateAppointment = ({
       toast.success("Cita registrada con exito!");
       queryClient.invalidateQueries({ queryKey: ["appointments"] });
       if (onSucces) onSucces();
-      //setSelectedAppointment(response.data);
+      setSelectedAppointment(response.data);
       closeModal();
       return;
     },

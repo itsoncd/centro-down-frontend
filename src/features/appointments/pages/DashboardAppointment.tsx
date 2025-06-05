@@ -5,9 +5,10 @@ import { useAppointmentStore } from "@/store";
 import { useGetAppointments } from "../hooks/useGetAppointments";
 import { LoaderCard } from "@/components/LoaderCard";
 import { AppointmentDetailsForm } from "../components/AppointmentDetailsForm";
+import { formatHour } from "@/utils";
 
 export const DashboardAppointment = () => {
-  const { selectedHour, selectedDate, selectedAppointment } =
+  const { selectedDate, selectedAppointment } =
     useAppointmentStore();
   const { appointmentQuery } = useGetAppointments();
   console.log(appointmentQuery.data?.data);
@@ -24,7 +25,7 @@ export const DashboardAppointment = () => {
 
         <div className="bg-white rounded-2xl shadow p-6 h-[500px] flex flex-col">
           <h2 className="text-xl font-bold mb-4 text-blue-800">
-            Citas agendadas
+            Horarios
           </h2>
           <div className="overflow-y-auto flex-1">
             <DaySchedule appointmentsData={appointmentQuery.data.data} />
@@ -41,12 +42,13 @@ export const DashboardAppointment = () => {
                 Detalle de la cita
               </h2>
               <p className="text-sm text-gray-600">
-                Hora: <span className="font-extrabold">{selectedHour}</span> |
+                Hora de inicio: <span className="font-extrabold">{formatHour(selectedAppointment.hora_inicio)}</span> |
+                Hora de fin: <span className="font-extrabold">{formatHour(selectedAppointment.hora_fin)}</span> |
                 Fecha: <span className="font-extrabold">{selectedDate}</span>
               </p>
             </div>
             <div className="overflow-y-auto flex-1">
-              <AppointmentDetailsForm appointment={selectedAppointment} />
+              <AppointmentDetailsForm />
             </div>
           </div>
         )}

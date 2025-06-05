@@ -9,7 +9,7 @@ export const createAppointment = async (body: AppointmentLike): Promise<Appointm
 }
 
 export const getAllAppointments = async (): Promise<GetAppointments> => {
-    await sleep(3);
+    // await sleep(1);
     const { data } = await api.get<GetAppointments>('/citas');
     console.log('🚀data: ', data);
     return data;

@@ -1,4 +1,5 @@
 import type { AppointmentData } from "@/features/appointments/types";
+import { formatHour } from "@/utils";
 import { create } from "zustand";
 
 type AppointmentStore = {
@@ -25,7 +26,7 @@ export const useAppointmentStore = create<AppointmentStore>((set) => ({
   openModal: () => set({ isModalOpen: true }),
   closeModal: () => set({ isModalOpen: false }),
   selectedHour: null,
-  setSelectedHour: (hour) => set({ selectedHour: hour }),
+  setSelectedHour: (hour) => set({ selectedHour: formatHour(hour) }),
   openHour: "08:00",
   closeHour: "18:00",
 }));

@@ -1,6 +1,7 @@
 import { useAppointmentStore } from "@/store";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
+import { es } from "react-day-picker/locale";
 import { parse } from "date-fns";
 import type { AppointmentData } from "@/features/appointments/types";
 import { modifiersClassNames } from "@/features/appointments/helpers";
@@ -11,7 +12,7 @@ type Props = {
 };
 
 export const Calendar = ({ appointments }: Props) => {
-  const { selectedDate, setSelectedDate, openModal } = useAppointmentStore();
+  const { selectedDate, setSelectedDate } = useAppointmentStore();
   console.log(selectedDate);
 
   const selectedDateObj = selectedDate
@@ -25,6 +26,7 @@ export const Calendar = ({ appointments }: Props) => {
   return (
     <div className="w-full">
       <DayPicker
+        locale={es}
         animate
         navLayout="around"
         classNames={{
@@ -42,13 +44,6 @@ export const Calendar = ({ appointments }: Props) => {
         modifiers={modifiers}
         modifiersClassNames={modifiersClassNames}
       />
-      <button
-        onClick={openModal}
-        disabled={!selectedDate}
-        className="mt-4 bg-blue-600 text-white py-2 px-4 rounded"
-      >
-        Agendar cita
-      </button>
     </div>
   );
 };

@@ -5,15 +5,20 @@ import type { AppointmentData } from "../types";
 import { toast } from "react-toastify";
 import { generateHourSlots } from "../helpers";
 import { Info } from "lucide-react";
-import dayjs from "dayjs";
 
 interface Props {
   appointmentsData: AppointmentData[];
-};
+}
 
 export const DaySchedule = ({ appointmentsData }: Props) => {
-  const { selectedDate, openModal, setSelectedHour, openHour, closeHour, setSelectedAppointment } =
-    useAppointmentStore();
+  const {
+    selectedDate,
+    openModal,
+    setSelectedHour,
+    openHour,
+    closeHour,
+    setSelectedAppointment,
+  } = useAppointmentStore();
 
   const hourSlots = useMemo(() => generateHourSlots("00:00", "23:00"), []);
 
@@ -35,22 +40,30 @@ export const DaySchedule = ({ appointmentsData }: Props) => {
         {hourSlots.map((hour) => {
           const isBlocked = hour < openHour || hour >= closeHour;
 
-          const isPresent = appointments.find(
-            (appointment) =>
-              appointment.hora_inicio.startsWith(hour) &&
-              dayjs(appointment.fecha_cita).isSame(dayjs(selectedDate), "day")
-          );
+          const isPresent = appointments.find((appointment) => {
+            const citaFecha = appointment.fecha_cita.toDateString();
+            const selected = new Date(selectedDate).toDateString();
+            if (citaFecha !== selected) return false;
+
+            const slotHour = parseInt(hour.split(":")[0], 10);
+
+            const [startHour] = appointment.hora_inicio.split(":").map(Number);
+            const [endHour] = appointment.hora_fin.split(":").map(Number);
+
+            return slotHour >= startHour && slotHour < endHour;
+          });
 
           return (
             <div
               key={hour}
               className={`p-2 rounded cursor-pointer text-sm border flex items-center justify-between
-        ${isBlocked
-                  ? "bg-red-100 text-red-600 border-red-300 cursor-not-allowed"
-                  : isPresent
-                    ? "bg-blue-100 text-blue-800 border-blue-300 cursor-not-allowed"
-                    : "bg-green-100 hover:bg-green-200 text-green-800"
-                }
+        ${
+          isBlocked
+            ? "bg-red-100 text-red-600 border-red-300 cursor-not-allowed"
+            : isPresent
+            ? "bg-blue-100 text-blue-800 border-blue-300 cursor-not-allowed"
+            : "bg-green-100 hover:bg-green-200 text-green-800"
+        }
       `}
               onClick={() => {
                 if (!isBlocked && !isPresent) {

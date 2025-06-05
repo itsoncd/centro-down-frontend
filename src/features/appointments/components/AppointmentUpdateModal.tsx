@@ -1,6 +1,7 @@
 import AppointmentForm from "./AppointmentForm";
 import type { AppointmentData } from "../types";
 import { useUpdateAppointment } from "../hooks/useUpdateAppointment";
+import { formatHour } from "@/utils";
 
 type AppointmentModalProps = {
   isOpen: boolean;
@@ -51,8 +52,8 @@ export default function AppointmentUpdateModal({
           defaultValues={{
             correo: appointment.correo,
             fecha_cita: new Date(appointment.fecha_cita).toISOString().slice(0, 10),
-            hora_inicio: appointment.hora_inicio,
-            hora_fin: appointment.hora_fin,
+            hora_inicio: formatHour(appointment.hora_inicio),
+            hora_fin: formatHour(appointment.hora_fin),
             nombre_alumno: appointment.nombre_alumno,
             nombre_tutor: appointment.nombre_tutor,
           }}
