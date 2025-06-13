@@ -42,6 +42,10 @@ export const router = createBrowserRouter([
       },
       { path: "alumnos",
         element: <InDevelopment />
+      },
+      {
+        path: "administrar-usuarios",
+        element: <InDevelopment />
       }
     ],
   },
