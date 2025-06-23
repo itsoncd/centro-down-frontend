@@ -5,7 +5,6 @@ import type { AppointmentFormData } from "../types";
 import { useAppointmentStore, useUserStore } from "@/store";
 import { useCreateAppointment } from "../hooks/useCreateAppointment";
 import { getDefaultValues } from "../helpers";
-import { formatHour } from '../../../utils/format-hours.utils';
 
 type Props = {
   defaultValues?: Partial<AppointmentFormData>;
