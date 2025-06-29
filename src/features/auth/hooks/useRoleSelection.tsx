@@ -24,6 +24,7 @@ export const useRoleSelection = () => {
     } else {
       const mainRole = roles[0];
       localStorage.setItem("rol", mainRole);
+      localStorage.setItem("AUTH_TOKEN", response.token);
       setUser({
         id: response.user.id,
         name: response.user.name,
@@ -38,6 +39,7 @@ export const useRoleSelection = () => {
   const selectRole = (role: Role) => {
     if (!pendingUserData) return;
     localStorage.setItem("rol", role);
+    localStorage.setItem("AUTH_TOKEN", pendingUserData.token);
     setUser({
       id: pendingUserData.user.id,
       name: pendingUserData.user.name,
