@@ -7,6 +7,7 @@ import { InDevelopment } from "@/pages/InDevelopment";
 import { HomePageDirector } from "@/features/appointments/pages/HomePageDirector";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 import { LoginPage } from "@/features/auth/pages/LoginPage";
+import { DashboardManageUser } from "@/features/manage-user/pages/DashboardManageUser";
 
 
 export const router = createBrowserRouter([
@@ -42,6 +43,10 @@ export const router = createBrowserRouter([
       },
       { path: "alumnos",
         element: <InDevelopment />
+      },
+      {
+        path: "administrar-usuarios",
+        element: <DashboardManageUser />
       }
     ],
   },

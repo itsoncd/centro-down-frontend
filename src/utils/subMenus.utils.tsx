@@ -25,6 +25,7 @@ export const subMenusByRole: Record<Role, SidebarLink[]> = {
     { to: "/director", label: "Inicio", icon: <Home size={18} /> },
     { to: "/director/citas", label: "Citas", icon: <Calendar size={18} /> },
     { to: "/director/agenda", label: "Agenda", icon: <BookOpenCheck size={18} /> },
+    { to: "/director/administrar-usuarios", label: "Administrar Usuarios", icon: <Users size={18} /> },
     { to: "/director/profesores", label: "Profesores", icon: <Users size={18} /> },
     { to: "/director/alumnos", label: "Alumnos", icon: <Users size={18} /> },
   ],
