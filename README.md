@@ -50,4 +50,6 @@ Para mejorar tu experiencia como desarrollador
 - Tailwind Fold – Oculta clases largas de Tailwind
 
 - Better Comments – Colorea tus comentarios por importancia
+  
+- Paste JSON as Code 
 
