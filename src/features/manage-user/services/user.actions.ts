@@ -1,5 +1,5 @@
 import { api } from "@/lib/axios";
-import type { HTTPResponseUsers, HTTPResponseUser } from "../types";
+import type { HTTPResponseUsers, HTTPResponseUser, CreateUserFormType } from "../types";
 
 
 export const getAllUser = async () => {
@@ -13,9 +13,9 @@ export const getAllUser = async () => {
     }
 };
 
-export const createUser = async () => {
+export const createUser = async ( user: CreateUserFormType ) => {
     try {
-        const { data } = await api.post<HTTPResponseUser>('/users');
+        const { data } = await api.post<HTTPResponseUser>('/users', user);
         return data;
     } catch (error) {
         console.log(error);

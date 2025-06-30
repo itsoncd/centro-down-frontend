@@ -21,3 +21,10 @@ export interface Datum {
     created_at:        Date;
     updated_at:        Date;
 }
+export interface CreateUserFormType {
+    name:                  string;
+    email:                 string;
+    password:              string;
+    password_confirmation: string;
+    roles:                 number[];
+}
