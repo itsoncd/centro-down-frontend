@@ -1,4 +1,4 @@
-import axios from "axios";
+import { api } from "@/lib/axios";
 
 export type Role = {
   id: number;
@@ -9,6 +9,6 @@ export type Role = {
 
 
 export const getRoles = async (): Promise<Role[]> => {
-  const response = await axios.get("http://localhost:8000/api/roles");
+  const response = await api.get("http://localhost:8000/api/roles");
   return response.data.data; // Extrae solo el array de roles
 };

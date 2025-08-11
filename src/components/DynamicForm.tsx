@@ -23,9 +23,27 @@ type SelectMultipleFieldConfig<T extends FieldValues> = BaseField<T> & {
   options: { label: string; value: string }[];
 };
 
+type CheckboxGroupFieldConfig<T extends FieldValues> = BaseField<T> & {
+  type: "checkbox-group";
+  options: { label: string; value: string }[];
+};
+
 export type FieldConfig<T extends FieldValues> =
   | InputFieldConfig<T>
-  | SelectMultipleFieldConfig<T>;
+  | SelectMultipleFieldConfig<T>
+  | CheckboxGroupFieldConfig<T>;
+
+function isCheckboxGroupField<T extends FieldValues>(
+  field: FieldConfig<T>
+): field is CheckboxGroupFieldConfig<T> {
+  return field.type === "checkbox-group";
+}
+
+function isSelectMultipleField<T extends FieldValues>(
+  field: FieldConfig<T>
+): field is SelectMultipleFieldConfig<T> {
+  return field.type === "select-multiple";
+}
 
 type Props<T extends FieldValues> = {
   fields: FieldConfig<T>[];
@@ -33,13 +51,6 @@ type Props<T extends FieldValues> = {
   onSubmit: (data: T) => void;
   submitLabel?: string;
 };
-
-// 🔧 Type Guard para que TypeScript lo entienda
-function isSelectMultipleField<T extends FieldValues>(
-  field: FieldConfig<T>
-): field is SelectMultipleFieldConfig<T> {
-  return field.type === "select-multiple";
-}
 
 export const DynamicForm = <T extends FieldValues>({
   fields,
@@ -56,6 +67,35 @@ export const DynamicForm = <T extends FieldValues>({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       {fields.map((field) => {
+        if (isCheckboxGroupField(field)) {
+          return (
+            <div key={field.id} className="space-y-1">
+              <label className="block font-medium">{field.label}</label>
+              <div className="flex flex-wrap gap-4">
+                {field.options.map((opt) => (
+                  <label
+                    key={opt.value}
+                    className="inline-flex items-center space-x-2 cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      value={opt.value}
+                      {...register(field.id, field.validation)}
+                      className="form-checkbox"
+                    />
+                    <span>{opt.label}</span>
+                  </label>
+                ))}
+              </div>
+              {errors[field.id] && (
+                <p className="text-red-500 text-sm">
+                  {(errors[field.id] as FieldError)?.message as string}
+                </p>
+              )}
+            </div>
+          );
+        }
+
         if (isSelectMultipleField(field)) {
           return (
             <div key={field.id} className="space-y-1">

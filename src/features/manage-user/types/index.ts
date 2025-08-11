@@ -1,3 +1,5 @@
+import type { Role } from "@/types";
+
 export interface HTTPResponseUsers {
     status_code: number;
     message:     string;
@@ -18,6 +20,7 @@ export interface Datum {
     confirmed:         boolean;
     isActive:          boolean;
     isVerified:        boolean;
+    roles?: Role[];
     created_at:        Date;
     updated_at:        Date;
 }
@@ -28,3 +31,12 @@ export interface CreateUserFormType {
     password_confirmation: string;
     roles:                 number[];
 }
+
+export interface UpdateUserFormType {
+  name: string;
+  email: string;
+  password?: string;
+  password_confirmation?: string;
+  roles: number[];
+}
+

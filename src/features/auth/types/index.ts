@@ -1,20 +1,11 @@
-//?? Types form
+import type { ApiResponseBase } from "@/types";
+
 export type LoginFormType = {
   email: string;
   password: string;
 };
 
-export type HTTPLoginResponse = {
-  message: string;
-  token: string;
-  user: userLoginReponse;
-};
-
-export type HTTPLoginError = {
-  error: string;
-};
-
-export type userLoginReponse = {
+export type UserLoginResponse = {
   id: string;
   name: string;
   email: string;
@@ -22,3 +13,8 @@ export type userLoginReponse = {
   confirmed: boolean;
   created_at: string;
 };
+
+export type HTTPLoginResponse = ApiResponseBase<{
+  token: string;
+  user: UserLoginResponse;
+}>;

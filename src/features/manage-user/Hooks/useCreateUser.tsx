@@ -9,7 +9,7 @@ export const useCreateUser = () => {
     mutationFn: (newUser: CreateUserFormType) => createUser(newUser),
     onSuccess: () => {
       // Refetch de la lista de usuarios
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: ["get-users-query"] });
     },
   });
 

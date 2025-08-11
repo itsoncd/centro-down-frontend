@@ -22,6 +22,7 @@ export const Table = ({ columns, data }: TableProps) => {
               <td colSpan={columns.length} className="text-center py-4">
                 No hay datos disponibles.
               </td>
+              <td>Hello</td>
             </tr>
           ) : (
             data.map((row, idx) => (
