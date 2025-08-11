@@ -7,19 +7,35 @@ export const modifiersClassNames = {
     appointmentDays: "bg-green-300 text-white",
   };
 
-const nonWorkingDays = [parseISO("2025-05-20"), parseISO("2025-05-25"),]
+export const getModifiers = (
+  appointments: AppointmentData[],
+  holidaysData: { date: string }[] | undefined
+) => {
+  const staticNonWorkingDays = [
+    parseISO("2025-05-20"),
+    parseISO("2025-05-25"),
+  ];
 
-export const getModifiers = ( appointments: AppointmentData[] ) => {
+  const apiNonWorkingDays = holidaysData
+    ? holidaysData.map((h) => parseISO(h.date))
+    : [];
+
+  const nonWorkingDays = [...staticNonWorkingDays, ...apiNonWorkingDays];
+
   const appointmentDays = Array.from(
     new Set(
       appointments.map(
-        (a) => parseISO(String(a.fecha_cita)).toISOString().split("T")[0]
+        (a) =>
+          parseISO(String(a.fecha_cita))
+            .toISOString()
+            .split("T")[0]
       )
     )
   ).map((dateStr) => parseISO(dateStr));
+
   return {
-    nonWorkingDays: nonWorkingDays,
+    nonWorkingDays,
     weekends: (date: Date) => date.getDay() === 0 || date.getDay() === 6,
-    appointmentDays: appointmentDays,
-  }
-}
+    appointmentDays,
+  };
+};

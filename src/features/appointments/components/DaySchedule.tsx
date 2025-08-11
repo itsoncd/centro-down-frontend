@@ -5,6 +5,7 @@ import type { AppointmentData } from "../types";
 import { toast } from "react-toastify";
 import { generateHourSlots } from "../helpers";
 import { Info } from "lucide-react";
+import { useSchedule } from "@/features/schedule/hooks/useSchedule";
 
 interface Props {
   appointmentsData: AppointmentData[];
@@ -15,10 +16,14 @@ export const DaySchedule = ({ appointmentsData }: Props) => {
     selectedDate,
     openModal,
     setSelectedHour,
-    openHour,
-    closeHour,
     setSelectedAppointment,
   } = useAppointmentStore();
+
+  const { scheduleQuery } = useSchedule();
+
+  // Valores por defecto por si no carga aún el horario
+  const openHour = scheduleQuery.data?.start_time || "08:00";
+  const closeHour = scheduleQuery.data?.end_time || "18:00";
 
   const hourSlots = useMemo(() => generateHourSlots("00:00", "23:00"), []);
 
@@ -46,7 +51,6 @@ export const DaySchedule = ({ appointmentsData }: Props) => {
             if (citaFecha !== selected) return false;
 
             const slotHour = parseInt(hour.split(":")[0], 10);
-
             const [startHour] = appointment.hora_inicio.split(":").map(Number);
             const [endHour] = appointment.hora_fin.split(":").map(Number);
 
@@ -57,14 +61,14 @@ export const DaySchedule = ({ appointmentsData }: Props) => {
             <div
               key={hour}
               className={`p-2 rounded cursor-pointer text-sm border flex items-center justify-between
-        ${
-          isBlocked
-            ? "bg-red-100 text-red-600 border-red-300 cursor-not-allowed"
-            : isPresent
-            ? "bg-blue-100 text-blue-800 border-blue-300 cursor-not-allowed"
-            : "bg-green-100 hover:bg-green-200 text-green-800"
-        }
-      `}
+                ${
+                  isBlocked
+                    ? "bg-red-100 text-red-600 border-red-300 cursor-not-allowed"
+                    : isPresent
+                    ? "bg-blue-100 text-blue-800 border-blue-300 cursor-not-allowed"
+                    : "bg-green-100 hover:bg-green-200 text-green-800"
+                }
+              `}
               onClick={() => {
                 if (!isBlocked && !isPresent) {
                   setSelectedHour(hour);
@@ -82,7 +86,6 @@ export const DaySchedule = ({ appointmentsData }: Props) => {
                   className="ml-4 flex items-center gap-1 text-blue-700 hover:text-blue-900 text-xs underline transition-all duration-200"
                   onClick={(e) => {
                     e.stopPropagation();
-                    console.log(isPresent);
                     setSelectedAppointment(isPresent);
                   }}
                 >

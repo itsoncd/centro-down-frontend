@@ -6,6 +6,7 @@ import { parse } from "date-fns";
 import type { AppointmentData } from "@/features/appointments/types";
 import { modifiersClassNames } from "@/features/appointments/helpers";
 import { getModifiers } from '../features/appointments/helpers/modifiers-calendar';
+import { useGetHolidays } from "@/features/schedule/hooks/useGetHoliday";
 
 type Props = {
   appointments: AppointmentData[];
@@ -15,11 +16,16 @@ export const Calendar = ({ appointments }: Props) => {
   const { selectedDate, setSelectedDate } = useAppointmentStore();
   console.log(selectedDate);
 
+    const { holidaysQuery } = useGetHolidays();
+  
+    console.log(holidaysQuery.data);
+
   const selectedDateObj = selectedDate
     ? parse(selectedDate, "yyyy-MM-dd", new Date())
     : undefined;
 
-    const modifiers = getModifiers(appointments);
+    const modifiers = getModifiers(appointments, holidaysQuery.data?.data);
+    console.log(modifiers.nonWorkingDays);
 
   
 
