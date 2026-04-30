@@ -8,6 +8,8 @@ import { HomePageDirector } from "@/features/appointments/pages/HomePageDirector
 import { NotFoundPage } from "@/pages/NotFoundPage";
 import { LoginPage } from "@/features/auth/pages/LoginPage";
 import { DashboardManageUser } from "@/features/manage-user/pages/DashboardManageUser";
+import { AuthGuard } from "@/guards/AuthGuard";
+import { ItemPage } from "@/features/evaluation-template/ItemPage";
 
 
 export const router = createBrowserRouter([
@@ -71,6 +73,20 @@ export const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage/>
+  },
+  {
+    path: "/items",
+    element: (
+      <AuthGuard>
+        <AppLayout />
+      </AuthGuard>
+    ),
+    children: [
+      {
+        index: true,
+        element: <ItemPage />
+      }
+    ]
   },
   {
     path: "*",
