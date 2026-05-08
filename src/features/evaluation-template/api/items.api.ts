@@ -1,6 +1,6 @@
 import { api } from '@/lib/axios'
 
-
+//Obtiene los items desde la API
 export const getItems = () =>
   api.get('/items').then(res => res.data)
 
@@ -11,6 +11,8 @@ type UploadFilesParams = {
   files: File[];
 };
 
+
+// Crea un nuevo item y lo manda a la API
 export const createItem =  async (payload: UploadFilesParams) => {
   const formData = new FormData();
   formData.append("name", payload.name)
