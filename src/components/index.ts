@@ -16,3 +16,4 @@ export * from './SearchBar';
 export * from './SidebarNav';
 export * from './Spinner';
 export * from './Table';
+export * from '../guards/AuthGuard';
