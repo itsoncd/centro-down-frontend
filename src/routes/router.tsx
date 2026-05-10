@@ -10,6 +10,9 @@ import { LoginPage } from "@/features/auth/pages/LoginPage";
 import { DashboardManageUser } from "@/features/manage-user/pages/DashboardManageUser";
 import { AuthGuard } from "@/guards/AuthGuard";
 import { ItemPage } from "@/features/evaluation-template/ItemPage";
+import CreateEvaluationTemplate from "@/features/evaluation-templates/pages/CreateEvaluationTemplate";
+import EditEvaluationTemplate from "@/features/evaluation-templates/pages/EditEvaluationTemplate";
+import MyTemplates from "@/features/evaluation-templates/pages/MyTemplates";
 
 
 export const router = createBrowserRouter([
@@ -49,6 +52,18 @@ export const router = createBrowserRouter([
       {
         path: "administrar-usuarios",
         element: <DashboardManageUser />
+      },
+      {
+        path: "plantillas",
+        element: <CreateEvaluationTemplate />
+      },
+      {
+        path: "plantillas/editar",
+        element: <EditEvaluationTemplate />
+      },
+      {
+        path: "plantillas/mis-plantillas",
+        element: <MyTemplates />
       }
     ],
   },
