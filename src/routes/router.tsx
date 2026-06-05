@@ -10,6 +10,8 @@ import { LoginPage } from "@/features/auth/pages/LoginPage";
 import { DashboardManageUser } from "@/features/manage-user/pages/DashboardManageUser";
 import { AuthGuard } from "@/guards/AuthGuard";
 import { ItemPage } from "@/features/evaluation-template/ItemPage";
+import { DashboardEvaluations } from "@/features/evaluations/pages/DashboardEvaluations";
+import { EvaluationPanel } from "@/features/evaluations/pages/EvaluationPanel";
 
 
 export const router = createBrowserRouter([
@@ -54,7 +56,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/tutor",
-    element: <AppLayout />,
+    element: (
+      <AuthGuard>
+        <AppLayout />
+      </AuthGuard>
+    ),
     children: [
       {
         index: true,
@@ -68,6 +74,14 @@ export const router = createBrowserRouter([
         path: "agenda",
         element: <InDevelopment />
       },
+      {
+        path: "evaluaciones",
+        element: <DashboardEvaluations />,
+      },
+      {
+        path: "calificar/:id",
+        element: <EvaluationPanel />
+      }
     ],
   },
   {
