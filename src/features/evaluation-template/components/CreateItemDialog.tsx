@@ -71,7 +71,7 @@ export const Item = ({ open, onClose, initialName = "" }: ItemProps) => {
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Typography variant="h6" fontWeight={600}>
-          Create Item
+          Crear Item
         </Typography>
         <IconButton onClick={onClose} size="small">
           <CloseIcon />
@@ -80,7 +80,7 @@ export const Item = ({ open, onClose, initialName = "" }: ItemProps) => {
       
       <DialogContent dividers sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
         <TextField
-          label="Name"
+          label="Nombre"
           variant="outlined"
           fullWidth
           value={name}
@@ -89,7 +89,7 @@ export const Item = ({ open, onClose, initialName = "" }: ItemProps) => {
         
         <Box>
           <Typography variant="subtitle2" gutterBottom>
-            Files
+            Archivos
           </Typography>
           <Box
             onDragEnter={handleDrag}
@@ -121,7 +121,7 @@ export const Item = ({ open, onClose, initialName = "" }: ItemProps) => {
             />
             { <CloudUploadIcon sx={{ fontSize: 48, color: 'text.secondary', mb: 1 }} /> }
             { <Typography variant="body1" color="text.secondary">
-              Drag and drop files here, or click to select
+              Arrastra archivos aquí o selecciona uno
             </Typography> }
           </Box>
           
@@ -158,10 +158,10 @@ export const Item = ({ open, onClose, initialName = "" }: ItemProps) => {
       
       <DialogActions sx={{ p: 2 }}>
         <Button onClick={onClose} color="inherit">
-          Cancel
+          Cancelar
         </Button>
         <Button variant="contained" onClick={handleCreateItem} disabled={!name}>
-          Save
+          Guardar
         </Button>
       </DialogActions>
     </Dialog>

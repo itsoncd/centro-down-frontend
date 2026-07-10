@@ -41,13 +41,6 @@ function createData(
   };
 }
 
-const rows = [
-  createData(1, 'Item 1', "1.0", true),
-  createData(2, 'Item 2', "1.0", true),
-  createData(3, 'Item 3', "1.0", true),
-];
-
-
 type Order = 'asc' | 'desc';
 
 interface HeadCell {
@@ -78,19 +71,19 @@ const headCells: readonly HeadCell[] = [
   }
 ];
 
-
 interface EnhancedTableProps {
   numSelected: number;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   rowCount: number;
 }
 
+// Configura la cebecera de la tabla
 function EnhancedTableHead(props: EnhancedTableProps) {
   const { onSelectAllClick, numSelected, rowCount } =
     props;
 
   return (
-    <TableHead>
+    <TableHead sx={{ backgroundColor: '#f8f9fa' }}>
       <TableRow>
         <TableCell padding="checkbox">
           <Checkbox
@@ -121,6 +114,7 @@ interface EnhancedTableToolbarProps {
   numSelected: number;
 }
 
+// Configura la barra de acción para los elementos seleccionados
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   const { numSelected } = props;
   return (
@@ -172,11 +166,10 @@ interface ItemListProps {
   items: ItemData[];
 }
 
+// Método principal
 export const ItemList = ({ items }: ItemListProps) => {
 
   const { data, isLoading, error } = useGetItems();
-
-  console.log(data)
 
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof Data>('name');
@@ -184,9 +177,48 @@ export const ItemList = ({ items }: ItemListProps) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+  // Obtiene los items de la API
+  const rowsData = data?.data?.data || [];
+  const totalItems = rowsData.length;
+
+  // Divide los items entre el numero que se especifique para mostrarlos en la tabla
+  const visibleRows = React.useMemo(() => {
+    return rowsData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  }, [rowsData, page, rowsPerPage]);
+
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - totalItems) : 0;
+
+  // Muestra un texto en lo que se obtienen los datos desde la API
+  if (isLoading) {
+    return (
+      <Box sx={{ width: '100%', p: 4, textAlign: 'center' }}>
+        <Typography color="textSecondary">Cargando datos...</Typography>
+      </Box>
+    );
+  }
+
+  // Avisa si no se pudieron cargar los datos de la API
+  if (error) {
+    return (
+      <Box sx={{ width: '100%', p: 4, textAlign: 'center' }}>
+        <Typography color="error">Error al cargar los ítems. Inténtalo de nuevo.</Typography>
+      </Box>
+    );
+  }
+
+  if (!items || items.length === 0) {
+    return (
+      <div className="w-full p-10 text-center bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
+        <p className="text-gray-500 font-medium">No items available</p>
+        <p className="text-gray-400 text-sm mt-1">Add some items to see them here.</p>
+      </div>
+    );
+  }
+
+  // Se encarga de la opcion de seleccionar todos los elementos de la tabla
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.id);
+      const newSelected = visibleRows.map((n) => n.id);
       setSelected(newSelected);
       return;
     }
@@ -221,27 +253,11 @@ export const ItemList = ({ items }: ItemListProps) => {
     setPage(0);
   };
 
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
-  const visibleRows = [...rows]
-        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-
-  if (!items || items.length === 0) {
-    return (
-      <div className="w-full p-10 text-center bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
-        <p className="text-gray-500 font-medium">No items available</p>
-        <p className="text-gray-400 text-sm mt-1">Add some items to see them here.</p>
-      </div>
-    );
-  }
-
+  // Aqui se construye la tabla
   return (
-    
     <div>
       <Box sx={{ width: '100%' }}>
-        <Paper sx={{ width: '100%', mb: 2 }}>
+        <Paper sx={{ width: '100%', mb: 2, borderRadius: '12px', border: '1px solid #e0e0e0', overflow: 'hidden' }}>
           {selected.length > 0 && (
             <EnhancedTableToolbar numSelected={selected.length} />
           )}
@@ -254,51 +270,28 @@ export const ItemList = ({ items }: ItemListProps) => {
               <EnhancedTableHead
                 numSelected={selected.length}
                 onSelectAllClick={handleSelectAllClick}
-                rowCount={rows.length}
+                rowCount={visibleRows.length}
               />
               <TableBody>
-                {!isLoading && data.data.data.map((row, index) => {
+                {visibleRows.map((row, index) => {
                   const isItemSelected = selected.includes(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row.id)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.id}
-                      selected={isItemSelected}
-                      sx={{ cursor: 'pointer' }}
-                    >
+                    <TableRow hover onClick={(event) => handleClick(event, row.id)} key={row.id} selected={isItemSelected}  sx={{ cursor: 'pointer', }} >
                       <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          slotProps={{
-                            input: { 'aria-labelledby': labelId },
-                          }}
-                        />
+                        <Checkbox checked={isItemSelected} slotProps={{ input: {'aria-labelledby': labelId}, }} />
                       </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
+                      <TableCell component="th" id={labelId} scope="row" padding="none">
                         {row.version_name}
                       </TableCell>
                       <TableCell align="left">{row.version}</TableCell>
-                      <TableCell align="left">true</TableCell>
+                      <TableCell align="left">{row.enabled ? 'true' : 'false'}</TableCell>
                     </TableRow>
                   );
                 })}
                 {emptyRows > 0 && (
-                  <TableRow
-                    style={{
-                    }}
-                  >
+                  <TableRow style={{}}>
                     <TableCell colSpan={4} />
                   </TableRow>
                 )}
@@ -308,7 +301,7 @@ export const ItemList = ({ items }: ItemListProps) => {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={rows.length}
+            count={rowsData.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
