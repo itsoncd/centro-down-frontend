@@ -9,13 +9,13 @@ interface Props {
 }
 
 function TemplateCard({ template, typeColors, calificationLabels, onDelete }: Props) {
-    const previewItems = template.items.slice(0, 3)
-    const remaining = template.items.length - 3
+    const previewItems = template.item_versions?.slice(0, 3)
+    const remaining = template.item_versions?.length - 3
 
     return (
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             <div className="flex items-start justify-between mb-3">
-                <h3 className="text-base font-semibold text-gray-800">{template.name}</h3>
+                <h3 className="text-base font-semibold text-gray-800">{template.version_name}</h3>
                 <div className="flex gap-2">
                     <button className="text-gray-400 hover:text-blue-600 transition-colors">
                         <Pencil size={16} />
@@ -46,7 +46,7 @@ function TemplateCard({ template, typeColors, calificationLabels, onDelete }: Pr
             <div className="flex gap-6 mb-4 text-sm text-gray-500">
                 <div>
                     <p className="text-xs text-gray-400">Ítems</p>
-                    <p className="font-semibold text-gray-700">{template.items.length} ítems</p>
+                    <p className="font-semibold text-gray-700">{template.item_versions?.length} ítems</p>
                 </div>
                 <div>
                     <p className="text-xs text-gray-400">Fecha de creación</p>
@@ -54,13 +54,13 @@ function TemplateCard({ template, typeColors, calificationLabels, onDelete }: Pr
                 </div>
             </div>
 
-            {template.items.length > 0 && (
+            {template.item_versions?.length > 0 && (
                 <div className="border border-gray-100 rounded-lg p-4">
                     <p className="text-xs text-gray-400 mb-2">Vista previa de ítems:</p>
                     <ul className="flex flex-col gap-1">
                         {previewItems.map((item, index) => (
                             <li key={item.id} className="text-sm text-gray-600">
-                                {index + 1}. {item.description}
+                                {index + 1}. {item.name}
                             </li>
                         ))}
                         {remaining > 0 && (

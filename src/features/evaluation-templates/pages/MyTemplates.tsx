@@ -1,40 +1,7 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import type { EvaluationTemplate } from "../types"
 import TemplateCard from "../components/TemplateCard"
 import { Image, FileText, Paperclip, Plus , X, Pencil, ArrowLeft, Play } from 'lucide-react'
-
-const MOCK_TEMPLATES: EvaluationTemplate[] = [
-    {
-        id: 1,
-        name: 'Evaluación de Lectoescritura',
-        description: 'Diagnóstico de Lectoescritura Nivel 1',
-        evaluationType: 'Académica',
-        calificationType: 'escala_logro',
-        instrumentMode: 'personalizado',
-        items: [
-            { id: 1, description: 'Reconoce las vocales en mayúscula', evidences: [] },
-            { id: 2, description: 'Reconoce las vocales en minúscula', evidences: [] },
-            { id: 3, description: 'Escribe su nombre completo', evidences: [] },
-        ],
-        createdAt: '9/5/2026',
-    },
-    {
-        id: 2,
-        name: 'Evaluación de Lenguaje Expresivo - Nivel Básico',
-        description: '',
-        evaluationType: 'Lenguaje',
-        calificationType: 'escala_logro',
-        instrumentMode: 'precargado',
-        items: [
-            { id: 1, description: 'Pronuncia palabras simples correctamente', evidences: [] },
-            { id: 2, description: 'Forma frases de 2-3 palabras', evidences: [] },
-            { id: 3, description: 'Responde a preguntas simples', evidences: [] },
-            { id: 4, description: 'Nombra objetos comunes', evidences: [] },
-            { id: 5, description: 'Expresa necesidades básicas verbalmente', evidences: [] },
-        ],
-        createdAt: '9/5/2026',
-    },
-]
 
 const calificationLabels: Record<string, string> = {
     escala_logro: 'Escala de Logro',
@@ -48,15 +15,56 @@ const typeColors: Record<string, string> = {
 }
 
 function MyTemplates() {
-    const [templates, setTemplates] = useState<EvaluationTemplate[]>(MOCK_TEMPLATES)
+
+    const [loading, setLoading] = useState(true);
+
+    const [templates, setTemplates] = useState<EvaluationTemplate[]>([]);
+
+    const formatDate = (dateString: string): string => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString("en-US");
+    };
+
+    useEffect(() => {
+        const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg1ODk3MDAzLCJleHAiOjE3ODU5MDA2MDMsIm5iZiI6MTc4NTg5NzAwMywianRpIjoiTGgyWXRuYUtPclBoZDhyOSIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.za61paIs5QBX5k9HkJfDh_sreQ0jMUWT1U5e_siFpiQ"
+        
+        fetch("http://localhost:8000/api/evaluation-templates/", {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+            .then(res => res.json())
+            .then((data) => {
+            const evaluationTemplateVersions: EvaluationTemplate[] = data.data.data.map((evaluationTemplateVersion: any) => ({
+                id: evaluationTemplateVersion.id,
+                version_name: evaluationTemplateVersion.version_name,
+                evaluationType: evaluationTemplateVersion.evaluation_template.type,
+                calificationType: evaluationTemplateVersion.grading_type,
+                item_versions: evaluationTemplateVersion.item_versions.map((item_version: any) => ({
+                    id: item_version.id,
+                    name: item_version.version_name
+                })),
+
+                createdAt: formatDate(evaluationTemplateVersion.created_at)
+            }));
+
+            setTemplates(evaluationTemplateVersions);
+            setLoading(false);
+        });
+    }, []);
+
     const [search, setSearch] = useState<string>('')
 
     const filtered = templates.filter(t =>
-        t.name.toLowerCase().includes(search.toLowerCase())
+        t.version_name.toLowerCase().includes(search.toLowerCase())
     )
 
     function handleDelete(id: number) {
         setTemplates(templates.filter(t => t.id !== id))
+    }
+
+    if (loading) {
+        return <div className="bg-blue-50 p-6 -m-6 min-h-screen">
+            <p>Cargando plantillas de evaluación...</p>
+        </div> 
     }
 
     return (
