@@ -20,20 +20,28 @@ function MyTemplates() {
 
     const [templates, setTemplates] = useState<EvaluationTemplate[]>([]);
 
+    const [pagination, setPagination] = useState<any>({ 
+        currentPage: 1,
+        lastPage: 1,
+        perPage: 3,
+        total: 0});
+
     const formatDate = (dateString: string): string => {
         const date = new Date(dateString);
         return date.toLocaleDateString("en-US");
     };
 
-    useEffect(() => {
-        const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg1ODk3MDAzLCJleHAiOjE3ODU5MDA2MDMsIm5iZiI6MTc4NTg5NzAwMywianRpIjoiTGgyWXRuYUtPclBoZDhyOSIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.za61paIs5QBX5k9HkJfDh_sreQ0jMUWT1U5e_siFpiQ"
-        
-        fetch("http://localhost:8000/api/evaluation-templates/", {
+    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg1OTExNzI4LCJleHAiOjE3ODU5MTUzMjgsIm5iZiI6MTc4NTkxMTcyOCwianRpIjoiMXAxRDNwcmcwTzdoTmhPZCIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.h_J02djr4OZdwjXTE_kavX_N5hf0bLREm53zfDLXFZc"
+
+    const fetchEvaluationTemplates = (page: number = 1, perPage: number = 5, sortBy: string = "id", direction: string = "desc") => {
+        setLoading(true);
+        fetch(`http://localhost:8000/api/evaluation-templates/page?page=${page}&per_page=${perPage}&sort_by=${sortBy}&direction=${direction}`, {
             headers: { Authorization: `Bearer ${token}` }
-        })
+            })
             .then(res => res.json())
-            .then((data) => {
-            const evaluationTemplateVersions: EvaluationTemplate[] = data.data.data.map((evaluationTemplateVersion: any) => ({
+            .then(json => {
+                console.log(json);
+                const evaluationTemplateVersions: EvaluationTemplate[] = json.data.data.map((evaluationTemplateVersion: any) => ({
                 id: evaluationTemplateVersion.id,
                 version_name: evaluationTemplateVersion.version_name,
                 evaluationType: evaluationTemplateVersion.evaluation_template.type,
@@ -47,8 +55,18 @@ function MyTemplates() {
             }));
 
             setTemplates(evaluationTemplateVersions);
+            setPagination({
+                currentPage: json.data.current_page,
+                lastPage: json.data.last_page,
+                perPage: json.data.per_page,
+                total: json.data.total
+            });
             setLoading(false);
         });
+    }
+
+    useEffect(() => {
+        fetchEvaluationTemplates();
     }, []);
 
     const [search, setSearch] = useState<string>('')
@@ -108,7 +126,24 @@ function MyTemplates() {
                     />
                 ))}
 
+                <div className="pagination bg-white rounded-xl p-6 shadow-sm border border-gray-100 flex items-center gap-4">
+                    <button className="bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-blue-700"
+                    disabled={pagination.currentPage <= 1}
+                    onClick={() => fetchEvaluationTemplates(pagination.currentPage - 1)}
+                    >
+                    Anterior
+                    </button>
+
+                    <button className="bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-blue-700"
+                    disabled={pagination.currentPage >= pagination.lastPage}
+                    onClick={() => fetchEvaluationTemplates(pagination.currentPage + 1)}
+                    >
+                    Siguiente
+                    </button>
+                </div>
+
             </div>
+
         </div>
     )
 }
