@@ -38,7 +38,7 @@ function ItemsSection({ items, onAddItem, onRemoveItem, canRemove = true, sectio
                                 className="flex items-center justify-between border border-gray-100 rounded-lg px-4 py-2"
                             >
                                 <span className="text-sm text-gray-700">
-                                    {index + 1}. {item.description}
+                                    {index + 1}. {item.name}
                                 </span>
                                 {canRemove && (
                                     <button
