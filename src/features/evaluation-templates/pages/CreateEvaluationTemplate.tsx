@@ -47,8 +47,9 @@ function CreateEvaluationTemplate() {
     }
 
     function handleAddItem(item: EvaluationItem) {
-        setItems([...items, item])
+        setItems([...items, { ...item, files: item.files || [] }])
     }
+
 
     function handleRemoveItem(id: number) {
         setItems(items.filter(i => i.id !== id))
@@ -78,8 +79,7 @@ function CreateEvaluationTemplate() {
 
     const handleSubmit = async () => {
         try {
-            const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg2NTAyNzIwLCJleHAiOjE3ODY1MDYzMjAsIm5iZiI6MTc4NjUwMjcyMCwianRpIjoiQkxPeE93SWxQQzJaZUlkQyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.dCs2bvFNNP3ELjAa_96Sg3RxkO0j2hTWjnZHY1Aa9Qc"
-
+            const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3MDA5NDc1LCJleHAiOjE3ODcwMTMwNzUsIm5iZiI6MTc4NzAwOTQ3NSwianRpIjoiR0JxTllDZFlxcEtob3ZUWSIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.aTi99RVxtmYFxcyt82UpOxG887Ox7E3QSe1RncqXOf4"
             // Construir el objeto template
             const evaluationTemplate = {
             name,
@@ -87,15 +87,11 @@ function CreateEvaluationTemplate() {
             grading_type: gradingType,
             };
 
-            // Construir los items (suponiendo que `items` es un array de objetos con { name, files })
             const payload = {
-            template: evaluationTemplate,
-            items: items.map(item => ({
-                name: item.name,
-                // si tienes archivos en el estado, aquí deben ir como File[]
-                files: item.evidences || []
-            }))
-            };
+                template: evaluationTemplate,
+                items
+            }
+
 
             console.log("Payload a enviar:", payload);
 

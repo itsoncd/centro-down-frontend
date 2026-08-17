@@ -22,7 +22,7 @@ function ItemModal({ onAdd, onClose }: Props) {
         onAdd({
             id: Date.now(),
             name: name,
-            evidences
+            files: evidences
         })
         onClose()
     }

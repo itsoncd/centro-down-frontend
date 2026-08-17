@@ -7,7 +7,7 @@ export type InstrumentMode = 'precargado' | 'personalizado'
 export interface EvaluationItem {
     id: number
     name: string
-    evidences: File[]
+    files: File[]
 }
 
 export interface PreloadedInstrument {
