@@ -65,21 +65,41 @@ function CreateEvaluationTemplate() {
 
         // Items
         payload.items.forEach((item: any, index: number) => {
+            if (item.id && !String(item.id).startsWith("1787")) {
+            // items precargados
+            formData.append(`items[${index}][id]`, item.id);
+            }
+            if (item.name) {
             formData.append(`items[${index}][name]`, item.name);
-            if (item.files) {
+            }
+            if (item.files && item.files.length > 0) {
             item.files.forEach((file: File) => {
                 formData.append(`items[${index}][files][]`, file);
             });
             }
         });
 
+        console.log([...formData.entries()]);
+
         return formData;
         }
 
 
+
     const handleSubmit = async () => {
         try {
-            const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3MDA5NDc1LCJleHAiOjE3ODcwMTMwNzUsIm5iZiI6MTc4NzAwOTQ3NSwianRpIjoiR0JxTllDZFlxcEtob3ZUWSIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.aTi99RVxtmYFxcyt82UpOxG887Ox7E3QSe1RncqXOf4"
+            const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3MTI4Mzg4LCJleHAiOjE3ODcxMzE5ODgsIm5iZiI6MTc4NzEyODM4OCwianRpIjoiZTlJRXFjSG52WFBtWTRrVCIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.DQQ9UDQv1xHGxqV8FxumqHiCL9BtmxZxpYnlwuP020I"
+
+            let url = ""
+            if (isPrecargado && selectedInstrument) {
+            // Crear nueva versión del template existente
+            url = `http://localhost:8000/api/evaluation-templates/${selectedInstrument.id}/versions`
+            } else {
+            // Crear template nuevo
+            url = "http://localhost:8000/api/evaluation-templates/full"
+            }
+
+
             // Construir el objeto template
             const evaluationTemplate = {
             name,
@@ -95,11 +115,10 @@ function CreateEvaluationTemplate() {
 
             console.log("Payload a enviar:", payload);
 
-            const res = await fetch("http://localhost:8000/api/evaluation-templates/full", {
+            const res = await fetch(url, {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`
-                // 👇 OJO: no pongas Content-Type si vas a enviar archivos
             },
             body: buildFormData(payload) // función que convierte JSON + files a FormData
             });

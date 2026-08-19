@@ -13,7 +13,7 @@ function InstrumentSelector({ evaluationType, mode, onModeChange, selectedInstru
   const [instruments, setInstruments] = useState<PreloadedInstrument[]>([])
   const [loading, setLoading] = useState(false)
 
-  const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3MDA5NDc1LCJleHAiOjE3ODcwMTMwNzUsIm5iZiI6MTc4NzAwOTQ3NSwianRpIjoiR0JxTllDZFlxcEtob3ZUWSIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.aTi99RVxtmYFxcyt82UpOxG887Ox7E3QSe1RncqXOf4"
+  const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3MTI4Mzg4LCJleHAiOjE3ODcxMzE5ODgsIm5iZiI6MTc4NzEyODM4OCwianRpIjoiZTlJRXFjSG52WFBtWTRrVCIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.DQQ9UDQv1xHGxqV8FxumqHiCL9BtmxZxpYnlwuP020I"
 
   useEffect(() => {
     async function fetchInstruments() {
@@ -58,10 +58,39 @@ function InstrumentSelector({ evaluationType, mode, onModeChange, selectedInstru
     onInstrumentChange(null)
   }
 
-  function handleInstrumentChange(id: string) {
-    const instrument = instruments.find(i => i.id === Number(id)) || null
-    onInstrumentChange(instrument)
+  async function handleInstrumentChange(id: string) {
+    if (!id) {
+      onInstrumentChange(null)
+      return
+    }
+
+    try {
+      const res = await fetch(`http://localhost:8000/api/evaluation-templates/${id}`, {
+        headers: { "Authorization": `Bearer ${token}` }
+      })
+      const json = await res.json()
+
+      const tpl = json.data
+      const latestVersion = tpl.versions.find((v: any) => v.latest) || tpl.versions[0]
+
+      const items = latestVersion.item_versions.map((iv: any) => ({
+        id: iv.id,
+        name: iv.version_name,
+        files: [] // si quieres traer evidencias, aquí puedes mapear iv.files
+      }))
+
+      onInstrumentChange({
+        id: tpl.id,
+        name: tpl.name,
+        calificationType: latestVersion.grading_type,
+        evaluationType: tpl.type,
+        items
+      })
+    } catch (err) {
+      console.error("Error cargando instrumento:", err)
+    }
   }
+
 
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
