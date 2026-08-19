@@ -8,7 +8,7 @@ interface Props {
 }
 
 function ItemModal({ onAdd, onClose }: Props) {
-    const [description, setDescription] = useState<string>('')
+    const [name, setName] = useState<string>('')
     const [evidences, setEvidences] = useState<File[]>([])
 
     function handleAddFile(e: React.ChangeEvent<HTMLInputElement>) {
@@ -18,11 +18,11 @@ function ItemModal({ onAdd, onClose }: Props) {
     }
 
     function handleAdd() {
-        if (description.trim() === '') return
+        if (name.trim() === '') return
         onAdd({
             id: Date.now(),
-            description,
-            evidences
+            name: name,
+            files: evidences
         })
         onClose()
     }
@@ -36,8 +36,8 @@ function ItemModal({ onAdd, onClose }: Props) {
                     <div>
                         <label className="text-sm font-medium text-gray-700">Descripción del Ítem</label>
                         <textarea
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                             placeholder="Ej: Reconoce las vocales en mayúscula y minúscula"
                             rows={3}
                             className="mt-1 w-full border border-gray-200 rounded-lg p-2 text-sm text-gray-700 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
@@ -97,7 +97,7 @@ function ItemModal({ onAdd, onClose }: Props) {
                     </button>
                     <button
                         onClick={handleAdd}
-                        disabled={description.trim() === ''}
+                        disabled={name.trim() === ''}
                         className="flex-1 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
                     >
                         Agregar Ítem
