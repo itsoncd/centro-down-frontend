@@ -31,7 +31,7 @@ function MyTemplates() {
         return date.toLocaleDateString("en-US");
     };
 
-    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3MTI4Mzg4LCJleHAiOjE3ODcxMzE5ODgsIm5iZiI6MTc4NzEyODM4OCwianRpIjoiZTlJRXFjSG52WFBtWTRrVCIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.DQQ9UDQv1xHGxqV8FxumqHiCL9BtmxZxpYnlwuP020I"
+    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3Mjk1NzQ1LCJleHAiOjE3ODcyOTkzNDUsIm5iZiI6MTc4NzI5NTc0NSwianRpIjoiZ3BmcHNDdE91Z0gxSUZQYiIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.tPyu7WNEND8GQq6oRXKM8cVtcTLwaOGrRB5aqOeWU2M"
 
     const fetchEvaluationTemplates = (page: number = 1, perPage: number = 5, sortBy: string = "id", direction: string = "desc") => {
         setLoading(true);
@@ -40,9 +40,9 @@ function MyTemplates() {
             })
             .then(res => res.json())
             .then(json => {
-                console.log(json);
                 const evaluationTemplateVersions: EvaluationTemplate[] = json.data.data.map((evaluationTemplateVersion: any) => ({
                 id: evaluationTemplateVersion.id,
+                evaluation_template_id: evaluationTemplateVersion.evaluation_template_id,
                 version_name: evaluationTemplateVersion.version_name,
                 evaluationType: evaluationTemplateVersion.evaluation_template.type,
                 calificationType: evaluationTemplateVersion.grading_type,

@@ -88,7 +88,7 @@ function CreateEvaluationTemplate() {
 
     const handleSubmit = async () => {
         try {
-            const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3MTI4Mzg4LCJleHAiOjE3ODcxMzE5ODgsIm5iZiI6MTc4NzEyODM4OCwianRpIjoiZTlJRXFjSG52WFBtWTRrVCIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.DQQ9UDQv1xHGxqV8FxumqHiCL9BtmxZxpYnlwuP020I"
+            const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3Mjk1NzQ1LCJleHAiOjE3ODcyOTkzNDUsIm5iZiI6MTc4NzI5NTc0NSwianRpIjoiZ3BmcHNDdE91Z0gxSUZQYiIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.tPyu7WNEND8GQq6oRXKM8cVtcTLwaOGrRB5aqOeWU2M"
 
             let url = ""
             if (isPrecargado && selectedInstrument) {
@@ -131,14 +131,16 @@ function CreateEvaluationTemplate() {
         }
         };
 
-
+    function goBack() {
+        navigate("/director/plantillas/mis-plantillas");
+    }
 
     return (
         <div className="bg-blue-50 p-6 -m-6 min-h-screen">
             <div className="max-w-2xl mx-auto flex flex-col gap-4">
                 
                 <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 flex items-center gap-4">
-                    <button className="flex items-center gap-1 text-sm text-gray-600 border border-gray-200 rounded-full px-4 py-1 bg-white hover:bg-gray-50">
+                    <button onClick={goBack} className="flex items-center gap-1 text-sm text-gray-600 border border-gray-200 rounded-full px-4 py-1 bg-white hover:bg-gray-50">
                         <ArrowLeft size={14} /> Volver al panel
                     </button>
                     <h1 className="text-2xl font-bold text-gray-800">Crear Plantilla de Evaluación</h1>
@@ -180,7 +182,7 @@ function CreateEvaluationTemplate() {
                 />
             
                 <div className="flex gap-3">
-                    <button className="flex-1 py-3 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
+                    <button onClick={goBack} className="flex-1 py-3 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
                         Cancelar
                     </button>
                     <button onClick={handleSubmit} className="flex-1 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">

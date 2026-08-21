@@ -1,5 +1,6 @@
 import type { EvaluationTemplate } from "../types"
 import { X, Pencil, Play } from 'lucide-react'
+import { useNavigate } from "react-router-dom";
 
 interface Props {
     template: EvaluationTemplate
@@ -11,15 +12,19 @@ interface Props {
 function TemplateCard({ template, typeColors, calificationLabels, onDelete }: Props) {
     const previewItems = template.item_versions?.slice(0, 3)
     const remaining = template.item_versions?.length - 3
+    const navigate = useNavigate();
 
     return (
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             <div className="flex items-start justify-between mb-3">
                 <h3 className="text-base font-semibold text-gray-800">{template.version_name}</h3>
                 <div className="flex gap-2">
-                    <button className="text-gray-400 hover:text-blue-600 transition-colors">
+                    <button
+                    onClick={() => navigate(`/director/plantillas/editar/${template.evaluation_template_id}`)}
+                    className="text-gray-400 hover:text-blue-600 transition-colors">
                         <Pencil size={16} />
                     </button>
+
                     <button
                         onClick={() => onDelete(template.id)}
                         className="text-gray-400 hover:text-red-500 transition-colors"

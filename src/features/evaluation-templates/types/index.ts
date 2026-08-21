@@ -19,12 +19,13 @@ export interface PreloadedInstrument {
 }
 
 export interface EvaluationTemplate {
-    id: number
-    version_name: string
-    description: string
-    evaluationType: EvaluationType
-    calificationType: CalificationType
-    instrumentMode: InstrumentMode
-    item_versions: EvaluationItem[]
-    createdAt: string
+  id: number
+  version_name: string
+  description: string
+  evaluationType: EvaluationType
+  calificationType: CalificationType
+  instrumentMode: InstrumentMode
+  item_versions: EvaluationItem[]
+  createdAt: string
+  evaluation_template_id: number
 }
