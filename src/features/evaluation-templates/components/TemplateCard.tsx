@@ -26,7 +26,7 @@ function TemplateCard({ template, typeColors, calificationLabels, onDelete }: Pr
                     </button>
 
                     <button
-                        onClick={() => onDelete(template.id)}
+                        onClick={() => onDelete(template.evaluation_template_id)}
                         className="text-gray-400 hover:text-red-500 transition-colors"
                     >
                         <X size={16} />
