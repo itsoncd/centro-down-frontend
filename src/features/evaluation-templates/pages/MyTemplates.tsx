@@ -16,7 +16,7 @@ const typeColors: Record<string, string> = {
 
 function MyTemplates() {
 
-    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3NTI5ODE5LCJleHAiOjE3ODc1MzM0MTksIm5iZiI6MTc4NzUyOTgxOSwianRpIjoiR1d3cmZ1OFJTTE5tejFnSiIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.jYiCu_T4FMyFG5-nEX-lvWIE_7mADLmdVG8RD5GMO14"
+    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3NTY0NjY4LCJleHAiOjE3ODc1NjgyNjgsIm5iZiI6MTc4NzU2NDY2OCwianRpIjoib2xhUnlxRXdhUlJPb1BXbiIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.qz7n6v8tYHmPNVvb2PsIAiEmf9krLzS4to5A7iWqYXc"
 
     const [loading, setLoading] = useState(true);
 
@@ -75,9 +75,31 @@ function MyTemplates() {
         t.version_name.toLowerCase().includes(search.toLowerCase())
     )
 
-    function handleDelete(id: number) {
-        setTemplates(templates.filter(t => t.id !== id))
-    }
+    async function handleDelete(id: number) {
+        try {
+            const res = await fetch(`http://localhost:8000/api/evaluation-templates/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+            });
+
+            const json = await res.json();
+
+            if (res.ok) {
+            alert("Plantilla desactivada exitosamente");
+            fetchEvaluationTemplates(pagination.currentPage);
+            } else {
+            console.error("Error al desactivar:", json);
+            alert("Error al desactivar la plantilla");
+            }
+        } catch (err) {
+            console.error("Error de red:", err);
+            alert("Error de red al desactivar la plantilla");
+        }
+        }
+
+
 
     if (loading) {
         return <div className="bg-blue-50 p-6 -m-6 min-h-screen">
@@ -94,7 +116,7 @@ function MyTemplates() {
                         <ArrowLeft size={14} /> Volver al panel
                     </button>
                     <h1 className="text-2xl font-bold text-gray-800">Mis Plantillas</h1>
-                    <span className="text-sm text-gray-400">{templates.length} plantilla(s) disponible(s)</span>
+                    <span className="text-sm text-gray-400">{pagination.total} plantilla(s) disponible(s)</span>
                 </div>
 
                 <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex gap-2">

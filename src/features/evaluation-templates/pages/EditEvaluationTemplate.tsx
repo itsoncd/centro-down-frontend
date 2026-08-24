@@ -9,7 +9,7 @@ import { ArrowLeft } from 'lucide-react'
 import { useNavigate } from "react-router-dom";
 
 function EditEvaluationTemplate() {
-  const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3NTI5ODE5LCJleHAiOjE3ODc1MzM0MTksIm5iZiI6MTc4NzUyOTgxOSwianRpIjoiR1d3cmZ1OFJTTE5tejFnSiIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.jYiCu_T4FMyFG5-nEX-lvWIE_7mADLmdVG8RD5GMO14"
+  const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3NTY0NjY4LCJleHAiOjE3ODc1NjgyNjgsIm5iZiI6MTc4NzU2NDY2OCwianRpIjoib2xhUnlxRXdhUlJPb1BXbiIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.qz7n6v8tYHmPNVvb2PsIAiEmf9krLzS4to5A7iWqYXc"
   const navigate = useNavigate();
   const { id } = useParams();
   const [template, setTemplate] = useState<EvaluationTemplate | null>(null);
