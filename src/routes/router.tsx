@@ -60,7 +60,7 @@ export const router = createBrowserRouter([
         element: <CreateEvaluationTemplate />
       },
       {
-        path: "plantillas/editar",
+        path: "plantillas/editar/:id",
         element: <EditEvaluationTemplate />
       },
       {
