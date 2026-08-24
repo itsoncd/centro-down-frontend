@@ -8,6 +8,7 @@ import { ArrowLeft } from 'lucide-react'
 import { useNavigate } from "react-router-dom";
 
 function CreateEvaluationTemplate() {
+    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3NTI5ODE5LCJleHAiOjE3ODc1MzM0MTksIm5iZiI6MTc4NzUyOTgxOSwianRpIjoiR1d3cmZ1OFJTTE5tejFnSiIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.jYiCu_T4FMyFG5-nEX-lvWIE_7mADLmdVG8RD5GMO14"
     const navigate = useNavigate();
 
     const [type, setType] = useState<EvaluationType>('Académica')
@@ -88,7 +89,6 @@ function CreateEvaluationTemplate() {
 
     const handleSubmit = async () => {
         try {
-            const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3Mjk1NzQ1LCJleHAiOjE3ODcyOTkzNDUsIm5iZiI6MTc4NzI5NTc0NSwianRpIjoiZ3BmcHNDdE91Z0gxSUZQYiIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.tPyu7WNEND8GQq6oRXKM8cVtcTLwaOGrRB5aqOeWU2M"
 
             let url = ""
             if (isPrecargado && selectedInstrument) {

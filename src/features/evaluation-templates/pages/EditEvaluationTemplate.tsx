@@ -9,6 +9,7 @@ import { ArrowLeft } from 'lucide-react'
 import { useNavigate } from "react-router-dom";
 
 function EditEvaluationTemplate() {
+  const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3NTI5ODE5LCJleHAiOjE3ODc1MzM0MTksIm5iZiI6MTc4NzUyOTgxOSwianRpIjoiR1d3cmZ1OFJTTE5tejFnSiIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.jYiCu_T4FMyFG5-nEX-lvWIE_7mADLmdVG8RD5GMO14"
   const navigate = useNavigate();
   const { id } = useParams();
   const [template, setTemplate] = useState<EvaluationTemplate | null>(null);
@@ -24,7 +25,6 @@ function EditEvaluationTemplate() {
   const [items, setItems] = useState<EvaluationItem[]>([]);
 
   useEffect(() => {
-  const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3Mjk1NzQ1LCJleHAiOjE3ODcyOTkzNDUsIm5iZiI6MTc4NzI5NTc0NSwianRpIjoiZ3BmcHNDdE91Z0gxSUZQYiIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.tPyu7WNEND8GQq6oRXKM8cVtcTLwaOGrRB5aqOeWU2M"
 
   async function fetchTemplate() {
     try {
@@ -82,6 +82,67 @@ function EditEvaluationTemplate() {
         navigate("/director/plantillas/mis-plantillas");
     }
 
+    async function handleUpdate() {
+        const formData = new FormData();
+
+        // Campos del template
+        formData.append("name", name);
+        formData.append("type", evaluationType);
+        formData.append("grading_type", calificationType);
+
+        items.forEach((item, index) => {
+        if (!item.isNew && item.id && Number.isInteger(item.id)) {
+            // Item existente
+            formData.append(`items[${index}][id]`, item.id.toString());
+        } else {
+            // Item nuevo
+            formData.append(`items[${index}][name]`, item.name);
+
+            if (item.files && item.files.length > 0) {
+            item.files.forEach((file: File, fIndex: number) => {
+                formData.append(`items[${index}][files][${fIndex}]`, file);
+            });
+            }
+        }
+        });
+
+
+
+        for (const [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
+
+
+        try {
+            formData.append("_method", "PUT");
+
+            const res = await fetch(
+                `http://localhost:8000/api/evaluation-templates/${template?.id}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                    },
+                    body: formData,
+                }
+            );
+
+            const json = await res.json();
+
+            if (res.ok) {
+            console.log("Plantilla actualizada:", json);
+            alert("Plantilla actualizada exitosamente");
+            goBack();
+            } else {
+            console.error("Error al actualizar:", json);
+            alert("Error al actualizar la plantilla");
+            }
+        } catch (err) {
+            console.error("Error de red:", err);
+            alert("Error de red al actualizar la plantilla");
+        }
+    }
+
     if (loading) return <p>Cargando...</p>;
     if (!template) return <p>No hay plantilla...</p>;
 
@@ -127,7 +188,7 @@ function EditEvaluationTemplate() {
                     <button onClick={goBack} className="flex-1 py-3 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
                             Cancelar
                     </button>
-                    <button className="flex-1 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+                    <button onClick={handleUpdate} className="flex-1 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
                             Guardar cambios
                     </button>
                 </div>

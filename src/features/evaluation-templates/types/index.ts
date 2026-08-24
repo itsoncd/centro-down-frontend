@@ -8,6 +8,7 @@ export interface EvaluationItem {
     id: number
     name: string
     files: File[]
+    isNew: boolean
 }
 
 export interface PreloadedInstrument {
