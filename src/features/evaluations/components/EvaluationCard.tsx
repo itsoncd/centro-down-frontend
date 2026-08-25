@@ -127,14 +127,19 @@ export const EvaluationCard = ({ evaluation }: Props) => {
                         </div>
                     </div>
 
-                    {evaluation.status.toLocaleLowerCase() !== 'completado' && (
-                    <div className="flex flex-col items-end gap-3">
-                        <button
-                            onClick={handleCalificarClick}
-                            className="bg-[#1f1f1f] hover:bg-black text-white text-semibold py-2 px-4 rounded-md transition-colors">
-                            {evaluation.status.toLowerCase() === 'pendiente' ? 'Calificar Evaluación' :  'Continuar Evaluación'}
-                        </button>
-                    </div>
+                    {!["completado", "cancelado"].includes(
+                        translateStatus(evaluation.status).toLowerCase()
+                    ) && (
+                        <div className="flex flex-col items-end gap-3">
+                            <button
+                                onClick={handleCalificarClick}
+                                className="bg-[#1f1f1f] hover:bg-black text-white text-semibold py-2 px-4 rounded-md transition-colors"
+                            >
+                                {translateStatus(evaluation.status).toLowerCase() === "pendiente"
+                                    ? "Calificar Evaluación"
+                                    : "Continuar Evaluación"}
+                            </button>
+                        </div>
                     )}
                 </div>
             )}
