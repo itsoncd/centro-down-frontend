@@ -6,6 +6,7 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { useNavigate } from "react-router-dom";
 import { useEvaluationStore } from "@/store";
+import { translateStatus } from "../utils/statusMapper";
 
 interface Props {
     evaluation: EvaluationData;
@@ -33,17 +34,19 @@ export const EvaluationCard = ({ evaluation }: Props) => {
 
     // Maneja el color del estado de la evaluación
     const getStatusColor = (estado: string) => {
-        switch(estado.toLocaleLowerCase()) {
-            case 'completado':
-                return 'bg-green-100 text-green-700 border border-green-500';
-            case 'en progreso':
-                return 'bg-yellow-50 text-yellow-700 border border-yellow-500';
-            case 'pendiente':
-                return 'bg-transparent text-red-700 border border-red-500';
+        switch (estado.toLowerCase()) {
+            case "completado":
+            return "bg-green-100 text-green-700 border border-green-500";
+            case "en progreso":
+            return "bg-yellow-50 text-yellow-700 border border-yellow-500";
+            case "pendiente":
+            return "bg-transparent text-red-700 border border-red-500";
+            case "cancelado":
+            return "bg-gray-200 text-gray-700 border border-gray-500";
             default:
-                return 'bg-gray-100 text-gray-800';
+            return "bg-gray-100 text-gray-800";
         }
-    }
+    };
 
     // Para formatear la fecha de este modo: 15/01/26
     const formatShortDate = (date: Date) => {
@@ -80,8 +83,8 @@ export const EvaluationCard = ({ evaluation }: Props) => {
                     {evaluation.type}
                 </span>
 
-                <span className={`px-3 py-0.5 rounded-full text-[11px] mr-2 font-bold ${getStatusColor(evaluation.status)}`}>
-                    {evaluation.status}
+                <span className={`px-3 py-0.5 rounded-full text-[11px] mr-2 font-bold ${getStatusColor(translateStatus(evaluation.status))}`}>
+                    {translateStatus(evaluation.status)}
                 </span>
 
                 {!isExpanded && (
