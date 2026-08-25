@@ -1,8 +1,8 @@
 // hooks/useGetEvaluationsByStudent.ts
 import { useQuery } from "@tanstack/react-query";
-import type { EvaluationData } from "../types";
+import type { EvaluationData, ItemData } from "../types";
 
-const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3NjI3MTAyLCJleHAiOjE3ODc2MzA3MDIsIm5iZiI6MTc4NzYyNzEwMiwianRpIjoiU2JlZ1gzYkNrblFCRDN4QSIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.mGsLhFGc2zHYHy44sXVlul8MkTq9j_We74CLyLnf9ic"
+const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3NjU3MDAxLCJleHAiOjE3ODc2NjA2MDEsIm5iZiI6MTc4NzY1NzAwMSwianRpIjoiWm1kc2VNYTJWREtGWEZkMyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.gB_N3akh326vCtcuExccFke4o_ognNLHe22FLAY_5B4"
 
 export const mapEvaluationFromApi = (apiEval: any): EvaluationData => {
   const template = apiEval.evaluation_template;
@@ -14,11 +14,13 @@ export const mapEvaluationFromApi = (apiEval: any): EvaluationData => {
     student_id: apiEval.student_id,
     user_id: apiEval.user_id,
     template_id: apiEval.evaluation_template_id,
-    items: (latestVersion?.item_versions ?? []).map((iv: any) => ({
+    items: (latestVersion?.item_versions ?? []).map((iv: any): ItemData => ({
       item_id: iv.id,
       name: iv.version_name,
-      grade: "", // aún no tienes calificación en el endpoint
-      comments: "" // aún no tienes comentarios en el endpoint
+      grade: "",
+      comments: "",
+      templateFiles: iv.files ?? [],
+      responseFiles: []
     })),
     status: apiEval.status,
     titulo: template?.name ?? `Evaluación ${apiEval.id}`,

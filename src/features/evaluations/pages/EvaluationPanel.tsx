@@ -3,11 +3,12 @@ import { useEvaluationStore } from '@/store';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetEvaluationById } from '../hooks/useGetEvaluationById';
 import { ItemGradeForm } from '../components/ItemGradeForm';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useUpdateEvaluation } from '../hooks';
 import type { ItemData } from '../types';
 
 export const EvaluationPanel = () => {
+    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3NjU3MDAxLCJleHAiOjE3ODc2NjA2MDEsIm5iZiI6MTc4NzY1NzAwMSwianRpIjoiWm1kc2VNYTJWREtGWEZkMyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.gB_N3akh326vCtcuExccFke4o_ognNLHe22FLAY_5B4"
     // Obtiene el ID de la evaluación desde los parametros de la URL
     const { id } = useParams();
     const navigate = useNavigate();
@@ -15,18 +16,28 @@ export const EvaluationPanel = () => {
     const { selectedEvaluation } = useEvaluationStore();
     // Realiza una petición a la API para tener la evaluación en caso de refrescar la página 
     // o que no haya una evaluación en el estado global
-    const { evaluationQuery } = useGetEvaluationById(Number(id));
+    //const { evaluationQuery } = useGetEvaluationById(Number(id));
     // Realiza la actualización de la evaluación al guardar el borrador o terminar la evaluación
     const { mutate: update } = useUpdateEvaluation();
 
     // Guarda la evaluación para mostrarla
-    const evaluation = selectedEvaluation || evaluationQuery.data?.data;
+    const evaluation = selectedEvaluation // || evaluationQuery.data?.data;
 
     const [ currentIndex, setCurrentIndex ] = useState(0);
     const [ answers, setAnswers ] = useState<Record<number, ItemData>>({});
 
+    useEffect(() => {
+        if (evaluation?.items) {
+        const initialAnswers: Record<number, ItemData> = {};
+        evaluation.items.forEach((item, index) => {
+            initialAnswers[index] = { ...item, responseFiles: [] };
+        });
+        setAnswers(initialAnswers);
+        }
+    }, [evaluation]);
+
     // Si todavía no se obtuvo la evaluación informa que esta cargando
-    if(evaluationQuery.isLoading && !selectedEvaluation) {
+    if(!selectedEvaluation) {
         return(
             <div className='min-h-screen bg-blue-50/30 flex flex-col items-center justify-center'>
                 <p className='text-gray-500 font-medium'>Cargando información de la evaluación...</p>
@@ -56,9 +67,13 @@ export const EvaluationPanel = () => {
     const handleAnswerChange = (updatedItem: ItemData) => {
         setAnswers(prev => ({
             ...prev,
-            [currentIndex]: updatedItem
+            [currentIndex]: {
+            ...prev[currentIndex],
+            ...updatedItem
+            }
         }));
-    }
+    };
+
 
     // Controles de los botones
     const handleNext = () => {
@@ -74,29 +89,47 @@ export const EvaluationPanel = () => {
         navigate('/tutor/evaluaciones');
     }
 
-    // Actualiza la información de la evaluación
     const handleSave = () => {
-        if(!evaluation || !evaluation.id) {
-            console.error("El ID de la evaluación no existe");
-            return;
-        }
+        if (!evaluation || !evaluation.id) return;
 
-        const updatedItems = evaluation.items.map((originalItem: ItemData, index: number) => {
-            return answers[index] || originalItem;
+        const gradedItems = Object.values(answers).map((item: ItemData) => ({
+            result: item.grade,
+            comments: item.comments,
+            evaluation_id: evaluation.id,
+            item_version_id: item.item_id,
+            responseFiles: item.responseFiles || []
+        }));
+
+        const formData = new FormData();
+        gradedItems.forEach((gi, giIndex) => {
+            formData.append(`graded_items[${giIndex}][result]`, gi.result);
+            formData.append(`graded_items[${giIndex}][comments]`, gi.comments);
+            formData.append(`graded_items[${giIndex}][evaluation_id]`, gi.evaluation_id.toString());
+            formData.append(`graded_items[${giIndex}][item_version_id]`, gi.item_version_id.toString());
+
+            gi.responseFiles.forEach((fileObj, fileIndex) => {
+            formData.append(`graded_items[${giIndex}][files][${fileIndex}][resource]`, fileObj.resource);
+            formData.append(`graded_items[${giIndex}][files][${fileIndex}][item_version_file_id]`, fileObj.item_version_file_id.toString());
+            });
         });
 
-        const isEvaluationCompleted = updatedItems[updatedItems.length - 1].grade !== "";
-        const status = isEvaluationCompleted ? "Completado" : "En Progreso"
-
-        const bodyToSend = {
-            ...evaluation,
-            items: updatedItems,
-            status: status
+        fetch("http://localhost:8000/api/evaluationGradedItems", {
+            method: "POST",
+            headers: {
+            "Authorization": `Bearer ${token}`,
+            },
+            body: formData
+        })
+            .then(res => res.json())
+            .then(data => {
+            console.log("Respuesta del backend:", data);
+            navigate("/tutor/evaluaciones");
+            })
+            .catch(err => console.error("Error al guardar:", err));
         };
 
-        console.log("Enviando a la API ", bodyToSend);
-        update({ id: Number(evaluation.id), body: bodyToSend });
-    }
+
+
 
     return(
         <div className="min-h-screen bg-blue-50/30 p-6 md:p-10 flex flex-col items-center">

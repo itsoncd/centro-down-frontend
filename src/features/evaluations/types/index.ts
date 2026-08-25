@@ -66,9 +66,29 @@ export interface StudentData {
     id: number;
 }
 
+// Archivo que viene del backend (plantilla)
+export interface TemplateFile {
+    id: number;
+    name: string;
+    extension: string;
+    pivot: {
+        item_version_id: number;
+        file_id: number;
+    };
+}
+
+// Archivo que sube el usuario (respuesta)
+export interface ResponseFile {
+    resource: File;
+    item_version_file_id: number;
+}
+
 export interface ItemData {
     item_id: number;
     name: string;
     grade: string;
     comments: string;
+    templateFiles: TemplateFile[];   // plantillas
+    responseFiles: ResponseFile[];   // respuestas
 }
+

@@ -17,11 +17,9 @@ export const ItemGradeForm = ({ item, onChange }: ItemGradeFormProps) => {
                     onChange={(e) => onChange({ ...item, grade: e.target.value })}
                     className="w-full bg-gray-100 border-transparent rounded-md py-3 px-4 text-sm font-bold text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none cursor-pointer"
                 >
-                    <option value="logrado">Logrado</option>
-                    <option value="en_proceso">En proceso</option>
-                    <option value="apoyo_visual">Requiere apoyo visual</option>
-                    <option value="apoyo_fisico">Requiere apoyo fisico</option>
-                    <option value="no_logrado">No logrado</option>
+                    <option value="ACHIEVED_ALONE">Logrado solo</option>
+                    <option value="ACHIEVED_WITH_HELP">Logrado con ayuda</option>
+                    <option value="NOT_ACHIEVED">No logrado</option>
                 </select>
             </div>
 
@@ -35,6 +33,30 @@ export const ItemGradeForm = ({ item, onChange }: ItemGradeFormProps) => {
                     className="w-full bg-transparent border border-gray-200 rounded-md p-3 text-sm text-gray-700 h-24 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                     placeholder="Escribe observaciones específicas sobre esta evaluación."
                 ></textarea>
+            </div>
+
+            <div className="border border-purple-200 rounded-md p-4">
+                {(item.templateFiles ?? []).map((templateFile) => (
+                    <div key={templateFile.id} className="mb-4">
+                        <label className="block text-sm font-bold text-gray-900 mb-2">
+                        Archivo
+                        </label>
+                        <p>{templateFile.name}.{templateFile.extension}</p>
+                        <input className="flex-1 flex items-center justify-center gap-2 border border-gray-200 rounded-lg p-2 text-sm text-gray-600 cursor-pointer hover:bg-gray-50"
+                        type="file"
+                        onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                            const newResponses = [
+                                ...(item.responseFiles || []),
+                                { resource: file, item_version_file_id: templateFile.pivot.file_id }
+                            ];
+                            onChange({ ...item, responseFiles: newResponses });
+                            }
+                        }}
+                        />
+                    </div>
+                ))}
             </div>
         </div>
     );
