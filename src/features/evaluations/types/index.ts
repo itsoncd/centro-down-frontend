@@ -74,6 +74,7 @@ export interface TemplateFile {
     pivot: {
         item_version_id: number;
         file_id: number;
+        id: number;
     };
 }
 

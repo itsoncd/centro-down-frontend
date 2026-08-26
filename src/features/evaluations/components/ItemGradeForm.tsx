@@ -13,7 +13,7 @@ export const ItemGradeForm = ({ item, onChange }: ItemGradeFormProps) => {
                     {item?.name}
                 </label>
                 <select 
-                    value={item?.grade || "en_proceso"}
+                    value={item?.grade || "ACHIEVED_ALONE"}
                     onChange={(e) => onChange({ ...item, grade: e.target.value })}
                     className="w-full bg-gray-100 border-transparent rounded-md py-3 px-4 text-sm font-bold text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none cursor-pointer"
                 >
@@ -49,7 +49,7 @@ export const ItemGradeForm = ({ item, onChange }: ItemGradeFormProps) => {
                             if (file) {
                             const newResponses = [
                                 ...(item.responseFiles || []),
-                                { resource: file, item_version_file_id: templateFile.pivot.file_id }
+                                { resource: file, item_version_file_id: templateFile.pivot.id }
                             ];
                             onChange({ ...item, responseFiles: newResponses });
                             }
