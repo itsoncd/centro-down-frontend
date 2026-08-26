@@ -8,7 +8,7 @@ import { ArrowLeft } from 'lucide-react'
 import { useNavigate } from "react-router-dom";
 
 function CreateEvaluationTemplate() {
-    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3NjUzMzU1LCJleHAiOjE3ODc2NTY5NTUsIm5iZiI6MTc4NzY1MzM1NSwianRpIjoidlN4ZHJ4UVlNTmoxQkZGMyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.Zp0pOCigtxvPZZ0fYk7cVFQX6zL_gekh-rzYSn76A8o"
+    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3Nzc1MzQyLCJleHAiOjE3ODc3Nzg5NDIsIm5iZiI6MTc4Nzc3NTM0MiwianRpIjoiWXdnWTFNd0dxSXBjVTF1OSIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.rf815e54KcQSInzb0VCMFZ_oAbnmMpZSIbKXS55nLrM"
     const navigate = useNavigate();
 
     const [type, setType] = useState<EvaluationType>('Académica')
@@ -85,9 +85,10 @@ function CreateEvaluationTemplate() {
         return formData;
         }
 
-
+    const [isSaving, setIsSaving] = useState(false);
 
     const handleSubmit = async () => {
+        setIsSaving(true);
         try {
 
             let url = ""
@@ -128,6 +129,8 @@ function CreateEvaluationTemplate() {
             navigate("mis-plantillas");
         } catch (err) {
             console.error(err);
+        } finally {
+            setIsSaving(false);
         }
         };
 
@@ -185,8 +188,8 @@ function CreateEvaluationTemplate() {
                     <button onClick={goBack} className="flex-1 py-3 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
                         Cancelar
                     </button>
-                    <button onClick={handleSubmit} className="flex-1 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
-                        Crear Plantilla
+                    <button onClick={handleSubmit} disabled={isSaving} className="flex-1 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+                        {isSaving ? "Creando..." : "Crear Plantilla"}
                     </button>
                 </div>
         
