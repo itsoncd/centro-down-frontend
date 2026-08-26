@@ -8,7 +8,7 @@ import { useUpdateEvaluation } from '../hooks';
 import type { ItemData } from '../types';
 
 export const EvaluationPanel = () => {
-    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3NzE0MjYzLCJleHAiOjE3ODc3MTc4NjMsIm5iZiI6MTc4NzcxNDI2MywianRpIjoiY3I5MGRhVHlvanhvcE5iMiIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.4CeF4PoQMQ_RcYnR3WXEHnN-uMUodcGVM-PF06mvcaY"
+    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3NzE4MTUwLCJleHAiOjE3ODc3MjE3NTAsIm5iZiI6MTc4NzcxODE1MCwianRpIjoidzlNUENuS1Ztck1PNGVoWCIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.WoFh4Da2d4EuNABGllPPw2x4zzZIj-rmtei4XSB-8CE"
     // Obtiene el ID de la evaluación desde los parametros de la URL
     const { id } = useParams();
     const navigate = useNavigate();
@@ -96,57 +96,64 @@ export const EvaluationPanel = () => {
         navigate('/tutor/evaluaciones');
     }
 
+    const [isSaving, setIsSaving] = useState(false);
+
     const handleSave = () => {
-  if (!evaluation || !evaluation.id) return;
+        if (!evaluation || !evaluation.id) return;
 
-  const gradedItems = Object.values(answers).map((item: ItemData) => ({
-    result: item.grade,
-    comments: item.comments,
-    evaluation_id: evaluation.id,
-    item_version_id: item.item_id,
-    responseFiles: item.responseFiles || []
-  }));
+        setIsSaving(true);
 
-  const formData = new FormData();
-    gradedItems.forEach((gi, giIndex) => {
-        formData.append(`graded_items[${giIndex}][result]`, gi.result);
-        formData.append(`graded_items[${giIndex}][comments]`, gi.comments);
-        formData.append(`graded_items[${giIndex}][evaluation_id]`, gi.evaluation_id.toString());
-        formData.append(`graded_items[${giIndex}][item_version_id]`, gi.item_version_id.toString());
+        const gradedItems = Object.values(answers).map((item: ItemData) => ({
+            result: item.grade,
+            comments: item.comments,
+            evaluation_id: evaluation.id,
+            item_version_id: item.item_id,
+            responseFiles: item.responseFiles || []
+        }));
 
-        gi.responseFiles.forEach((fileObj, fileIndex) => {
-        formData.append(`graded_items[${giIndex}][files][${fileIndex}][resource]`, fileObj.resource);
-        formData.append(`graded_items[${giIndex}][files][${fileIndex}][item_version_file_id]`, fileObj.item_version_file_id.toString());
-        });
-    });
+        const formData = new FormData();
+            gradedItems.forEach((gi, giIndex) => {
+                formData.append(`graded_items[${giIndex}][result]`, gi.result);
+                formData.append(`graded_items[${giIndex}][comments]`, gi.comments);
+                formData.append(`graded_items[${giIndex}][evaluation_id]`, gi.evaluation_id.toString());
+                formData.append(`graded_items[${giIndex}][item_version_id]`, gi.item_version_id.toString());
 
-    // 1️⃣ Guardar calificación
-    fetch("http://localhost:8000/api/evaluationGradedItems", {
-        method: "POST",
-        headers: { "Authorization": `Bearer ${token}` },
-        body: formData
-    })
-        .then(res => res.json())
-        .then(data => {
-        console.log("Calificación creada:", data);
+                gi.responseFiles.forEach((fileObj, fileIndex) => {
+                formData.append(`graded_items[${giIndex}][files][${fileIndex}][resource]`, fileObj.resource);
+                formData.append(`graded_items[${giIndex}][files][${fileIndex}][item_version_file_id]`, fileObj.item_version_file_id.toString());
+                });
+            });
 
-        // 2️⃣ Actualizar estado a CLOSED
-        return fetch(`http://localhost:8000/api/evaluations/${evaluation.id}`, {
-            method: "PUT",
-            headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ status: "CLOSED" })
-        });
-        })
-        .then(res => res.json())
-        .then(updatedEval => {
-        console.log("Evaluación actualizada:", updatedEval);
-        navigate("/tutor/evaluaciones");
-        })
-        .catch(err => console.error("Error al guardar:", err));
-    };
+            // 1️⃣ Guardar calificación
+            fetch("http://localhost:8000/api/evaluationGradedItems", {
+                method: "POST",
+                headers: { "Authorization": `Bearer ${token}` },
+                body: formData
+            })
+                .then(res => res.json())
+                .then(data => {
+                console.log("Calificación creada:", data);
+
+                // 2️⃣ Actualizar estado a CLOSED
+                return fetch(`http://localhost:8000/api/evaluations/${evaluation.id}`, {
+                    method: "PUT",
+                    headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ status: "CLOSED" })
+                });
+                })
+                .then(res => res.json())
+                .then(updatedEval => {
+                console.log("Evaluación actualizada:", updatedEval);
+                useEvaluationStore.setState({ selectedEvaluation: updatedEval });
+                navigate("/tutor/evaluaciones");
+                window.location.reload();
+                })
+                .catch(err => console.error("Error al guardar:", err))
+                .finally(() => setIsSaving(false));
+            };
 
 
 
@@ -175,11 +182,6 @@ export const EvaluationPanel = () => {
                             className='bg-black hover:bg-gray-800 text-white font-semibold py-2.5 px-6 rounded-md text-sm transition-colors'>
                             Volver
                         </button>
-                        <button 
-                            onClick={handleSave}
-                            className='bg-black hover:bg-gray-800 text-white font-semibold py-2.5 px-6 rounded-md text-sm transition-colors'>
-                            Guardar Borrador
-                        </button>
                         {!isFirstItem && (
                             <button 
                                 onClick={handlePrev}
@@ -190,8 +192,9 @@ export const EvaluationPanel = () => {
                         {isLastItem ? (
                             <button 
                                 onClick={handleSave}
+                                disabled={isSaving}
                                 className='bg-black hover:bg-gray-800 text-white font-semibold py-2.5 px-6 rounded-md text-sm transition-colors'>
-                                Guardar Evaluación
+                                {isSaving ? "Guardando..." : "Guardar Evaluación"}
                             </button>
                         ) : (
                             <button 
