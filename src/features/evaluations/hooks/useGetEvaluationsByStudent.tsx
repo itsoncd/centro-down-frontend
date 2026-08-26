@@ -2,7 +2,7 @@
 import { useQuery } from "@tanstack/react-query";
 import type { EvaluationData, ItemData } from "../types";
 
-const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3Nzc1MzQyLCJleHAiOjE3ODc3Nzg5NDIsIm5iZiI6MTc4Nzc3NTM0MiwianRpIjoiWXdnWTFNd0dxSXBjVTF1OSIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.rf815e54KcQSInzb0VCMFZ_oAbnmMpZSIbKXS55nLrM"
+const token = import.meta.env.VITE_API_TOKEN;
 
 export const mapEvaluationFromApi = (apiEval: any): EvaluationData => {
   const template = apiEval.evaluation_template;
