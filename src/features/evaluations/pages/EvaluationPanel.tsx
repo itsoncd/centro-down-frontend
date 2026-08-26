@@ -8,7 +8,7 @@ import { useUpdateEvaluation } from '../hooks';
 import type { ItemData } from '../types';
 
 export const EvaluationPanel = () => {
-    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3NzE4MTUwLCJleHAiOjE3ODc3MjE3NTAsIm5iZiI6MTc4NzcxODE1MCwianRpIjoidzlNUENuS1Ztck1PNGVoWCIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.WoFh4Da2d4EuNABGllPPw2x4zzZIj-rmtei4XSB-8CE"
+    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3Nzc1MzQyLCJleHAiOjE3ODc3Nzg5NDIsIm5iZiI6MTc4Nzc3NTM0MiwianRpIjoiWXdnWTFNd0dxSXBjVTF1OSIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.rf815e54KcQSInzb0VCMFZ_oAbnmMpZSIbKXS55nLrM"
     // Obtiene el ID de la evaluación desde los parametros de la URL
     const { id } = useParams();
     const navigate = useNavigate();
@@ -100,6 +100,29 @@ export const EvaluationPanel = () => {
 
     const handleSave = () => {
         if (!evaluation || !evaluation.id) return;
+
+        // Validaciones
+        for (const [index, item] of Object.entries(answers)) {
+            const i = item as ItemData;
+
+            // Validar que tenga calificación
+            if (!i.grade) {
+            alert(`El ítem "${i.name}" no tiene calificación asignada.`);
+            return;
+            }
+
+            // Validar observaciones (ejemplo: mínimo 5 caracteres)
+            if (!i.comments) {
+            alert(`El ítem "${i.name}" requiere observaciones.`);
+            return;
+            }
+
+            // Validar archivos de respuesta (ejemplo: al menos uno obligatorio)
+            if (!i.responseFiles || i.responseFiles.length === 0) {
+            alert(`El ítem "${i.name}" requiere al menos un archivo de respuesta.`);
+            return;
+            }
+        }
 
         setIsSaving(true);
 
