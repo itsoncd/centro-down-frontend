@@ -9,7 +9,7 @@ import { ArrowLeft } from 'lucide-react'
 import { useNavigate } from "react-router-dom";
 
 function EditEvaluationTemplate() {
-  const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3NjIwMTczLCJleHAiOjE3ODc2MjM3NzMsIm5iZiI6MTc4NzYyMDE3MywianRpIjoiZmJmbDNENEtTV0t4ME56SCIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.9oJjhHma1yDkdWT6JxCPIU6oW2AXLHJG0J9jABNtBCo"
+  const token = import.meta.env.VITE_API_TOKEN;
   const navigate = useNavigate();
   const { id } = useParams();
   const [template, setTemplate] = useState<EvaluationTemplate | null>(null);
@@ -82,7 +82,21 @@ function EditEvaluationTemplate() {
         navigate("/director/plantillas/mis-plantillas");
     }
 
+    const [isSaving, setIsSaving] = useState(false);
+
     async function handleUpdate() {
+        // Validaciones
+        if (name === "") {
+            alert("Debes definir el nombre del instrumento.");
+            return;
+        }
+        if (items.length === 0) {
+            alert("Debes agregar al menos un ítem antes de guardar.");
+            return;
+        }
+
+        setIsSaving(true);
+
         const formData = new FormData();
 
         // Campos del template
@@ -140,6 +154,8 @@ function EditEvaluationTemplate() {
         } catch (err) {
             console.error("Error de red:", err);
             alert("Error de red al actualizar la plantilla");
+        } finally {
+            setIsSaving(false);
         }
     }
 
@@ -188,8 +204,8 @@ function EditEvaluationTemplate() {
                     <button onClick={goBack} className="flex-1 py-3 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
                             Cancelar
                     </button>
-                    <button onClick={handleUpdate} className="flex-1 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
-                            Guardar cambios
+                    <button onClick={handleUpdate} disabled={isSaving} className="flex-1 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+                            {isSaving ? "Guardando..." : "Guardar Cambios"}
                     </button>
                 </div>
 

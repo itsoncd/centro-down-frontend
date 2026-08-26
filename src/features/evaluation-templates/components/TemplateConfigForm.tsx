@@ -57,20 +57,6 @@ function TemplateConfigForm({
                     )}
                 </div>
 
-                {!preloadedInstrument && (
-                    <div>
-                        <label className="text-sm font-medium text-gray-700">Descripción</label>
-                        <input
-                            type="text"
-                            value={description}
-                            onChange={(e) => onDescriptionChange(e.target.value)}
-                            disabled={disabled}
-                            placeholder="Ej: Diagnóstico de Lectoescritura Nivel 1"
-                            className="mt-1 w-full border border-gray-200 rounded-lg p-2 text-sm text-gray-700 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-400"
-                        />
-                    </div>
-                )}
-
                 <div className="flex gap-2 mt-1">
                     {calificationOptions.map((option) => (
                         <button

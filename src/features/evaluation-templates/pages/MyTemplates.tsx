@@ -16,7 +16,7 @@ const typeColors: Record<string, string> = {
 
 function MyTemplates() {
 
-    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3NjUzMzU1LCJleHAiOjE3ODc2NTY5NTUsIm5iZiI6MTc4NzY1MzM1NSwianRpIjoidlN4ZHJ4UVlNTmoxQkZGMyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.Zp0pOCigtxvPZZ0fYk7cVFQX6zL_gekh-rzYSn76A8o"
+    const token = import.meta.env.VITE_API_TOKEN;
 
     const [loading, setLoading] = useState(true);
 
@@ -77,6 +77,7 @@ function MyTemplates() {
 
     async function handleDelete(id: number) {
         try {
+            setLoading(true);
             const res = await fetch(`http://localhost:8000/api/evaluation-templates/${id}`, {
             method: "DELETE",
             headers: {
@@ -87,15 +88,16 @@ function MyTemplates() {
             const json = await res.json();
 
             if (res.ok) {
-            alert("Plantilla desactivada exitosamente");
             fetchEvaluationTemplates(pagination.currentPage);
             } else {
             console.error("Error al desactivar:", json);
             alert("Error al desactivar la plantilla");
+            setLoading(false);
             }
         } catch (err) {
             console.error("Error de red:", err);
             alert("Error de red al desactivar la plantilla");
+            setLoading(false);
         }
         }
 

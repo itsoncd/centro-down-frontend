@@ -13,7 +13,7 @@ function InstrumentSelector({ evaluationType, mode, onModeChange, selectedInstru
   const [instruments, setInstruments] = useState<PreloadedInstrument[]>([])
   const [loading, setLoading] = useState(false)
 
-  const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzg3NjIwMTczLCJleHAiOjE3ODc2MjM3NzMsIm5iZiI6MTc4NzYyMDE3MywianRpIjoiZmJmbDNENEtTV0t4ME56SCIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl19.9oJjhHma1yDkdWT6JxCPIU6oW2AXLHJG0J9jABNtBCo"
+  const token = import.meta.env.VITE_API_TOKEN;
 
   useEffect(() => {
     async function fetchInstruments() {

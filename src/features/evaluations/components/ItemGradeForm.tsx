@@ -39,9 +39,9 @@ export const ItemGradeForm = ({ item, onChange }: ItemGradeFormProps) => {
                 {(item.templateFiles ?? []).map((templateFile) => (
                     <div key={templateFile.id} className="mb-4">
                         <label className="block text-sm font-bold text-gray-900 mb-2">
-                        Archivo
+                        Adjuntar Evidencias
                         </label>
-                        <p>{templateFile.name}.{templateFile.extension}</p>
+                        <p>Archivo: {templateFile.name}.{templateFile.extension}</p>
                         <input className="flex-1 flex items-center justify-center gap-2 border border-gray-200 rounded-lg p-2 text-sm text-gray-600 cursor-pointer hover:bg-gray-50"
                         type="file"
                         onChange={(e) => {
