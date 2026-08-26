@@ -88,6 +88,16 @@ function CreateEvaluationTemplate() {
     const [isSaving, setIsSaving] = useState(false);
 
     const handleSubmit = async () => {
+        // Validaciones
+        if (name === "") {
+            alert("Debes definir el nombre del instrumento.");
+            return;
+        }
+        if (items.length === 0) {
+            alert("Debes agregar al menos un ítem antes de guardar.");
+            return;
+        }
+
         setIsSaving(true);
         try {
 

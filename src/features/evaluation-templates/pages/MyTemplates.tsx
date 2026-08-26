@@ -77,6 +77,7 @@ function MyTemplates() {
 
     async function handleDelete(id: number) {
         try {
+            setLoading(true);
             const res = await fetch(`http://localhost:8000/api/evaluation-templates/${id}`, {
             method: "DELETE",
             headers: {
@@ -87,15 +88,16 @@ function MyTemplates() {
             const json = await res.json();
 
             if (res.ok) {
-            alert("Plantilla desactivada exitosamente");
             fetchEvaluationTemplates(pagination.currentPage);
             } else {
             console.error("Error al desactivar:", json);
             alert("Error al desactivar la plantilla");
+            setLoading(false);
             }
         } catch (err) {
             console.error("Error de red:", err);
             alert("Error de red al desactivar la plantilla");
+            setLoading(false);
         }
         }
 

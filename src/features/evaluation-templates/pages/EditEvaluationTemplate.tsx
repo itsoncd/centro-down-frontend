@@ -85,6 +85,16 @@ function EditEvaluationTemplate() {
     const [isSaving, setIsSaving] = useState(false);
 
     async function handleUpdate() {
+        // Validaciones
+        if (name === "") {
+            alert("Debes definir el nombre del instrumento.");
+            return;
+        }
+        if (items.length === 0) {
+            alert("Debes agregar al menos un ítem antes de guardar.");
+            return;
+        }
+
         setIsSaving(true);
 
         const formData = new FormData();
