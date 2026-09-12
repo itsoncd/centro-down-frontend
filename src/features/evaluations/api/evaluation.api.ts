@@ -1,5 +1,6 @@
 import { api } from "@/lib/axios";
-import type { EvaluationCreated, EvaluationData, EvaluationLike, EvaluationUpdated, GetEvaluation, GetEvaluations } from "../types";
+import type { EvaluationCreated, EvaluationData, EvaluationLike, EvaluationUpdated, GetEvaluation, GetEvaluations, GetEvaluationsParams, GetEvaluationsResponse } from "../types";
+import { mapApiEvaluationToEvaluationData } from "../utils/evaluationMapper";
 
 // Manda solicitud a la API para crear una evaluación
 export const createEvaluation = async (body: EvaluationLike): Promise<EvaluationCreated> => {
@@ -8,11 +9,20 @@ export const createEvaluation = async (body: EvaluationLike): Promise<Evaluation
     return data;
 }
 
-// Manda solicitud para obtener todas las evaluaciones desde la API
-export const getAllEvaluations = async (): Promise<GetEvaluations> => {
-    const { data } = await api.get<GetEvaluations>('/evaluations');
-    console.log('data: ', data);
-    return data;
+// Manda solicitud para obtener las evaluaciones desde la API ( filtradas y paginadas ).
+// Los filtros y la paginación (student_id, status, evaluator_id, evaluation_template_type,
+// evaluation_template_name, page, per_page) viajan como query params
+export const getAllEvaluations = async (params?: GetEvaluationsParams): Promise<GetEvaluations> => {
+    const { data } = await api.get<GetEvaluationsResponse>('/evaluations', { params });
+    // La respuesta es un paginador de Laravel: se adaptan sus elementos al modelo de la UI
+    const paginator = data.data;
+    return {
+        ...data,
+        data: {
+            ...paginator,
+            data: Array.isArray(paginator?.data) ? paginator.data.map(mapApiEvaluationToEvaluationData) : [],
+        },
+    };
 }
 
 // Manda solicitud para obtener una evaluación con un ID especifico
