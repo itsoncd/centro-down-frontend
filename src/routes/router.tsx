@@ -15,16 +15,23 @@ import EditEvaluationTemplate from "@/features/evaluation-templates/pages/EditEv
 import MyTemplates from "@/features/evaluation-templates/pages/MyTemplates";
 import { DashboardEvaluations } from "@/features/evaluations/pages/DashboardEvaluations";
 import { EvaluationPanel } from "@/features/evaluations/pages/EvaluationPanel";
+import { ListEvaluations } from "@/features/evaluations/pages/ListEvaluations";
+import DefaultLayout from "@/layouts/DefaultLayout";
 
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomeLayoutDev />,
+    element: <DefaultLayout />,
     children: [
       {
         index: true,
         element: <HomePageDev />,
+      },
+      {
+        // Páginas de evaluaciones: /evaluaciones/<página>
+        path: "evaluaciones/aplicacion-de-evaluaciones",
+        element: <ListEvaluations />,
       },
     ],
   },
