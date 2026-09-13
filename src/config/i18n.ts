@@ -1,6 +1,7 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import esCommon from '@/locales/es/common.json';
+import esEvaluations from '@/locales/es/evaluations.json';
 
 export const SUPPORTED_LANGUAGES = ['es'] as const;
 export type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number];
@@ -22,12 +23,12 @@ export const getStoredLanguage = (): SupportedLanguage => {
 
 if (!i18n.isInitialized) {
   void i18n.use(initReactI18next).init({
-    resources: { es: { common: esCommon } },
+    resources: { es: { common: esCommon, evaluations: esEvaluations } },
     lng: getStoredLanguage(),
     fallbackLng: DEFAULT_LANGUAGE,
     supportedLngs: [...SUPPORTED_LANGUAGES],
     defaultNS: 'common',
-    ns: ['common'],
+    ns: ['common', 'evaluations'],
     load: 'languageOnly',
     initAsync: false,
     returnNull: false,

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import Button from "@/components/Button";
 
 interface EvaluationsPaginationProps {
@@ -23,12 +24,13 @@ export const EvaluationsPagination = ({
     onPageChange,
     onPerPageChange,
 }: EvaluationsPaginationProps) => {
+    const { t } = useTranslation("evaluations");
     const selectClassName = "border border-gray-200 rounded-lg p-2 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500";
 
     // El paginador devuelve from/to en null cuando la página no tiene elementos
     const rangeLabel = total === 0 || from === null || to === null
-        ? "Sin evaluaciones"
-        : `Mostrando ${from}-${to} de ${total}`;
+        ? t("pagination.empty")
+        : t("pagination.range", { from, to, total });
 
     // La última página siempre es al menos 1, incluso sin resultados
     const lastPageSafe = Math.max(lastPage, 1);
@@ -40,7 +42,7 @@ export const EvaluationsPagination = ({
             <div className="flex flex-wrap items-center gap-3">
                 {/* Tamaño de página: la API acepta de 1 a 100 (10 por defecto) */}
                 <label className="flex items-center gap-2 text-sm text-gray-600">
-                    Por página
+                    {t("pagination.perPage")}
                     <select
                         value={perPage}
                         onChange={(e) => onPerPageChange(Number(e.target.value))}
@@ -56,11 +58,11 @@ export const EvaluationsPagination = ({
                     size="sm"
                     disabled={currentPage <= 1}
                     onClick={() => onPageChange(currentPage - 1)}>
-                    Anterior
+                    {t("pagination.previous")}
                 </Button>
 
                 <span className="text-sm text-gray-600 font-medium">
-                    Página {currentPage} de {lastPageSafe}
+                    {t("pagination.page", { page: currentPage, pages: lastPageSafe })}
                 </span>
 
                 <Button
@@ -68,7 +70,7 @@ export const EvaluationsPagination = ({
                     size="sm"
                     disabled={currentPage >= lastPageSafe}
                     onClick={() => onPageChange(currentPage + 1)}>
-                    Siguiente
+                    {t("pagination.next")}
                 </Button>
             </div>
         </div>
