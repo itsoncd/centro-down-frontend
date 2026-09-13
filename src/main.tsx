@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
+import '@/config/i18n'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './routes/router'
 import { TanStackProvider } from './plugins/TanStackProvider' 
