@@ -5,6 +5,7 @@ declare module 'i18next' {
     defaultNS: 'common';
     resources: {
       common: typeof import('@/locales/es/common.json');
+      evaluations: typeof import('@/locales/es/evaluations.json');
     };
   }
 }

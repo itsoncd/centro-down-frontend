@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import Button from "@/components/Button";
 import { useStudentStore } from "@/store";
@@ -43,6 +44,7 @@ const orderOptions = (values: string[], preference: string[]): string[] => {
 };
 
 export const ListEvaluations = () => {
+    const { t } = useTranslation("evaluations");
     const { selectedStudent, setSelectedStudent } = useStudentStore();
     const [searchInput, setSearchInput] = useState("");
     const [statusFilter, setStatusFilter] = useState<"" | EvaluationStatus>("");
@@ -117,16 +119,16 @@ export const ListEvaluations = () => {
 
     // Reemplazar por la navegación a la página de creación de evaluaciones cuando exista
     const handleStartEvaluation = () => {
-        toast.info("La creación de evaluaciones estará disponible próximamente");
+        toast.info(t("list.startComingSoon"));
     };
 
     return (
         <div className="min-h-screen bg-blue-50/40 p-6 md:p-10 flex flex-col">
             <div className="space-y-6 flex flex-1 flex-col">
                 <div>
-                    <h1 className="text-2xl font-bold text-blue-800">Evaluaciones</h1>
+                    <h1 className="text-2xl font-bold text-blue-800">{t("list.title")}</h1>
                     <p className="text-sm text-gray-500 mt-1 font-medium">
-                        Administra las evaluaciones que se han realizado
+                        {t("list.subtitle")}
                     </p>
                 </div>
 
@@ -134,7 +136,7 @@ export const ListEvaluations = () => {
                 <div className="flex justify-end">
                     <div className="w-2/12">
                         <Button variant="primary" size="lg" className="w-full" onClick={handleStartEvaluation}>
-                            Empezar Evaluación
+                            {t("list.startButton")}
                         </Button>
                     </div>
                 </div>
@@ -144,14 +146,14 @@ export const ListEvaluations = () => {
                     {/* Filtro de estudiantes por nombre */}
                     <aside className="w-full md:w-2/12 bg-white rounded-sm border border-gray-200 shadow-sm p-3">
                         {allEvaluationsQuery.isLoading ? (
-                            <p className="px-4 py-3 text-sm text-gray-500 font-medium">Cargando estudiantes...</p>
+                            <p className="px-4 py-3 text-sm text-gray-500 font-medium">{t("students.loading")}</p>
                         ) : (
                             <StudentFilter students={students} />
                         )}
 
                         {studentsArePartial && (
                             <p className="px-3 pt-3 text-xs text-gray-400 font-medium">
-                                Se listan los estudiantes de las {referenceEvaluations.length} evaluaciones más recientes.
+                                {t("students.partial", { evaluations: referenceEvaluations.length })}
                             </p>
                         )}
                     </aside>
@@ -176,20 +178,20 @@ export const ListEvaluations = () => {
                             {/* Lista de evaluaciones */}
                             {evaluationQuery.isLoading ? (
                                 <div className="flex flex-col items-center gap-3 mb-6 text-gray-500 font-medium py-8">
-                                    Cargando evaluaciones...
+                                    {t("list.loading")}
                                 </div>
                             ) : evaluationQuery.isError ? (
                                 <div className="flex flex-col items-center gap-3 mb-6 text-gray-500 font-medium py-8">
-                                    <p>No se pudieron obtener las evaluaciones</p>
+                                    <p>{t("list.loadError")}</p>
                                     <Button variant="secondary" size="sm" onClick={() => evaluationQuery.refetch()}>
-                                        Reintentar
+                                        {t("actions.retry", { ns: "common" })}
                                     </Button>
                                 </div>
                             ) : evaluations.length === 0 ? (
                                 <div className="flex flex-col items-center gap-3 mb-6 text-gray-500 font-medium py-8">
                                     {hasActiveFilters
-                                        ? "No se encontraron evaluaciones con los filtros aplicados"
-                                        : "No hay evaluaciones registradas"}
+                                        ? t("list.emptyFiltered")
+                                        : t("list.empty")}
                                 </div>
                             ) : (
                                 <div

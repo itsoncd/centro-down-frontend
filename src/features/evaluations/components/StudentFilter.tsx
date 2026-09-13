@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { SearchBar } from "@/components/SearchBar";
 import { useStudentStore } from "@/store";
 import type { StudentData } from "../types";
@@ -8,6 +9,7 @@ interface StudentFilterProps {
 }
 
 export const StudentFilter = ({ students }: StudentFilterProps) => {
+    const { t } = useTranslation("evaluations");
     const { selectedStudent, setSelectedStudent } = useStudentStore();
     const [searchTerm, setSearchTerm] = useState("");
 
@@ -19,7 +21,7 @@ export const StudentFilter = ({ students }: StudentFilterProps) => {
         <div className="flex flex-col gap-2">
             {/* Buscador de estudiantes por nombre */}
             <SearchBar
-                placeholder="Buscar estudiante..."
+                placeholder={t("students.searchPlaceholder")}
                 onSearch={setSearchTerm}
                 className="w-full"
             />
@@ -32,13 +34,13 @@ export const StudentFilter = ({ students }: StudentFilterProps) => {
                         ? "bg-gray-200 text-gray-900"
                         : "text-gray-700 hover:bg-gray-50"
                 }`}>
-                Todos los estudiantes
+                {t("students.all")}
             </button>
 
             {/* Lista de estudiantes */}
             {filteredStudents.length === 0 ? (
                 <p className="px-4 py-3 text-sm text-gray-500 font-medium">
-                    No se encontraron estudiantes
+                    {t("students.empty")}
                 </p>
             ) : (
                 <ul className="space-y-1 overflow-y-auto h-full p-2 custom-scrollbar">
