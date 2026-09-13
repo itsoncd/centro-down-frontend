@@ -1,0 +1,36 @@
+{
+  "list": {
+    "title": "Lista de evaluaciones",
+    "subtitle": "Administra las evaluaciones que se han realizado",
+    "startButton": "Empezar Evaluación",
+    "startComingSoon": "La creación de evaluaciones estará disponible próximamente",
+    "loading": "Cargando evaluaciones...",
+    "loadError": "No se pudieron obtener las evaluaciones",
+    "empty": "No hay evaluaciones registradas",
+    "emptyFiltered": "No se encontraron evaluaciones con los filtros aplicados"
+  },
+  "filters": {
+    "searchLabel": "Buscar",
+    "searchPlaceholder": "Buscar evaluación por título...",
+    "statusLabel": "Estado",
+    "statusAll": "Todos los estados",
+    "typeLabel": "Tipo",
+    "typeAll": "Todos los tipos",
+    "clear": "Limpiar filtros"
+  },
+  "students": {
+    "loading": "Cargando estudiantes...",
+    "searchPlaceholder": "Buscar estudiante...",
+    "all": "Todos los estudiantes",
+    "empty": "No se encontraron estudiantes",
+    "partial": "Se listan los estudiantes de las {{evaluations}} evaluaciones más recientes."
+  },
+  "pagination": {
+    "empty": "Sin evaluaciones",
+    "range": "Mostrando {{from}}-{{to}} de {{total}}",
+    "perPage": "Por página",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "page": "Página {{page}} de {{pages}}"
+  }
+}

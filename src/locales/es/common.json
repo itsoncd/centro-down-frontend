@@ -6,7 +6,8 @@
     "save": "Guardar",
     "cancel": "Cancelar",
     "delete": "Eliminar",
-    "confirm": "Confirmar"
+    "confirm": "Confirmar",
+    "retry": "Reintentar"
   },
   "states": {
     "loading": "Cargando...",
