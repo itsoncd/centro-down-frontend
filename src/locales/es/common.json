@@ -1,0 +1,20 @@
+{
+  "app": {
+    "name": "Centro Down"
+  },
+  "actions": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "confirm": "Confirmar"
+  },
+  "states": {
+    "loading": "Cargando...",
+    "error": "Ocurrió un error",
+    "empty": "Sin resultados"
+  },
+  "language": {
+    "label": "Idioma",
+    "es": "Español"
+  }
+}
