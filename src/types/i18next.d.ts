@@ -6,6 +6,7 @@ declare module 'i18next' {
     resources: {
       common: typeof import('@/locales/es/common.json');
       evaluations: typeof import('@/locales/es/evaluations.json');
+      auth: typeof import('@/locales/es/auth.json');
     };
   }
 }

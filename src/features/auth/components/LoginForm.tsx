@@ -1,8 +1,9 @@
 import { useForm } from "react-hook-form";
 import type { LoginFormType } from "../types";
-import { ErrorMessage } from "@/components";
+import { ErrorMessage } from "@/components/ErrorMessage";
 import { RoleSelectionModal } from "./RoleModalSelection";
 import { useLogin, useRoleSelection } from "../hooks";
+import { extractApiErrorMessage } from "@/utils";
 import { toast } from "react-toastify";
 
 export const LoginForm = () => {
@@ -30,11 +31,14 @@ export const LoginForm = () => {
   //?? Functions for login
   const handleLogin = (formData: LoginFormType) =>
     loginMutation(formData, {
-      onSuccess: (response) => {
+      onSuccess: (user) => {
         toast.success("Inicio de Sesion exitoso.");
-        handleRoleSelection(response);
+        handleRoleSelection(user);
       },
-      onError: (error) => toast.error(error.response?.data.error),
+      onError: (error) =>
+        toast.error(
+          extractApiErrorMessage(error, "No se pudo iniciar sesión, intente de nuevo.")
+        ),
     });
 
   return (
