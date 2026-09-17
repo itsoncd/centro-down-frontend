@@ -1,3 +1,4 @@
+export * from './apiError.utils';
 export * from './awaitFetch.utils';
 export * from './class-name.utils';
 export * from './format-hours.utils';

@@ -1,17 +1,22 @@
 import { useNavigate } from "react-router-dom";
-import { useUserStore } from "@/store/user.store";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { loginActions } from "@/features/auth/services/login.actions";
+import { clearClientSession } from "@/lib/session";
 
 export const useLogout = () => {
   const navigate = useNavigate();
-  const clearUser = useUserStore((state) => state.clearUser); // Asegúrate de tener esta función
+  const queryClient = useQueryClient();
 
-  const logout = () => {
-    localStorage.removeItem("roles");
-    localStorage.removeItem("rol");
-    localStorage.removeItem("token");
+  const logout = async () => {
+    try {
+      await loginActions.logout();
+    } catch {
+      // The server session may already be gone; the client is cleared anyway.
+    }
 
-    clearUser();
+    clearClientSession();
+    queryClient.clear();
 
     navigate("/");
 
