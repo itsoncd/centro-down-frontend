@@ -4,21 +4,15 @@ export type LoginFormType = {
   password: string;
 };
 
-export type HTTPLoginResponse = {
-  message: string;
-  token: string;
-  user: userLoginReponse;
-};
-
-export type HTTPLoginError = {
-  error: string;
-};
-
-export type userLoginReponse = {
-  id: string;
+export type AuthUser = {
+  id: number;
   name: string;
   email: string;
   roles: string[];
   confirmed: boolean;
   created_at: string;
+};
+
+export type HTTPLoginError = {
+  error: string;
 };

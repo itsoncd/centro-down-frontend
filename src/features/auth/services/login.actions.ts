@@ -1,16 +1,30 @@
-import { api } from "@/lib/axios";
-import type { HTTPLoginResponse, LoginFormType } from "../types";
+import { api, ensureCsrf } from "@/lib/axios";
+import type { ApiEnvelope } from "@/types";
+import type { AuthUser, LoginFormType } from "../types";
 
 
 export const loginActions = {
 
-    login: async (body: LoginFormType): Promise<HTTPLoginResponse> => {
-        try {
-            const { data } = await api.post<HTTPLoginResponse>('/login', body);
-            return data;
-        } catch (error) {
-            console.log(error);
-            throw error;
+    // Login only establishes the server session, so the authenticated user
+    // (and its roles) has to be read from /auth/user afterwards.
+    login: async (body: LoginFormType): Promise<AuthUser> => {
+        await ensureCsrf();
+
+        const response = await api.post('/login', body);
+
+        if (response.status !== 204) {
+            throw new Error(`Unexpected login response: ${response.status}`);
         }
+
+        return loginActions.getCurrentUser();
+    },
+
+    getCurrentUser: async (): Promise<AuthUser> => {
+        const { data } = await api.get<ApiEnvelope<AuthUser>>('/auth/user');
+        return data.data;
+    },
+
+    logout: async (): Promise<void> => {
+        await api.post('/logout');
     }
 };

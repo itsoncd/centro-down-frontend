@@ -1,4 +1,5 @@
 import type { Role } from "@/types";
+import { ROLES } from "@/types";
 
 const initialRouteByRole: Record<Role, string> = {
   admin: "/admin",
@@ -8,9 +9,7 @@ const initialRouteByRole: Record<Role, string> = {
 };
 
 export function getInitialRouteByRole(role: Role | string): string {
-  const validRoles: Role[] = ["admin", "director", "profesor", "tutor"];
-
-  if (!validRoles.includes(role as Role)) return "/";
+  if (!ROLES.includes(role as Role)) return "/";
 
   return initialRouteByRole[role as Role];
 }

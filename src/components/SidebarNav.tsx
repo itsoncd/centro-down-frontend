@@ -71,7 +71,9 @@ export const SidebarNav = ({ isOpen, toggleSidebar }: Props) => {
 
       {/* Logout */}
       <button
-        onClick={logout}
+        onClick={() => {
+          void logout();
+        }}
         className={`flex items-center gap-2 text-red-600 hover:underline mt-auto ${
           !isOpen ? "justify-center" : ""
         }`}

@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useUserStore } from "@/store/user.store";
 import { getInitialRouteByRole } from "@/utils";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import { ROLES } from "@/types";
 import type { Role } from "@/types";
-import type { HTTPLoginResponse } from "../types";
+import type { AuthUser } from "../types";
 
 export const useRoleSelection = () => {
   const navigate = useNavigate();
@@ -12,52 +14,53 @@ export const useRoleSelection = () => {
 
   const [availableRoles, setAvailableRoles] = useState<Role[]>([]);
   const [showRoleModal, setShowRoleModal] = useState(false);
-  const [pendingUserData, setPendingUserData] = useState<HTTPLoginResponse | null>(null);
+  const [pendingUserData, setPendingUserData] = useState<AuthUser | null>(null);
 
-  const handleRoleSelection = (response: HTTPLoginResponse) => {
-    const roles = response.user.roles as Role[];
-
-    if (roles.length > 1) {
-      setAvailableRoles(roles);
-      setPendingUserData(response);
-      setShowRoleModal(true);
-    } else {
-      const mainRole = roles[0];
-      localStorage.setItem("rol", mainRole);
-      localStorage.setItem("AUTH_TOKEN", response.token);
-      setUser({
-        id: response.user.id,
-        name: response.user.name,
-        email: response.user.email,
-        roles: [mainRole],
-      });
-      const initialRoute = getInitialRouteByRole(mainRole);
-      navigate(initialRoute);
-    }
-  };
-
-  const selectRole = (role: Role) => {
-    if (!pendingUserData) return;
+  const applyRole = (user: AuthUser, role: Role) => {
     localStorage.setItem("rol", role);
-    localStorage.setItem("AUTH_TOKEN", pendingUserData.token);
     setUser({
-      id: pendingUserData.user.id,
-      name: pendingUserData.user.name,
-      email: pendingUserData.user.email,
+      id: String(user.id),
+      name: user.name,
+      email: user.email,
       roles: [role],
     });
-    const initialRoute = getInitialRouteByRole(role);
-    cleanup();
-    navigate(initialRoute);
+    navigate(getInitialRouteByRole(role));
   };
-
-  const closeModal = () => cleanup();
 
   const cleanup = () => {
     setShowRoleModal(false);
     setAvailableRoles([]);
     setPendingUserData(null);
   };
+
+  const handleRoleSelection = (user: AuthUser) => {
+    const roles = user.roles.filter((role): role is Role =>
+      ROLES.includes(role as Role)
+    );
+
+    if (roles.length === 0) {
+      toast.error("El usuario no tiene roles asignados.");
+      return;
+    }
+
+    if (roles.length > 1) {
+      setAvailableRoles(roles);
+      setPendingUserData(user);
+      setShowRoleModal(true);
+      return;
+    }
+
+    applyRole(user, roles[0]);
+  };
+
+  const selectRole = (role: Role) => {
+    if (!pendingUserData) return;
+    const user = pendingUserData;
+    cleanup();
+    applyRole(user, role);
+  };
+
+  const closeModal = () => cleanup();
 
   return {
     handleRoleSelection,
