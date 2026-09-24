@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
 import type { EvaluationTemplate } from "../types"
 import TemplateCard from "../components/TemplateCard"
-import { Image, FileText, Paperclip, Plus , X, Pencil, ArrowLeft, Play } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
+import { getEvaluationTemplatesPage } from '../api/evaluation-template.api'
 
 const calificationLabels: Record<string, string> = {
     escala_logro: 'Escala de Logro',
@@ -33,14 +34,18 @@ function MyTemplates() {
         return date.toLocaleDateString("en-US");
     };
 
-    const fetchEvaluationTemplates = (page: number = 1, perPage: number = 5, sortBy: string = "id", direction: string = "desc") => {
-        setLoading(true);
-        fetch(`http://localhost:8000/api/evaluation-templates/page?page=${page}&per_page=${perPage}&sort_by=${sortBy}&direction=${direction}`, {
-            headers: { Authorization: `Bearer ${token}` }
-            })
-            .then(res => res.json())
-            .then(json => {
-                const evaluationTemplateVersions: EvaluationTemplate[] = json.data.data.map((evaluationTemplateVersion: any) => ({
+    const showEvaluationTemplates = async (page: number = 1,
+         perPage: number = 5,
+          sortBy: string = "id",
+           direction: string = "desc"):
+            Promise<void> => {
+
+        try {
+            setLoading(true);
+
+            const data = await getEvaluationTemplatesPage(page, perPage, sortBy, direction);
+
+            const evaluationTemplateVersions: EvaluationTemplate[] = data.data.data.map((evaluationTemplateVersion: any) => ({
                 id: evaluationTemplateVersion.id,
                 evaluation_template_id: evaluationTemplateVersion.evaluation_template_id,
                 version_name: evaluationTemplateVersion.version_name,
@@ -56,17 +61,20 @@ function MyTemplates() {
 
             setTemplates(evaluationTemplateVersions);
             setPagination({
-                currentPage: json.data.current_page,
-                lastPage: json.data.last_page,
-                perPage: json.data.per_page,
-                total: json.data.total
+                currentPage: data.data.current_page,
+                lastPage: data.data.last_page,
+                perPage: data.data.per_page,
+                total: data.data.total
             });
             setLoading(false);
-        });
-    }
+
+        } catch (error) {
+            console.log(error)
+        }
+    };
 
     useEffect(() => {
-        fetchEvaluationTemplates();
+        showEvaluationTemplates();
     }, []);
 
     const [search, setSearch] = useState<string>('')
@@ -88,7 +96,7 @@ function MyTemplates() {
             const json = await res.json();
 
             if (res.ok) {
-            fetchEvaluationTemplates(pagination.currentPage);
+            showEvaluationTemplates(pagination.currentPage);
             } else {
             console.error("Error al desactivar:", json);
             alert("Error al desactivar la plantilla");
@@ -153,14 +161,14 @@ function MyTemplates() {
                 <div className="pagination bg-white rounded-xl p-6 shadow-sm border border-gray-100 flex items-center gap-4">
                     <button className="bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-blue-700"
                     disabled={pagination.currentPage <= 1}
-                    onClick={() => fetchEvaluationTemplates(pagination.currentPage - 1)}
+                    onClick={() => showEvaluationTemplates(pagination.currentPage - 1)}
                     >
                     Anterior
                     </button>
 
                     <button className="bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-blue-700"
                     disabled={pagination.currentPage >= pagination.lastPage}
-                    onClick={() => fetchEvaluationTemplates(pagination.currentPage + 1)}
+                    onClick={() => showEvaluationTemplates(pagination.currentPage + 1)}
                     >
                     Siguiente
                     </button>
