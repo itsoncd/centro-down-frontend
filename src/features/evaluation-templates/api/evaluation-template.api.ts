@@ -1,4 +1,5 @@
 import { api } from "@/lib/axios";
+import type { EvaluationItem } from "../types"
 
 export const getEvaluationTemplatesPage = async (page: number = 1,
      perPage: number = 5,
@@ -15,3 +16,15 @@ export const getEvaluationTemplatesPage = async (page: number = 1,
             });
     return data;
 }
+
+export const createItem = async (item: EvaluationItem) => {
+    const formData = new FormData();
+    formData.append("name", item.name);
+
+    item.files.forEach((file) => {
+        formData.append("files[]", file);
+    });
+
+    const response = await api.post("http://localhost:8000/api/items", formData, { headers: { "Content-Type": "multipart/form-data" } });
+    console.log("Item creado:", response.data);
+};

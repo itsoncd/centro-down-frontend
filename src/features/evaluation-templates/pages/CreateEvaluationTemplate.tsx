@@ -6,6 +6,7 @@ import TemplateConfigForm from "../components/TemplateConfigForm"
 import ItemsSection from "../components/ItemsSection"
 import { ArrowLeft } from 'lucide-react'
 import { useNavigate } from "react-router-dom";
+import { createItem } from '../api/evaluation-template.api'
 
 function CreateEvaluationTemplate() {
     const token = import.meta.env.VITE_API_TOKEN;
@@ -51,7 +52,6 @@ function CreateEvaluationTemplate() {
         setItems([...items, { ...item, files: item.files || [] }])
     }
 
-
     function handleRemoveItem(id: number) {
         setItems(items.filter(i => i.id !== id))
     }
@@ -67,25 +67,54 @@ function CreateEvaluationTemplate() {
         // Items
         payload.items.forEach((item: any, index: number) => {
             if (item.id && !String(item.id).startsWith("1787")) {
-            // items precargados
-            formData.append(`items[${index}][id]`, item.id);
+                // items precargados
+                formData.append(`items[${index}][id]`, item.id);
             }
             if (item.name) {
-            formData.append(`items[${index}][name]`, item.name);
+                formData.append(`items[${index}][name]`, item.name);
             }
             if (item.files && item.files.length > 0) {
-            item.files.forEach((file: File) => {
-                formData.append(`items[${index}][files][]`, file);
-            });
+                item.files.forEach((file: File) => {
+                    formData.append(`items[${index}][files][]`, file);
+                });
             }
         });
 
         console.log([...formData.entries()]);
 
         return formData;
-        }
+    }
 
     const [isSaving, setIsSaving] = useState(false);
+
+    const saveEvaluationTemplate = async () => {
+        console.log("NUEVO MÉTODO");
+        // Validaciones
+        if (name === "") {
+            alert("Debes definir el nombre del instrumento.");
+            return;
+        }
+        if (items.length === 0) {
+            alert("Debes agregar al menos un ítem antes de guardar.");
+            return;
+        }
+
+        setIsSaving(true);
+
+        try {
+            console.log("BOTÓN PRESIONADO")
+
+            for (const item of items) {
+                await createItem(item);
+            }
+
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsSaving(false);
+        }
+
+    };
 
     const handleSubmit = async () => {
         // Validaciones
@@ -142,7 +171,7 @@ function CreateEvaluationTemplate() {
         } finally {
             setIsSaving(false);
         }
-        };
+    };
 
     function goBack() {
         navigate("/director/plantillas/mis-plantillas");
@@ -198,7 +227,7 @@ function CreateEvaluationTemplate() {
                     <button onClick={goBack} className="flex-1 py-3 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
                         Cancelar
                     </button>
-                    <button onClick={handleSubmit} disabled={isSaving} className="flex-1 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+                    <button onClick={saveEvaluationTemplate} disabled={isSaving} className="flex-1 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
                         {isSaving ? "Creando..." : "Crear Plantilla"}
                     </button>
                 </div>
