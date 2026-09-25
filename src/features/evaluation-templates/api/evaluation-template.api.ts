@@ -1,5 +1,5 @@
 import { api } from "@/lib/axios";
-import type { EvaluationItem } from "../types"
+import type { EvaluationItem, EvaluationTemplatePayload } from "../types"
 
 export const getEvaluationTemplatesPage = async (page: number = 1,
      perPage: number = 5,
@@ -26,5 +26,18 @@ export const createItem = async (item: EvaluationItem) => {
     });
 
     const response = await api.post("http://localhost:8000/api/items", formData, { headers: { "Content-Type": "multipart/form-data" } });
-    console.log("Item creado:", response.data);
+    
+    return response.data.data;
+};
+
+export const createEvaluationTemplate = async (payload: EvaluationTemplatePayload) => {
+    const response = await api.post("http://localhost:8000/api/evaluation-templates",
+         payload, 
+        {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+    
+    return response.data;
 };

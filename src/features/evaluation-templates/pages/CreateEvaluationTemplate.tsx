@@ -1,12 +1,12 @@
 import { useState } from "react"
-import type { CalificationType, EvaluationItem, EvaluationType, InstrumentMode, PreloadedInstrument } from "../types"
+import type { CalificationType, EvaluationItem, EvaluationType, InstrumentMode, PreloadedInstrument, EvaluationTemplatePayload } from "../types"
 import EvaluationTypeSelector from "../components/EvaluationTypeSelector"
 import InstrumentSelector from "../components/InstrumentSelector"
 import TemplateConfigForm from "../components/TemplateConfigForm"
 import ItemsSection from "../components/ItemsSection"
 import { ArrowLeft } from 'lucide-react'
 import { useNavigate } from "react-router-dom";
-import { createItem } from '../api/evaluation-template.api'
+import { createItem, createEvaluationTemplate } from '../api/evaluation-template.api'
 
 function CreateEvaluationTemplate() {
     const token = import.meta.env.VITE_API_TOKEN;
@@ -102,11 +102,24 @@ function CreateEvaluationTemplate() {
         setIsSaving(true);
 
         try {
-            console.log("BOTÓN PRESIONADO")
+
+            const createdItems = [];
 
             for (const item of items) {
-                await createItem(item);
+                const created = await createItem(item);
+                createdItems.push(created.id);
             }
+
+            const payload: EvaluationTemplatePayload = {
+                name,
+                type,
+                grading_type: gradingType,
+                item_version_ids: createdItems
+            }
+
+            await createEvaluationTemplate(payload);
+
+            navigate("mis-plantillas");
 
         } catch (error) {
             console.log(error);
@@ -114,63 +127,6 @@ function CreateEvaluationTemplate() {
             setIsSaving(false);
         }
 
-    };
-
-    const handleSubmit = async () => {
-        // Validaciones
-        if (name === "") {
-            alert("Debes definir el nombre del instrumento.");
-            return;
-        }
-        if (items.length === 0) {
-            alert("Debes agregar al menos un ítem antes de guardar.");
-            return;
-        }
-
-        setIsSaving(true);
-        try {
-
-            let url = ""
-            if (isPrecargado && selectedInstrument) {
-            // Crear nueva versión del template existente
-            url = `http://localhost:8000/api/evaluation-templates/${selectedInstrument.id}/versions`
-            } else {
-            // Crear template nuevo
-            url = "http://localhost:8000/api/evaluation-templates/full"
-            }
-
-
-            // Construir el objeto template
-            const evaluationTemplate = {
-            name,
-            type,
-            grading_type: gradingType,
-            };
-
-            const payload = {
-                template: evaluationTemplate,
-                items
-            }
-
-
-            console.log("Payload a enviar:", payload);
-
-            const res = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${token}`
-            },
-            body: buildFormData(payload) // función que convierte JSON + files a FormData
-            });
-
-            const data = await res.json();
-            console.log("Guardado con éxito:", data);
-            navigate("mis-plantillas");
-        } catch (err) {
-            console.error(err);
-        } finally {
-            setIsSaving(false);
-        }
     };
 
     function goBack() {
