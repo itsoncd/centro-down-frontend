@@ -7,9 +7,9 @@ import TemplateConfigForm from "../components/TemplateConfigForm"
 import ItemsSection from "../components/ItemsSection"
 import { ArrowLeft } from 'lucide-react'
 import { useNavigate } from "react-router-dom";
+import { getInstrumentById, updateEvaluationTemplate } from "../api/evaluation-template.api"
 
 function EditEvaluationTemplate() {
-  const token = import.meta.env.VITE_API_TOKEN;
   const navigate = useNavigate();
   const { id } = useParams();
   const [template, setTemplate] = useState<EvaluationTemplate | null>(null);
@@ -29,11 +29,10 @@ function EditEvaluationTemplate() {
   async function fetchTemplate() {
     try {
       // Paso 1: traer el template completo
-      const res = await fetch(`http://localhost:8000/api/evaluation-templates/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const json = await res.json();
-      const tpl = json.data;
+      if (!id) return;
+      const safeId = id as string;
+      const res = await getInstrumentById(safeId);
+      const tpl = res.data;
 
       setTemplate(tpl);
 
@@ -130,27 +129,13 @@ function EditEvaluationTemplate() {
         try {
             formData.append("_method", "PUT");
 
-            const res = await fetch(
-                `http://localhost:8000/api/evaluation-templates/${template?.id}`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                    },
-                    body: formData,
-                }
-            );
+            if (!template) return;
+            const safeTemplateId = template?.id as number;
 
-            const json = await res.json();
+            await updateEvaluationTemplate(safeTemplateId, formData);
 
-            if (res.ok) {
-            console.log("Plantilla actualizada:", json);
             alert("Plantilla actualizada exitosamente");
             goBack();
-            } else {
-            console.error("Error al actualizar:", json);
-            alert("Error al actualizar la plantilla");
-            }
         } catch (err) {
             console.error("Error de red:", err);
             alert("Error de red al actualizar la plantilla");

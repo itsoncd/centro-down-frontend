@@ -1,5 +1,5 @@
 import { api } from "@/lib/axios";
-import type { EvaluationItem, EvaluationTemplatePayload } from "../types"
+import type { EvaluationItem, EvaluationTemplatePayload, UpdateEvaluationTemplatePayload } from "../types"
 
 export const getEvaluationTemplatesPage = async (page: number = 1,
      perPage: number = 5,
@@ -51,6 +51,13 @@ export const createEvaluationTemplate = async (payload: EvaluationTemplatePayloa
     
     return response.data;
 };
+
+export const updateEvaluationTemplate = async (id: number, formData: FormData) => {
+    const response = await api.post(`http://localhost:8000/api/evaluation-templates/${id}`,
+        formData, 
+        { headers: { "Content-Type": "multipart/form-data" } });
+    return response;
+}
 
 export const deleteEvaluationTemplateVersion = async (id: number) => {
     const response = await api.delete(`http://localhost:8000/api/evaluation-templates/${id}`);
