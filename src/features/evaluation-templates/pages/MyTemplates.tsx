@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import type { EvaluationTemplate } from "../types"
 import TemplateCard from "../components/TemplateCard"
 import { ArrowLeft } from 'lucide-react'
-import { getEvaluationTemplatesPage } from '../api/evaluation-template.api'
+import { getEvaluationTemplatesPage, deleteEvaluationTemplateVersion } from '../api/evaluation-template.api'
 
 const calificationLabels: Record<string, string> = {
     escala_logro: 'Escala de Logro',
@@ -16,8 +16,6 @@ const typeColors: Record<string, string> = {
 }
 
 function MyTemplates() {
-
-    const token = import.meta.env.VITE_API_TOKEN;
 
     const [loading, setLoading] = useState(true);
 
@@ -84,29 +82,16 @@ function MyTemplates() {
     )
 
     async function handleDelete(id: number) {
-        try {
-            setLoading(true);
-            const res = await fetch(`http://localhost:8000/api/evaluation-templates/${id}`, {
-            method: "DELETE",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-            },
-            });
-
-            const json = await res.json();
-
-            if (res.ok) {
-            showEvaluationTemplates(pagination.currentPage);
-            } else {
-            console.error("Error al desactivar:", json);
-            alert("Error al desactivar la plantilla");
-            setLoading(false);
+            try {
+                setLoading(true);
+                await deleteEvaluationTemplateVersion(id);
+                await showEvaluationTemplates(pagination.currentPage);
+            } catch (err) {
+                console.error("Error de red:", err);
+                alert("Error de red al desactivar la plantilla");
+            } finally {
+                setLoading(false);
             }
-        } catch (err) {
-            console.error("Error de red:", err);
-            alert("Error de red al desactivar la plantilla");
-            setLoading(false);
-        }
         }
 
 

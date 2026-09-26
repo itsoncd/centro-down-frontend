@@ -51,3 +51,8 @@ export const createEvaluationTemplate = async (payload: EvaluationTemplatePayloa
     
     return response.data;
 };
+
+export const deleteEvaluationTemplateVersion = async (id: number) => {
+    const response = await api.delete(`http://localhost:8000/api/evaluation-templates/${id}`);
+    return response;
+}
