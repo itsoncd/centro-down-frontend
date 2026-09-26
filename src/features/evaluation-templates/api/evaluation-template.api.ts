@@ -17,6 +17,16 @@ export const getEvaluationTemplatesPage = async (page: number = 1,
     return data;
 }
 
+export const getInstrumentList = async (type: string): Promise<any> => {
+    const { data } = await api.get(`http://localhost:8000/api/evaluation-templates/list/${type}`);
+    return data;
+}
+
+export const getInstrumentById = async (id: string): Promise<any> => {
+    const { data } = await api.get(`http://localhost:8000/api/evaluation-templates/${id}`);
+    return data;
+}
+
 export const createItem = async (item: EvaluationItem) => {
     const formData = new FormData();
     formData.append("name", item.name);

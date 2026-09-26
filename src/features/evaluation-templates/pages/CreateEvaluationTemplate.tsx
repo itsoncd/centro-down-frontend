@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import { createItem, createEvaluationTemplate } from '../api/evaluation-template.api'
 
 function CreateEvaluationTemplate() {
-    const token = import.meta.env.VITE_API_TOKEN;
     const navigate = useNavigate();
 
     const [type, setType] = useState<EvaluationType>('Académica')
@@ -88,7 +87,6 @@ function CreateEvaluationTemplate() {
     const [isSaving, setIsSaving] = useState(false);
 
     const saveEvaluationTemplate = async () => {
-        console.log("NUEVO MÉTODO");
         // Validaciones
         if (name === "") {
             alert("Debes definir el nombre del instrumento.");
@@ -166,7 +164,7 @@ function CreateEvaluationTemplate() {
                     onNameChange={setName}
                     onDescriptionChange={setDescription}
                     onCalificationChange={setGradingType}
-                    disabled={isPrecargado}
+                    disabled={false}
                     preloadedInstrument={selectedInstrument}
                     sectionNumber={configSectionNumber}
                 />
