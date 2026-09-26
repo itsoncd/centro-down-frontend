@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom";
-import type { EvaluationTemplate, CalificationType, EvaluationItem, EvaluationType, InstrumentMode, PreloadedInstrument } from "../types"
+import type { EvaluationTemplate, CalificationType, EvaluationItem, EvaluationType, InstrumentMode } from "../types"
 import EvaluationTypeSelector from "../components/EvaluationTypeSelector"
-import InstrumentSelector from "../components/InstrumentSelector"
 import TemplateConfigForm from "../components/TemplateConfigForm"
 import ItemsSection from "../components/ItemsSection"
 import { ArrowLeft } from 'lucide-react'
@@ -18,7 +17,6 @@ function EditEvaluationTemplate() {
   // Estados editables
   const [evaluationType, setEvaluationType] = useState<EvaluationType>("Académica");
   const [instrumentMode, setInstrumentMode] = useState<InstrumentMode>("personalizado");
-  const [selectedInstrument, setSelectedInstrument] = useState<PreloadedInstrument | null>(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [calificationType, setCalificationType] = useState<CalificationType>("porcentual");
@@ -65,7 +63,7 @@ function EditEvaluationTemplate() {
 
     
     const isAcademica = evaluationType === 'Académica'
-    const isPrecargado = instrumentMode === 'precargado' && selectedInstrument !== null
+    const isPrecargado = instrumentMode === 'precargado'
     const configSectionNumber = isAcademica ? 2 : 3
     const itemsSectionNumber = isAcademica ? 3 : 4
     
@@ -119,13 +117,6 @@ function EditEvaluationTemplate() {
         }
         });
 
-
-
-        for (const [key, value] of formData.entries()) {
-            console.log(key, value);
-        }
-
-
         try {
             formData.append("_method", "PUT");
 
@@ -173,7 +164,7 @@ function EditEvaluationTemplate() {
                     onDescriptionChange={setDescription}
                     onCalificationChange={setCalificationType}
                     disabled={isPrecargado}
-                    preloadedInstrument={selectedInstrument}
+                    preloadedInstrument={null}
                     sectionNumber={configSectionNumber}
                 />
 

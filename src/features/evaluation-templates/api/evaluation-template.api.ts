@@ -1,5 +1,5 @@
 import { api } from "@/lib/axios";
-import type { EvaluationItem, EvaluationTemplatePayload, UpdateEvaluationTemplatePayload } from "../types"
+import type { EvaluationItem, EvaluationTemplatePayload } from "../types"
 
 export const getEvaluationTemplatesPage = async (page: number = 1,
      perPage: number = 5,

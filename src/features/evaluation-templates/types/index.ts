@@ -37,11 +37,3 @@ export interface EvaluationTemplatePayload {
     grading_type: string;
     item_version_ids: number[];
 }
-
-export interface UpdateEvaluationTemplatePayload {
-    name: string;
-    type: string;
-    grading_type: string;
-    version: string;
-    items: EvaluationItem[]
-}
