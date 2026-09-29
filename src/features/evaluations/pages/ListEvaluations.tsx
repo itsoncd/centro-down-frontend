@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import Button from "@/components/Button";
 import { useStudentStore } from "@/store";
 import { useDebouncedValue } from "@/hooks";
@@ -45,6 +45,7 @@ const orderOptions = (values: string[], preference: string[]): string[] => {
 
 export const ListEvaluations = () => {
     const { t } = useTranslation("evaluations");
+    const navigate = useNavigate();
     const { selectedStudent, setSelectedStudent } = useStudentStore();
     const [searchInput, setSearchInput] = useState("");
     const [statusFilter, setStatusFilter] = useState<"" | EvaluationStatus>("");
@@ -117,9 +118,9 @@ export const ListEvaluations = () => {
         setSelectedStudent(null);
     };
 
-    // Reemplazar por la navegación a la página de creación de evaluaciones cuando exista
+    // Navega a la página que inicia una evaluación
     const handleStartEvaluation = () => {
-        toast.info(t("list.startComingSoon"));
+        navigate("/evaluaciones/aplicacion-de-evaluaciones/empezar");
     };
 
     return (
