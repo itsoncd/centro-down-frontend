@@ -120,7 +120,7 @@ export const ListEvaluations = () => {
 
     // Navega a la página que inicia una evaluación
     const handleStartEvaluation = () => {
-        navigate("/evaluaciones/aplicacion-de-evaluaciones/empezar");
+        navigate("/evaluaciones/aplicacion-de-evaluaciones/crear");
     };
 
     return (
