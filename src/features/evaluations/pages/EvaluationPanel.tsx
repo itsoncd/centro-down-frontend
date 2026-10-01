@@ -157,14 +157,14 @@ export const EvaluationPanel = () => {
                 .then(data => {
                 console.log("Calificación creada:", data);
 
-                // Actualizar estado a CLOSED
+                // 2️⃣ Actualizar estado a COMPLETED
                 return fetch(`http://localhost:8000/api/evaluations/${evaluation.id}`, {
                     method: "PUT",
                     headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({ status: "CLOSED" })
+                    body: JSON.stringify({ status: "COMPLETED" })
                 });
                 })
                 .then(res => res.json())

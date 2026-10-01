@@ -1,13 +1,9 @@
-export interface EvaluationLike {
-    evaluation_id: string;
-    titulo_evaluacion: string;
-    fecha_creacion: string;
-    categoria: string;
-    estado: string;
-    nombre_alumno: string;
-    nombre_tutor: string;
-    numero_pruebas: string;
-    plantilla_evaluacion: string;
+// Cuerpo que acepta POST /api/evaluations (StoreEvaluationRequest).
+// `user_id` es el evaluador: si se omite, el backend usa el usuario autenticado
+export interface StoreEvaluationPayload {
+    student_id: number;
+    template_version_id: number;
+    user_id?: number;
 }
 
 export interface StudentLike {
@@ -17,10 +13,11 @@ export interface StudentLike {
 
 // HTTP Responses
 
+// El backend responde una evaluación plana (sin relaciones) al crear
 export interface EvaluationCreated {
     statusCode: number;
     message:     string;
-    data:        EvaluationData;
+    data:        ApiEvaluation;
     timestamp?:  string;
 }
 
@@ -131,7 +128,7 @@ export interface ItemData {
 // Respuestas crudas de la API (snake_case, docs/evaluations.md)
 // ==========================================================
 
-export type EvaluationStatus = "PENDING" | "CLOSED" | "CANCELLED";
+export type EvaluationStatus = "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
 
 export interface ApiStudent {
     id: number;
@@ -156,6 +153,26 @@ export interface ApiEvaluator {
     updated_at: string;
 }
 
+// Fila de la tabla `evaluators`: el perfil que vincula un usuario con sus alumnos asignados
+export interface ApiEvaluatorProfile {
+    id: number;
+    user_id: number;
+    created_at: string;
+    updated_at: string;
+    user?: ApiEvaluator | null;
+}
+
+// GET /api/evaluators/{id}: el perfil con su usuario y sus alumnos asignados
+export interface ApiEvaluatorDetail extends ApiEvaluatorProfile {
+    students?: ApiStudent[];
+}
+
+// GET /api/evaluators/options: mínimo para llenar combos
+export interface ApiEvaluatorOption {
+    id: number;
+    name: string;
+}
+
 export interface ApiEvaluationTemplate {
     id: number;
     name: string;
@@ -164,6 +181,18 @@ export interface ApiEvaluationTemplate {
     user_id: number;
     created_at: string;
     updated_at: string;
+}
+
+// GET /api/evaluation-templates/{id}: la plantilla con todas sus versiones
+export interface ApiEvaluationTemplateDetail extends ApiEvaluationTemplate {
+    versions?: ApiEvaluationTemplateVersion[];
+    user?: ApiEvaluator | null;
+}
+
+// GET /api/evaluation-templates/options: mínimo para llenar combos
+export interface ApiEvaluationTemplateOption {
+    id: number;
+    name: string;
 }
 
 export interface ApiItemVersionFile {
@@ -249,3 +278,15 @@ export interface ApiSuccessResponse<T> {
 }
 
 export type GetEvaluationsResponse = ApiSuccessResponse<ApiPaginator<ApiEvaluation>>;
+
+// GET /api/evaluation-templates/options: catálogo de plantillas habilitadas para el combo
+export type GetEvaluationTemplateOptionsResponse = ApiSuccessResponse<ApiEvaluationTemplateOption[]>;
+
+// GET /api/evaluation-templates/{id}: detalle de una plantilla
+export type GetEvaluationTemplateDetailResponse = ApiSuccessResponse<ApiEvaluationTemplateDetail>;
+
+// GET /api/evaluators/options: catálogo de evaluadores para el combo
+export type GetEvaluatorOptionsResponse = ApiSuccessResponse<ApiEvaluatorOption[]>;
+
+// GET /api/evaluators/{id} y /api/evaluators/by-user/{userId}
+export type GetEvaluatorDetailResponse = ApiSuccessResponse<ApiEvaluatorDetail>;

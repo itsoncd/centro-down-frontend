@@ -1,11 +1,10 @@
 import { api } from "@/lib/axios";
-import type { EvaluationCreated, EvaluationData, EvaluationLike, EvaluationUpdated, GetEvaluation, GetEvaluations, GetEvaluationsParams, GetEvaluationsResponse } from "../types";
+import type { EvaluationCreated, EvaluationData, EvaluationUpdated, GetEvaluation, GetEvaluations, GetEvaluationsParams, GetEvaluationsResponse, StoreEvaluationPayload } from "../types";
 import { mapApiEvaluationToEvaluationData } from "../utils/evaluationMapper";
 
 // Manda solicitud a la API para crear una evaluación
-export const createEvaluation = async (body: EvaluationLike): Promise<EvaluationCreated> => {
+export const createEvaluation = async (body: StoreEvaluationPayload): Promise<EvaluationCreated> => {
     const { data } = await api.post<EvaluationCreated>('/evaluations', body);
-    console.log('data: ', data);
     return data;
 }
 

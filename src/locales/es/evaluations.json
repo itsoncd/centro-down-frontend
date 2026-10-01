@@ -3,7 +3,6 @@
     "title": "Lista de evaluaciones",
     "subtitle": "Administra las evaluaciones que se han realizado",
     "startButton": "Empezar Evaluación",
-    "startComingSoon": "La creación de evaluaciones estará disponible próximamente",
     "loading": "Cargando evaluaciones...",
     "loadError": "No se pudieron obtener las evaluaciones",
     "empty": "No hay evaluaciones registradas",
@@ -32,5 +31,52 @@
     "previous": "Anterior",
     "next": "Siguiente",
     "page": "Página {{page}} de {{pages}}"
+  },
+  "create": {
+    "title": "Crear Evaluación",
+    "subtitle": "Selecciona la plantilla y asigna la evaluación a un alumno",
+    "loadError": "No se pudieron cargar los datos para empezar la evaluación",
+    "template": {
+      "title": "1. Plantilla de evaluación",
+      "label": "Plantilla",
+      "placeholder": "Selecciona una plantilla",
+      "empty": "No hay plantillas de evaluación disponibles"
+    },
+    "details": {
+      "title": "Detalles de la plantilla",
+      "empty": "Selecciona una plantilla para ver sus detalles",
+      "loading": "Cargando plantilla...",
+      "loadError": "No se pudo cargar la plantilla",
+      "noVersion": "La plantilla no tiene versiones",
+      "type": "Tipo",
+      "grading": "Tipo de calificación",
+      "gradingEscalaLogro": "Escala de logro",
+      "gradingPorcentual": "Porcentual",
+      "version": "Versión",
+      "createdAt": "Fecha de creación",
+      "items": "Ítems",
+      "itemsEmpty": "La plantilla no tiene ítems",
+      "noType": "Sin tipo"
+    },
+    "assignment": {
+      "title": "2. Datos de la evaluación",
+      "evaluatorLabel": "Evaluador",
+      "evaluatorPlaceholder": "Selecciona un evaluador",
+      "evaluatorLocked": "Solo puedes aplicar evaluaciones como tú mismo",
+      "evaluatorMissing": "Tu usuario no tiene perfil de evaluador",
+      "studentLabel": "Alumno a evaluar",
+      "studentPlaceholder": "Selecciona un alumno",
+      "selectEvaluatorFirst": "Selecciona primero un evaluador para ver sus alumnos",
+      "studentsLoading": "Cargando alumnos...",
+      "studentsLoadError": "No se pudieron obtener los alumnos",
+      "evaluatorsEmpty": "No hay evaluadores disponibles",
+      "studentsEmpty": "No hay alumnos disponibles"
+    },
+    "actions": {
+      "save": "Guardar evaluación",
+      "saving": "Guardando...",
+      "cancel": "Cancelar"
+    },
+    "submitError": "No se pudo registrar la evaluación."
   }
 }

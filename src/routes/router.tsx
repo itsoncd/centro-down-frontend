@@ -15,6 +15,7 @@ import MyTemplates from "@/features/evaluation-templates/pages/MyTemplates";
 import { DashboardEvaluations } from "@/features/evaluations/pages/DashboardEvaluations";
 import { EvaluationPanel } from "@/features/evaluations/pages/EvaluationPanel";
 import { ListEvaluations } from "@/features/evaluations/pages/ListEvaluations";
+import { CreateEvaluation } from "@/features/evaluations/pages/CreateEvaluation";
 import DefaultLayout from "@/layouts/DefaultLayout";
 
 
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
         // Páginas de evaluaciones: /evaluaciones/<página>
         path: "evaluaciones/aplicacion-de-evaluaciones",
         element: <ListEvaluations />,
+      },
+      {
+        path: "evaluaciones/aplicacion-de-evaluaciones/crear",
+        element: <CreateEvaluation />,
       },
     ],
   },

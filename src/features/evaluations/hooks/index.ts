@@ -3,3 +3,8 @@ export * from './useGetEvaluations';
 export * from './useGetEvaluationById'
 export * from './useUpdateEvaluation';
 export * from './useGetEvaluationsByStudent';
+export * from './useGetEvaluationTemplateOptions';
+export * from './useGetEvaluationTemplateDetail';
+export * from './useGetEvaluatorOptions';
+export * from './useGetEvaluatorDetail';
+export * from './useGetEvaluatorByUser';
