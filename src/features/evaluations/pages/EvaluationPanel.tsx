@@ -111,13 +111,13 @@ export const EvaluationPanel = () => {
             return;
             }
 
-            // Validar observaciones (ejemplo: mínimo 5 caracteres)
+            // Validar observaciones
             if (!i.comments) {
             alert(`El ítem "${i.name}" requiere observaciones.`);
             return;
             }
 
-            // Validar archivos de respuesta (ejemplo: al menos uno obligatorio)
+            // Validar archivos de respuesta
             if (!i.responseFiles || i.responseFiles.length === 0) {
             alert(`El ítem "${i.name}" requiere al menos un archivo de respuesta.`);
             return;
@@ -147,7 +147,7 @@ export const EvaluationPanel = () => {
                 });
             });
 
-            // 1️⃣ Guardar calificación
+            // Guardar calificación
             fetch("http://localhost:8000/api/evaluationGradedItems", {
                 method: "POST",
                 headers: { "Authorization": `Bearer ${token}` },
