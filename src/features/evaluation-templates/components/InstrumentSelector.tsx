@@ -20,10 +20,12 @@ function InstrumentSelector({ evaluationType, mode, onModeChange, selectedInstru
       try {
         const res = await getInstrumentList(evaluationType);
 
-        const templates = res.data.data.map((tpl: any) => {
+        console.log(res.data)
+
+        const templates = res.data.map((tpl: any) => {
           return {
             id: tpl.id,
-            name: tpl.version_name,
+            name: tpl.name,
           }
         })
 
