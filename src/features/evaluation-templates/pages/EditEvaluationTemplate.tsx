@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom";
-import type { EvaluationTemplate, CalificationType, EvaluationItem, EvaluationType, InstrumentMode, PreloadedInstrument } from "../types"
+import type { EvaluationTemplate, CalificationType, EvaluationItem, EvaluationType, InstrumentMode } from "../types"
 import EvaluationTypeSelector from "../components/EvaluationTypeSelector"
-import InstrumentSelector from "../components/InstrumentSelector"
 import TemplateConfigForm from "../components/TemplateConfigForm"
 import ItemsSection from "../components/ItemsSection"
 import { ArrowLeft } from 'lucide-react'
 import { useNavigate } from "react-router-dom";
+import { getInstrumentById, updateEvaluationTemplate } from "../api/evaluation-template.api"
 
 function EditEvaluationTemplate() {
-  const token = import.meta.env.VITE_API_TOKEN;
   const navigate = useNavigate();
   const { id } = useParams();
   const [template, setTemplate] = useState<EvaluationTemplate | null>(null);
@@ -18,7 +17,6 @@ function EditEvaluationTemplate() {
   // Estados editables
   const [evaluationType, setEvaluationType] = useState<EvaluationType>("Académica");
   const [instrumentMode, setInstrumentMode] = useState<InstrumentMode>("personalizado");
-  const [selectedInstrument, setSelectedInstrument] = useState<PreloadedInstrument | null>(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [calificationType, setCalificationType] = useState<CalificationType>("porcentual");
@@ -29,11 +27,10 @@ function EditEvaluationTemplate() {
   async function fetchTemplate() {
     try {
       // Paso 1: traer el template completo
-      const res = await fetch(`http://localhost:8000/api/evaluation-templates/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const json = await res.json();
-      const tpl = json.data;
+      if (!id) return;
+      const safeId = id as string;
+      const res = await getInstrumentById(safeId);
+      const tpl = res.data;
 
       setTemplate(tpl);
 
@@ -66,7 +63,7 @@ function EditEvaluationTemplate() {
 
     
     const isAcademica = evaluationType === 'Académica'
-    const isPrecargado = instrumentMode === 'precargado' && selectedInstrument !== null
+    const isPrecargado = instrumentMode === 'precargado'
     const configSectionNumber = isAcademica ? 2 : 3
     const itemsSectionNumber = isAcademica ? 3 : 4
     
@@ -120,37 +117,16 @@ function EditEvaluationTemplate() {
         }
         });
 
-
-
-        for (const [key, value] of formData.entries()) {
-            console.log(key, value);
-        }
-
-
         try {
             formData.append("_method", "PUT");
 
-            const res = await fetch(
-                `http://localhost:8000/api/evaluation-templates/${template?.id}`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                    },
-                    body: formData,
-                }
-            );
+            if (!template) return;
+            const safeTemplateId = template?.id as number;
 
-            const json = await res.json();
+            await updateEvaluationTemplate(safeTemplateId, formData);
 
-            if (res.ok) {
-            console.log("Plantilla actualizada:", json);
             alert("Plantilla actualizada exitosamente");
             goBack();
-            } else {
-            console.error("Error al actualizar:", json);
-            alert("Error al actualizar la plantilla");
-            }
         } catch (err) {
             console.error("Error de red:", err);
             alert("Error de red al actualizar la plantilla");
@@ -188,7 +164,7 @@ function EditEvaluationTemplate() {
                     onDescriptionChange={setDescription}
                     onCalificationChange={setCalificationType}
                     disabled={isPrecargado}
-                    preloadedInstrument={selectedInstrument}
+                    preloadedInstrument={null}
                     sectionNumber={configSectionNumber}
                 />
 

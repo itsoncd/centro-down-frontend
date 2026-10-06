@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import type { EvaluationType, InstrumentMode, PreloadedInstrument } from "../types"
+import { getInstrumentList, getInstrumentById } from "../api/evaluation-template.api"
 
 interface Props {
   evaluationType: EvaluationType
@@ -13,33 +14,22 @@ function InstrumentSelector({ evaluationType, mode, onModeChange, selectedInstru
   const [instruments, setInstruments] = useState<PreloadedInstrument[]>([])
   const [loading, setLoading] = useState(false)
 
-  const token = import.meta.env.VITE_API_TOKEN;
-
   useEffect(() => {
     async function fetchInstruments() {
       setLoading(true)
       try {
-        const res = await fetch("http://localhost:8000/api/evaluation-templates", {
-          headers: { "Authorization": `Bearer ${token}` }
-        })
-        const json = await res.json()
-        console.log("Respuesta completa:", json)
+        const res = await getInstrumentList(evaluationType);
 
-        // Extraer los templates desde json.data.data
-        const templates = json.data.data.map((version: any) => {
-          const tpl = version.evaluation_template
+        console.log(res.data)
+
+        const templates = res.data.map((tpl: any) => {
           return {
             id: tpl.id,
             name: tpl.name,
-            type: tpl.type,
-            calificationType: version.grading_type,
-            items: [] // si quieres cargar items después, aquí puedes dejarlos vacíos
           }
         })
 
-        // Filtrar por tipo seleccionado
-        const filtered = templates.filter((t: any) => t.type === evaluationType)
-        setInstruments(filtered)
+        setInstruments(templates)
       } catch (err) {
         console.error("Error cargando instrumentos:", err)
       } finally {
@@ -65,18 +55,15 @@ function InstrumentSelector({ evaluationType, mode, onModeChange, selectedInstru
     }
 
     try {
-      const res = await fetch(`http://localhost:8000/api/evaluation-templates/${id}`, {
-        headers: { "Authorization": `Bearer ${token}` }
-      })
-      const json = await res.json()
+      const res = await getInstrumentById(id);
 
-      const tpl = json.data
+      const tpl = res.data
       const latestVersion = tpl.versions.find((v: any) => v.latest) || tpl.versions[0]
 
       const items = latestVersion.item_versions.map((iv: any) => ({
         id: iv.id,
         name: iv.version_name,
-        files: [] // si quieres traer evidencias, aquí puedes mapear iv.files
+        files: []
       }))
 
       onInstrumentChange({
