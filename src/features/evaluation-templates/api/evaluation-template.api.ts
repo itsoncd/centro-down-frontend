@@ -6,7 +6,7 @@ export const getEvaluationTemplatesPage = async (page: number = 1,
       sortBy: string = "id",
        direction: string = "desc"): 
        Promise<any> => {
-    const { data } = await api.get(`http://localhost:8000/api/evaluation-templates/page`, {
+    const { data } = await api.get(`http://localhost:8000/api/evaluation-templates`, {
                 params: {
                     page,
                     per_page: perPage,
