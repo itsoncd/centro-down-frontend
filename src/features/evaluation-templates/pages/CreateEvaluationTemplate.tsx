@@ -55,35 +55,6 @@ function CreateEvaluationTemplate() {
         setItems(items.filter(i => i.id !== id))
     }
 
-    function buildFormData(payload: any): FormData {
-        const formData = new FormData();
-
-        // Template
-        formData.append("template[name]", payload.template.name);
-        formData.append("template[type]", payload.template.type);
-        formData.append("template[grading_type]", payload.template.grading_type);
-
-        // Items
-        payload.items.forEach((item: any, index: number) => {
-            if (item.id && !String(item.id).startsWith("1787")) {
-                // items precargados
-                formData.append(`items[${index}][id]`, item.id);
-            }
-            if (item.name) {
-                formData.append(`items[${index}][name]`, item.name);
-            }
-            if (item.files && item.files.length > 0) {
-                item.files.forEach((file: File) => {
-                    formData.append(`items[${index}][files][]`, file);
-                });
-            }
-        });
-
-        console.log([...formData.entries()]);
-
-        return formData;
-    }
-
     const [isSaving, setIsSaving] = useState(false);
 
     const saveEvaluationTemplate = async () => {
