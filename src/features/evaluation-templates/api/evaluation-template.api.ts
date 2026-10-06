@@ -18,7 +18,11 @@ export const getEvaluationTemplatesPage = async (page: number = 1,
 }
 
 export const getInstrumentList = async (type: string): Promise<any> => {
-    const { data } = await api.get(`/evaluation-templates/list/${type}`);
+    const { data } = await api.get(`/evaluation-templates/options`, {
+                params: {
+                    type
+                },
+            });
     return data;
 }
 
