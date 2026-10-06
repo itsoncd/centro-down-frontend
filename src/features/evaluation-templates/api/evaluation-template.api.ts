@@ -6,7 +6,7 @@ export const getEvaluationTemplatesPage = async (page: number = 1,
       sortBy: string = "id",
        direction: string = "desc"): 
        Promise<any> => {
-    const { data } = await api.get(`http://localhost:8000/api/evaluation-templates`, {
+    const { data } = await api.get(`/evaluation-templates`, {
                 params: {
                     page,
                     per_page: perPage,
@@ -18,12 +18,12 @@ export const getEvaluationTemplatesPage = async (page: number = 1,
 }
 
 export const getInstrumentList = async (type: string): Promise<any> => {
-    const { data } = await api.get(`http://localhost:8000/api/evaluation-templates/list/${type}`);
+    const { data } = await api.get(`/evaluation-templates/list/${type}`);
     return data;
 }
 
 export const getInstrumentById = async (id: string): Promise<any> => {
-    const { data } = await api.get(`http://localhost:8000/api/evaluation-templates/${id}`);
+    const { data } = await api.get(`/evaluation-templates/${id}`);
     return data;
 }
 
@@ -35,13 +35,13 @@ export const createItem = async (item: EvaluationItem) => {
         formData.append("files[]", file);
     });
 
-    const response = await api.post("http://localhost:8000/api/items", formData, { headers: { "Content-Type": "multipart/form-data" } });
+    const response = await api.post("/items", formData, { headers: { "Content-Type": "multipart/form-data" } });
     
     return response.data.data;
 };
 
 export const createEvaluationTemplate = async (payload: EvaluationTemplatePayload) => {
-    const response = await api.post("http://localhost:8000/api/evaluation-templates",
+    const response = await api.post("/evaluation-templates",
          payload, 
         {
             headers: {
@@ -53,13 +53,13 @@ export const createEvaluationTemplate = async (payload: EvaluationTemplatePayloa
 };
 
 export const updateEvaluationTemplate = async (id: number, formData: FormData) => {
-    const response = await api.post(`http://localhost:8000/api/evaluation-templates/${id}`,
+    const response = await api.post(`/evaluation-templates/${id}`,
         formData, 
         { headers: { "Content-Type": "multipart/form-data" } });
     return response;
 }
 
 export const deleteEvaluationTemplateVersion = async (id: number) => {
-    const response = await api.delete(`http://localhost:8000/api/evaluation-templates/${id}`);
+    const response = await api.delete(`/evaluation-templates/${id}`);
     return response;
 }
