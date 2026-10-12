@@ -30,3 +30,10 @@ export interface EvaluationTemplate {
   createdAt: string
   evaluation_template_id: number
 }
+
+export interface EvaluationTemplatePayload {
+    name: string;
+    type: string;
+    grading_type: string;
+    item_version_ids: number[];
+}
