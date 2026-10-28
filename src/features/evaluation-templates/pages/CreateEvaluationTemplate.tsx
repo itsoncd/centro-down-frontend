@@ -88,7 +88,7 @@ function CreateEvaluationTemplate() {
 
             await createEvaluationTemplate(payload);
 
-            navigate("mis-plantillas");
+            goBack();
 
         } catch (error) {
             console.log(error);
@@ -99,7 +99,7 @@ function CreateEvaluationTemplate() {
     };
 
     function goBack() {
-        navigate("/director/plantillas/mis-plantillas");
+        navigate("/evaluaciones/plantilla-de-evaluaciones");
     }
 
     return (

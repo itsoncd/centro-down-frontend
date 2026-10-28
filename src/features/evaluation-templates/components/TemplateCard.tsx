@@ -20,7 +20,7 @@ function TemplateCard({ template, typeColors, calificationLabels, onDelete }: Pr
                 <h3 className="text-base font-semibold text-gray-800">{template.version_name}</h3>
                 <div className="flex gap-2">
                     <button
-                    onClick={() => navigate(`/director/plantillas/editar/${template.evaluation_template_id}`)}
+                    onClick={() => navigate(`/evaluaciones/plantilla-de-evaluaciones/${template.evaluation_template_id}`)}
                     className="text-gray-400 hover:text-blue-600 transition-colors">
                         <Pencil size={16} />
                     </button>

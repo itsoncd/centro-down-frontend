@@ -3,6 +3,7 @@ import type { EvaluationTemplate } from "../types"
 import TemplateCard from "../components/TemplateCard"
 import { ArrowLeft } from 'lucide-react'
 import { getEvaluationTemplatesPage, deleteEvaluationTemplateVersion } from '../api/evaluation-template.api'
+import { useNavigate } from "react-router-dom";
 
 const calificationLabels: Record<string, string> = {
     escala_logro: 'Escala de Logro',
@@ -16,6 +17,7 @@ const typeColors: Record<string, string> = {
 }
 
 function MyTemplates() {
+    const navigate = useNavigate();
 
     const [loading, setLoading] = useState(true);
 
@@ -80,6 +82,10 @@ function MyTemplates() {
     const filtered = templates.filter(t =>
         t.version_name.toLowerCase().includes(search.toLowerCase())
     )
+
+    function createNewTemplate() {
+        navigate("/evaluaciones/plantilla-de-evaluaciones/crear");
+    }
 
     async function handleDelete(id: number) {
             try {
@@ -149,6 +155,12 @@ function MyTemplates() {
                     onClick={() => showEvaluationTemplates(pagination.currentPage - 1)}
                     >
                     Anterior
+                    </button>
+
+                    <button className="bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-blue-700"
+                    onClick={() => createNewTemplate()}
+                    >
+                    Crear
                     </button>
 
                     <button className="bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-blue-700"

@@ -76,7 +76,7 @@ function EditEvaluationTemplate() {
     }
 
     function goBack() {
-        navigate("/director/plantillas/mis-plantillas");
+        navigate("/evaluaciones/plantilla-de-evaluaciones");
     }
 
     const [isSaving, setIsSaving] = useState(false);
