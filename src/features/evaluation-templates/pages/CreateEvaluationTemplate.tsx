@@ -142,7 +142,7 @@ function CreateEvaluationTemplate() {
                     items={items}
                     onAddItem={handleAddItem}
                     onRemoveItem={handleRemoveItem}
-                    canRemove={!isPrecargado}
+                    canRemove={true}
                     sectionNumber={itemsSectionNumber}
                 />
             
