@@ -74,10 +74,6 @@ function TemplateCard({ template, typeColors, calificationLabels, onDelete }: Pr
                     </ul>
                 </div>
             )}
-
-            <button className="mt-4 w-full py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors flex items-center justify-center gap-2">
-                <Play size={16} /> Aplicar a Alumno
-            </button>
         </div>
     )
 }
