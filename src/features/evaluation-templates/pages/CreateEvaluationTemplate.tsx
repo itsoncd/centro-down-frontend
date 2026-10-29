@@ -21,8 +21,6 @@ function CreateEvaluationTemplate() {
     
     const isAcademica = type === 'Académica'
     const isPrecargado = instrumentMode === 'precargado' && selectedInstrument !== null
-    const configSectionNumber = isAcademica ? 2 : 3
-    const itemsSectionNumber = isAcademica ? 3 : 4
     
     function handleEvaluationTypeChange(type: EvaluationType) {
         setType(type)
@@ -135,7 +133,7 @@ function CreateEvaluationTemplate() {
                     onCalificationChange={setGradingType}
                     disabled={false}
                     preloadedInstrument={selectedInstrument}
-                    sectionNumber={configSectionNumber}
+                    sectionNumber={3}
                 />
                 
                 <ItemsSection
@@ -143,7 +141,7 @@ function CreateEvaluationTemplate() {
                     onAddItem={handleAddItem}
                     onRemoveItem={handleRemoveItem}
                     canRemove={true}
-                    sectionNumber={itemsSectionNumber}
+                    sectionNumber={4}
                 />
             
                 <div className="flex gap-3">
