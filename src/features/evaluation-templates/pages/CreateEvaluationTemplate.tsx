@@ -118,15 +118,13 @@ function CreateEvaluationTemplate() {
                     onChange={handleEvaluationTypeChange}
                 />
             
-                {!isAcademica && (
-                    <InstrumentSelector
-                        evaluationType={type}
-                        mode={instrumentMode}
-                        onModeChange={setInstrumentMode}
-                        selectedInstrument={selectedInstrument}
-                        onInstrumentChange={handleInstrumentChange}
-                    />
-                )}
+                <InstrumentSelector
+                    evaluationType={type}
+                    mode={instrumentMode}
+                    onModeChange={setInstrumentMode}
+                    selectedInstrument={selectedInstrument}
+                    onInstrumentChange={handleInstrumentChange}
+                />
             
                 <TemplateConfigForm
                     name={name}
