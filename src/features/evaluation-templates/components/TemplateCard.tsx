@@ -14,19 +14,25 @@ function TemplateCard({ template, typeColors, calificationLabels, onDelete }: Pr
     const remaining = template.item_versions?.length - 3
     const navigate = useNavigate();
 
+    const handleConfirmDelete = (id: number) => {
+        if (window.confirm("¿Estás seguro de que deseas eliminar esta plantilla?")) {
+            onDelete(id);
+        }
+    };
+
     return (
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             <div className="flex items-start justify-between mb-3">
                 <h3 className="text-base font-semibold text-gray-800">{template.version_name}</h3>
                 <div className="flex gap-2">
                     <button
-                    onClick={() => navigate(`/director/plantillas/editar/${template.evaluation_template_id}`)}
+                    onClick={() => navigate(`/evaluaciones/plantilla-de-evaluaciones/${template.evaluation_template_id}`)}
                     className="text-gray-400 hover:text-blue-600 transition-colors">
                         <Pencil size={16} />
                     </button>
 
                     <button
-                        onClick={() => onDelete(template.evaluation_template_id)}
+                        onClick={() => handleConfirmDelete(template.evaluation_template_id)}
                         className="text-gray-400 hover:text-red-500 transition-colors"
                     >
                         <X size={16} />
@@ -74,10 +80,6 @@ function TemplateCard({ template, typeColors, calificationLabels, onDelete }: Pr
                     </ul>
                 </div>
             )}
-
-            <button className="mt-4 w-full py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors flex items-center justify-center gap-2">
-                <Play size={16} /> Aplicar a Alumno
-            </button>
         </div>
     )
 }

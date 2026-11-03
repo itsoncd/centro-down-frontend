@@ -37,6 +37,18 @@ export const router = createBrowserRouter([
         path: "evaluaciones/aplicacion-de-evaluaciones/crear",
         element: <CreateEvaluation />,
       },
+      {
+        path: "evaluaciones/plantilla-de-evaluaciones",
+        element: <MyTemplates/>,
+      },
+      {
+        path: "evaluaciones/plantilla-de-evaluaciones/crear",
+        element: <CreateEvaluationTemplate/>,
+      },
+      {
+        path: "evaluaciones/plantilla-de-evaluaciones/:id",
+        element: <EditEvaluationTemplate/>,
+      }
     ],
   },
   {
@@ -69,18 +81,6 @@ export const router = createBrowserRouter([
       {
         path: "administrar-usuarios",
         element: <DashboardManageUser />
-      },
-      {
-        path: "plantillas",
-        element: <CreateEvaluationTemplate />
-      },
-      {
-        path: "plantillas/editar/:id",
-        element: <EditEvaluationTemplate />
-      },
-      {
-        path: "plantillas/mis-plantillas",
-        element: <MyTemplates />
       }
     ],
   },
