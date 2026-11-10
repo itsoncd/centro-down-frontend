@@ -16,6 +16,7 @@ import { DashboardEvaluations } from "@/features/evaluations/pages/DashboardEval
 import { EvaluationPanel } from "@/features/evaluations/pages/EvaluationPanel";
 import { ListEvaluations } from "@/features/evaluations/pages/ListEvaluations";
 import { CreateEvaluation } from "@/features/evaluations/pages/CreateEvaluation";
+import { GradeItemPage } from "@/features/evaluations/pages/GradeItemPage";
 import DefaultLayout from "@/layouts/DefaultLayout";
 
 
@@ -36,6 +37,15 @@ export const router = createBrowserRouter([
       {
         path: "evaluaciones/aplicacion-de-evaluaciones/crear",
         element: <CreateEvaluation />,
+      },
+      {
+        // The URL is public (FR-1) but grading needs a session, so the element is guarded.
+        path: "evaluaciones/aplicacion-de-evaluaciones/:evaluationId/calificar-item/:itemId",
+        element: (
+          <AuthGuard>
+            <GradeItemPage />
+          </AuthGuard>
+        ),
       },
     ],
   },

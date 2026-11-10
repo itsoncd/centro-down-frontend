@@ -40,3 +40,9 @@ export const updateEvaluation = async (
     console.log('Evaluacion actualizada: ', data);
     return data;
 }
+
+// Marca la evaluación como completada; la API también registra su fecha de cierre.
+export const completeEvaluation = async (id: number): Promise<EvaluationUpdated> => {
+    const { data } = await api.put<EvaluationUpdated>(`/evaluations/${id}`, { status: 'COMPLETED' });
+    return data;
+}

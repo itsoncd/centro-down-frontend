@@ -78,5 +78,85 @@
       "cancel": "Cancelar"
     },
     "submitError": "No se pudo registrar la evaluación."
+  },
+  "grading": {
+    "title": "Calificación de ítem",
+    "loading": "Cargando la información de la evaluación...",
+    "loadError": "No se pudo obtener la información de la evaluación",
+    "notFound": {
+      "title": "No se encontró la evaluación",
+      "backToList": "Volver a las evaluaciones"
+    },
+    "item": {
+      "of": "Ítem {{current}} de {{total}}",
+      "next": "Siguiente ítem"
+    },
+    "instrument": {
+      "previous": "Instrumento anterior",
+      "next": "Instrumento siguiente",
+      "view": "Ver instrumento",
+      "empty": "Este ítem no tiene instrumentos",
+      "graded": "Calificado",
+      "viewerTitle": "Instrumento",
+      "loading": "Cargando el instrumento...",
+      "loadError": "No se pudo mostrar el instrumento",
+      "download": "Descargar",
+      "close": "Cerrar"
+    },
+    "grades": {
+      "label": "Calificación",
+      "notAchieved": "No logró",
+      "achievedWithHelp": "Logró con ayuda",
+      "achievedAlone": "Logró"
+    },
+    "notes": {
+      "label": "Notas",
+      "placeholder": "Escribe tus observaciones sobre este ítem."
+    },
+    "evidence": {
+      "label": "Evidencias",
+      "dropzone": "Arrastra archivos aquí o haz clic para seleccionarlos",
+      "empty": "Todavía no se han agregado evidencias",
+      "view": "Ver",
+      "remove": "Quitar",
+      "removeTitle": "Quitar evidencia",
+      "removeDescription": "La evidencia se eliminará al guardar. ¿Deseas continuar?",
+      "rejected": "Algunos archivos no se pudieron agregar"
+    },
+    "save": {
+      "action": "Guardar",
+      "saving": "Guardando...",
+      "success": "Calificación guardada con éxito.",
+      "error": "No se pudo guardar la calificación."
+    },
+    "finish": {
+      "action": "Finalizar",
+      "finalizing": "Finalizando...",
+      "title": "Finalizar evaluación",
+      "description": "La evaluación quedará completada. ¿Deseas finalizarla?",
+      "descriptionUnsaved": "Hay cambios sin guardar en el instrumento actual y se perderán al finalizar. ¿Deseas continuar?",
+      "success": "Evaluación finalizada con éxito.",
+      "error": "No se pudo finalizar la evaluación."
+    },
+    "validation": {
+      "gradeRequired": "Selecciona una calificación.",
+      "gradeInvalid": "La calificación seleccionada no es válida.",
+      "evidenceRequired": "Agrega al menos una evidencia.",
+      "evidenceInvalid": "Alguna de las evidencias no es válida."
+    },
+    "progress": {
+      "label": "Items completados"
+    },
+    "items": {
+      "label": "Items de la evaluación",
+      "completed": "Completado",
+      "current": "En edición"
+    },
+    "discard": {
+      "title": "Cambios sin guardar",
+      "description": "Si continúas se perderán los cambios que no has guardado. ¿Deseas continuar?",
+      "confirm": "Descartar cambios",
+      "cancel": "Seguir editando"
+    }
   }
 }
