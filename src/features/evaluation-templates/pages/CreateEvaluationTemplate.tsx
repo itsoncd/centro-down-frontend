@@ -21,8 +21,6 @@ function CreateEvaluationTemplate() {
     
     const isAcademica = type === 'Académica'
     const isPrecargado = instrumentMode === 'precargado' && selectedInstrument !== null
-    const configSectionNumber = isAcademica ? 2 : 3
-    const itemsSectionNumber = isAcademica ? 3 : 4
     
     function handleEvaluationTypeChange(type: EvaluationType) {
         setType(type)
@@ -88,7 +86,7 @@ function CreateEvaluationTemplate() {
 
             await createEvaluationTemplate(payload);
 
-            navigate("mis-plantillas");
+            goBack();
 
         } catch (error) {
             console.log(error);
@@ -99,7 +97,7 @@ function CreateEvaluationTemplate() {
     };
 
     function goBack() {
-        navigate("/director/plantillas/mis-plantillas");
+        navigate("/evaluaciones/plantilla-de-evaluaciones");
     }
 
     return (
@@ -118,15 +116,13 @@ function CreateEvaluationTemplate() {
                     onChange={handleEvaluationTypeChange}
                 />
             
-                {!isAcademica && (
-                    <InstrumentSelector
-                        evaluationType={type}
-                        mode={instrumentMode}
-                        onModeChange={setInstrumentMode}
-                        selectedInstrument={selectedInstrument}
-                        onInstrumentChange={handleInstrumentChange}
-                    />
-                )}
+                <InstrumentSelector
+                    evaluationType={type}
+                    mode={instrumentMode}
+                    onModeChange={setInstrumentMode}
+                    selectedInstrument={selectedInstrument}
+                    onInstrumentChange={handleInstrumentChange}
+                />
             
                 <TemplateConfigForm
                     name={name}
@@ -137,15 +133,15 @@ function CreateEvaluationTemplate() {
                     onCalificationChange={setGradingType}
                     disabled={false}
                     preloadedInstrument={selectedInstrument}
-                    sectionNumber={configSectionNumber}
+                    sectionNumber={3}
                 />
                 
                 <ItemsSection
                     items={items}
                     onAddItem={handleAddItem}
                     onRemoveItem={handleRemoveItem}
-                    canRemove={!isPrecargado}
-                    sectionNumber={itemsSectionNumber}
+                    canRemove={true}
+                    sectionNumber={4}
                 />
             
                 <div className="flex gap-3">
