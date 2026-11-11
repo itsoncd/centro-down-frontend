@@ -42,6 +42,7 @@ export const EvaluationsFilters = ({
                 <div className="flex-1 min-w-[200px]">
                     <p className="text-sm text-gray-600 mb-1">{t("filters.searchLabel")}</p>
                     <SearchBar
+                        ariaLabel={t("filters.searchLabel")}
                         placeholder={t("filters.searchPlaceholder")}
                         value={search}
                         onSearch={onSearchChange}
@@ -53,6 +54,7 @@ export const EvaluationsFilters = ({
                 <div className="w-48">
                     <p className="text-sm text-gray-600 mb-1">{t("filters.statusLabel")}</p>
                     <select
+                        aria-label={t("filters.statusLabel")}
                         value={status}
                         onChange={(e) => onStatusChange(e.target.value)}
                         className={selectClassName}>
@@ -67,6 +69,7 @@ export const EvaluationsFilters = ({
                 <div className="w-48">
                     <p className="text-sm text-gray-600 mb-1">{t("filters.typeLabel")}</p>
                     <select
+                        aria-label={t("filters.typeLabel")}
                         value={type}
                         onChange={(e) => onTypeChange(e.target.value)}
                         className={selectClassName}>

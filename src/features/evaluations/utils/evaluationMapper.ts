@@ -39,9 +39,9 @@ export const mapApiEvaluationToEvaluationData = (
         template_id: version?.evaluation_template_id ?? 0,
         items,
         status: evaluation.status ?? "",
-        titulo: template?.name ?? `Evaluación ${evaluation.id}`,
+        titulo: template?.name ?? "",
         result: Number(evaluation.result ?? 0) || 0,
-        type: template?.type ?? "Sin tipo",
+        type: template?.type ?? "",
         student: evaluation.student
             ? mapApiStudentToStudentData(evaluation.student)
             : undefined,

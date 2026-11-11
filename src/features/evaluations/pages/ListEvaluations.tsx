@@ -9,9 +9,16 @@ import { EvaluationsFilters } from "../components/EvaluationsFilters";
 import { EvaluationsPagination } from "../components/EvaluationsPagination";
 import { StudentFilter } from "../components/StudentFilter";
 import { useGetEvaluations } from "../hooks";
-import type { EvaluationStatus, GetEvaluationsParams } from "../types";
+import type { EvaluationData, EvaluationStatus, GetEvaluationsParams } from "../types";
 import { collectStudentsFromEvaluations } from "../utils/evaluationMapper";
-import { evaluationStatusOptions, isEvaluationStatus } from "../utils/statusMapper";
+import {
+    CREATE_PATH,
+    firstItemVersionId,
+    gradingItemPath,
+    hasActiveFilters,
+    orderTypeOptions,
+} from "../utils/evaluationList";
+import { evaluationStatuses, isEvaluationStatus, statusLabelKey } from "../utils/statusMapper";
 
 // Orden canónico de las opciones de tipo; valores desconocidos se agregan al final
 const typePreference = ["Académica", "Lenguaje", "Psicológica"];
@@ -24,24 +31,6 @@ const defaultPerPage = 10;
 // tamaño de página más grande que permite la API
 const optionsPerPage = 100;
 const optionsQueryParams: GetEvaluationsParams = { per_page: optionsPerPage };
-
-// Deduplica valores (sin distinguir mayúsculas) y los ordena según la preferencia
-const orderOptions = (values: string[], preference: string[]): string[] => {
-    const unique: string[] = [];
-    const seen = new Set<string>();
-    for (const value of values) {
-        const key = value.toLowerCase();
-        if (!seen.has(key)) {
-            seen.add(key);
-            unique.push(value);
-        }
-    }
-    const preferred = preference.filter((p) => unique.some((u) => u.toLowerCase() === p.toLowerCase()));
-    const rest = unique
-        .filter((u) => !preference.some((p) => p.toLowerCase() === u.toLowerCase()))
-        .sort((a, b) => a.localeCompare(b));
-    return [...preferred, ...rest];
-};
 
 export const ListEvaluations = () => {
     const { t } = useTranslation("evaluations");
@@ -89,17 +78,28 @@ export const ListEvaluations = () => {
     // Estudiantes que aparecen en las evaluaciones, para el filtro lateral
     const students = useMemo(() => collectStudentsFromEvaluations(referenceEvaluations), [referenceEvaluations]);
 
+    // Opciones del combo de estado, localizadas a partir de los valores conocidos
+    const statusOptions = useMemo(
+        () => evaluationStatuses.map((value) => ({ value, label: t(statusLabelKey(value)) })),
+        [t],
+    );
+
     // Opciones del combo de tipo, derivadas del conjunto sin filtrar
     const typeOptions = useMemo(() => {
         const types = referenceEvaluations.map((e) => e.type).filter((type) => type.length > 0);
-        return orderOptions(types, typePreference).map((type) => ({ value: type, label: type }));
+        return orderTypeOptions(types, typePreference).map((type) => ({ value: type, label: type }));
     }, [referenceEvaluations]);
 
     // El sidebar sólo puede listar los estudiantes de las evaluaciones consultadas
     const referenceTotal = allEvaluationsQuery.data?.data.total ?? 0;
     const studentsArePartial = referenceTotal > referenceEvaluations.length;
 
-    const hasActiveFilters = Boolean(selectedStudent) || statusFilter !== "" || typeFilter !== "" || searchInput.trim() !== "";
+    const filtersActive = hasActiveFilters({
+        selectedStudent,
+        searchInput,
+        statusFilter,
+        typeFilter,
+    });
 
     const handleStatusChange = (value: string) => {
         setStatusFilter(isEvaluationStatus(value) ? value : "");
@@ -118,9 +118,17 @@ export const ListEvaluations = () => {
         setSelectedStudent(null);
     };
 
+    // Navega a la pantalla de calificación en el primer ítem de la evaluación
+    const handleGrade = (evaluation: EvaluationData) => {
+        const itemVersionId = firstItemVersionId(evaluation);
+        if (itemVersionId === null) return;
+
+        navigate(gradingItemPath(evaluation.id, itemVersionId));
+    };
+
     // Navega a la página que inicia una evaluación
     const handleStartEvaluation = () => {
-        navigate("/evaluaciones/aplicacion-de-evaluaciones/crear");
+        navigate(CREATE_PATH);
     };
 
     return (
@@ -171,7 +179,7 @@ export const ListEvaluations = () => {
                                 onStatusChange={handleStatusChange}
                                 type={typeFilter}
                                 onTypeChange={setTypeFilter}
-                                statusOptions={evaluationStatusOptions}
+                                statusOptions={statusOptions}
                                 typeOptions={typeOptions}
                                 onClearFilters={handleClearFilters}
                             />
@@ -190,7 +198,7 @@ export const ListEvaluations = () => {
                                 </div>
                             ) : evaluations.length === 0 ? (
                                 <div className="flex flex-col items-center gap-3 mb-6 text-gray-500 font-medium py-8">
-                                    {hasActiveFilters
+                                    {filtersActive
                                         ? t("list.emptyFiltered")
                                         : t("list.empty")}
                                 </div>
@@ -202,13 +210,14 @@ export const ListEvaluations = () => {
                                         <EvaluationCard
                                             key={evaluation.id}
                                             evaluation={evaluation}
+                                            onGrade={handleGrade}
                                         />
                                     ))}
                                 </div>
                             )}
 
-                            {/* Paginación: al fondo de la página, sólo cuando hay resultados */}
-                            {(pageData?.total ?? 0) > 0 && (
+                            {/* Paginación: al fondo de la página, sólo cuando hay resultados y no hay error */}
+                            {!evaluationQuery.isError && (pageData?.total ?? 0) > 0 && (
                                 <div className="mt-auto">
                                     <EvaluationsPagination
                                         currentPage={currentPage}
