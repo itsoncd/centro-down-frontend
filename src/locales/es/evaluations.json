@@ -32,6 +32,22 @@
     "next": "Siguiente",
     "page": "Página {{page}} de {{pages}}"
   },
+  "statuses": {
+    "NOT_STARTED": "Sin iniciar",
+    "IN_PROGRESS": "En progreso",
+    "COMPLETED": "Completado",
+    "CANCELLED": "Cancelado"
+  },
+  "card": {
+    "itemCount": "{{total}} Pruebas",
+    "itemsLabel": "Pruebas",
+    "itemsCount": "{{total}} pruebas",
+    "createdAt": "Fecha de Creación",
+    "startGrading": "Calificar Evaluación",
+    "continueGrading": "Continuar Evaluación",
+    "untitled": "Evaluación {{id}}",
+    "noType": "Sin tipo"
+  },
   "create": {
     "title": "Crear Evaluación",
     "subtitle": "Selecciona la plantilla y asigna la evaluación a un alumno",

@@ -4,9 +4,10 @@ import { EvaluationCard } from "./EvaluationCard";
 interface EvaluationListProps {
     evaluations: EvaluationData[];
     student: StudentData | null;
+    onGrade: (evaluation: EvaluationData) => void;
 }
 
-export const EvaluationList = ({ evaluations, student }: EvaluationListProps) => {
+export const EvaluationList = ({ evaluations, student, onGrade }: EvaluationListProps) => {
     const filteredEvaluations = evaluations.filter((evaluation) => evaluation.student_id === student?.id);
 
     if (student === null) return(<div className="flex flex-col items-center gap-3 mb-6 text-gray-500">Seleccione un estudiante</div>)
@@ -22,6 +23,7 @@ export const EvaluationList = ({ evaluations, student }: EvaluationListProps) =>
                     <EvaluationCard
                         key={evaluation.id}
                         evaluation={evaluation}
+                        onGrade={onGrade}
                     />
                 ))}
             </div>

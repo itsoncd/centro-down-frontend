@@ -21,6 +21,7 @@ export const StudentFilter = ({ students }: StudentFilterProps) => {
         <div className="flex flex-col gap-2">
             {/* Buscador de estudiantes por nombre */}
             <SearchBar
+                ariaLabel={t("students.searchPlaceholder")}
                 placeholder={t("students.searchPlaceholder")}
                 onSearch={setSearchTerm}
                 className="w-full"

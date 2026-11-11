@@ -32,8 +32,7 @@ import {
 import type { ApiFieldError } from "../utils/gradingErrors";
 import type { GradeResult, GradingDraft } from "../types/grading";
 import { extractApiErrorMessage } from "@/utils";
-
-const LIST_PATH = "/evaluaciones/aplicacion-de-evaluaciones";
+import { LIST_PATH, gradingItemPath } from "../utils/evaluationList";
 
 export const GradeItemPage = () => {
   const { t } = useTranslation("evaluations");
@@ -99,7 +98,7 @@ export const GradeItemPage = () => {
 
   useEffect(() => {
     if (!itemsReady || currentItem !== null || firstItemId === null) return;
-    navigate(`/evaluaciones/aplicacion-de-evaluaciones/${evaluationId}/calificar-item/${firstItemId}`, {
+    navigate(gradingItemPath(evaluationId, firstItemId), {
       replace: true,
     });
   }, [itemsReady, currentItem, firstItemId, evaluationId, navigate]);
@@ -151,11 +150,7 @@ export const GradeItemPage = () => {
   };
 
   const navigateToItem = (itemVersionId: number) =>
-    guard(() =>
-      navigate(
-        `/evaluaciones/aplicacion-de-evaluaciones/${evaluationId}/calificar-item/${itemVersionId}`,
-      ),
-    );
+    guard(() => navigate(gradingItemPath(evaluationId, itemVersionId)));
 
   const selectInstrument = (index: number) => {
     if (index === instrumentIndex) return;

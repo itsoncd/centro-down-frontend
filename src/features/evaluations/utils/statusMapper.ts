@@ -1,19 +1,30 @@
 // utils/statusMapper.ts
 import type { EvaluationStatus } from "../types";
-export const translateStatus = (status: string): string => {
+
+// Typed keys of the `statuses.*` block in locales/es/evaluations.json.
+export type StatusLabelKey =
+  | "statuses.NOT_STARTED"
+  | "statuses.IN_PROGRESS"
+  | "statuses.COMPLETED"
+  | "statuses.CANCELLED";
+
+// Locale key for a known status; null when the value is not one of the four known statuses.
+export function statusLabelKey(status: EvaluationStatus): StatusLabelKey;
+export function statusLabelKey(status: string): StatusLabelKey | null;
+export function statusLabelKey(status: string): StatusLabelKey | null {
   switch (status.toUpperCase()) {
     case "NOT_STARTED":
-      return "Sin iniciar";
+      return "statuses.NOT_STARTED";
     case "IN_PROGRESS":
-      return "En progreso";
+      return "statuses.IN_PROGRESS";
     case "COMPLETED":
-      return "Completado";
+      return "statuses.COMPLETED";
     case "CANCELLED":
-      return "Cancelado";
+      return "statuses.CANCELLED";
     default:
-      return status; // fallback: muestra tal cual
+      return null;
   }
-};
+}
 
 // Estados que acepta la API (enum de evaluations.status), en el orden del flujo:
 // NOT_STARTED → IN_PROGRESS → COMPLETED, con CANCELLED fuera del flujo.
@@ -29,9 +40,6 @@ export const evaluationStatuses: EvaluationStatus[] = [
 // Verifica que un valor (por ejemplo, el de un <select>) sea un estado válido de la API
 export const isEvaluationStatus = (value: string): value is EvaluationStatus =>
   (evaluationStatuses as string[]).includes(value);
-
-export const evaluationStatusOptions: { value: EvaluationStatus; label: string }[] =
-  evaluationStatuses.map((value) => ({ value, label: translateStatus(value) }));
 
 // Estados en los que la evaluación ya no se puede calificar
 export const isFinishedStatus = (status: string): boolean => {

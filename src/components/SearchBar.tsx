@@ -5,12 +5,14 @@ interface SearchBarProps {
   onSearch: (value: string) => void;
   className?: string;
   value?: string;
+  ariaLabel?: string;
 }
 
-export const SearchBar = ({ placeholder, onSearch, className, value }: SearchBarProps) => {
+export const SearchBar = ({ placeholder, onSearch, className, value, ariaLabel }: SearchBarProps) => {
   return (
     <input
       type="text"
+      aria-label={ariaLabel}
       placeholder={placeholder}
       value={value}
       onChange={(e) => onSearch(e.target.value)}
