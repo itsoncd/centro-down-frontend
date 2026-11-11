@@ -1,7 +1,6 @@
 // useRoleSelection.ts
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "@/store/user.store";
-import { getInitialRouteByRole } from "@/utils";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { ROLES } from "@/types";
@@ -24,7 +23,7 @@ export const useRoleSelection = () => {
       email: user.email,
       roles: [role],
     });
-    navigate(getInitialRouteByRole(role));
+    navigate("/");
   };
 
   const cleanup = () => {
