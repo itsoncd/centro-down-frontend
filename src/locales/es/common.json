@@ -2,6 +2,36 @@
   "app": {
     "name": "Centro Down"
   },
+  "nav": {
+    "ariaLabel": "Navegación principal",
+    "menu": "Menú",
+    "groups": {
+      "inicio": "Inicio",
+      "evaluaciones": "Evaluaciones",
+      "gestion": "Gestión",
+      "usuarios": "Usuarios",
+      "configuracion": "Configuración",
+      "citas": "Citas",
+      "alumnos": "Alumnos"
+    },
+    "items": {
+      "inicio": "Inicio",
+      "dashboard": "Dashboard",
+      "usuarios": "Usuarios",
+      "configuracion": "Configuración",
+      "aplicacionEvaluaciones": "Aplicación de evaluaciones",
+      "crearEvaluacion": "Crear evaluación",
+      "plantillasEvaluacion": "Plantillas de evaluación",
+      "crearPlantilla": "Crear plantilla",
+      "citas": "Citas",
+      "agenda": "Agenda",
+      "administrarUsuarios": "Administrar Usuarios",
+      "profesores": "Profesores",
+      "alumnos": "Alumnos",
+      "misCitas": "Mis Citas",
+      "generarCita": "Generar Cita"
+    }
+  },
   "actions": {
     "save": "Guardar",
     "cancel": "Cancelar",
